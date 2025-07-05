@@ -1,32 +1,117 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>胖虎同学 - 积极有时，消极有时</title><meta name="keywords" content="博客,学习,胖虎同学,菜鸡,程序猿"><meta name="author" content="胖虎同学"><meta name="copyright" content="胖虎同学"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="个人博客，分享日常生活、学习笔记，记录美好与成长">
-<meta property="og:type" content="website">
-<meta property="og:title" content="胖虎同学">
-<meta property="og:url" content="https://youngsay.cn/index.html">
-<meta property="og:site_name" content="胖虎同学">
-<meta property="og:description" content="个人博客，分享日常生活、学习笔记，记录美好与成长">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://offer.youngsay.cn/blog/logo.png">
-<meta property="article:author" content="胖虎同学">
-<meta property="article:tag" content="博客,学习,胖虎同学,菜鸡,程序猿">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://offer.youngsay.cn/blog/logo.png"><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/tigerLogo.ico"><link rel="canonical" href="https://youngsay.cn/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>胖虎同学 - 积极有时，消极有时</title><meta name="author" content="胖虎同学"><meta name="copyright" content="胖虎同学"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="个人博客，分享日常生活、学习笔记，记录美好与成长"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "胖虎同学",
+  "url": "https://youngsay.cn/"
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/tigerLogo.ico"><link rel="canonical" href="https://youngsay.cn/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-<script>LA.init({id:"3H5hC7QOyk44ksT4",ck:"3H5hC7QOyk44ksT4"})</script><script>const GLOBAL_CONFIG = { 
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  localSearch: undefined,
   translate: undefined,
-  noticeOutdate: undefined,
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
@@ -34,7 +119,7 @@
     post: false
   },
   runtime: '天',
-  date_suffix: {
+  dateSuffix: {
     just: '刚刚',
     min: '分钟前',
     hour: '小时前',
@@ -42,191 +127,116 @@
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
-    }
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: true,
-  isAnchor: false
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '胖虎同学',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-06-04 00:29:06'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="胖虎同学" type="application/atom+xml">
-</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">胖虎同学</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2025/06/03/new-work/" title="近期碎碎念"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="近期碎碎念"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/06/03/new-work/" title="近期碎碎念">近期碎碎念</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-06-03T15:57:01.000Z" title="发表于 2025-06-03 23:57:01">2025-06-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快，还没来得及写2024年终总结，2025又已经过半了。好久没写博客了，某天心血来潮想要写点啥，打开记事本，又觉得没什么可写。感觉想说的很多，又不知道从何说起。
-现在是凌晨，刚写完入职一个月的新人串讲。十点多回到家，感觉啥都没干就凌晨了，不甘心就这样睡，打算趁现在写点啥。
-
-先聊工作。转眼间毕业快一年了，算上实习也工作一年多了，就在一个多月前，换了家公司实现价值（做牛马）。现在还在试用期，面临着新的环境、业务，还是有些压力的。无论是在上家，还是现在，都有一个共同的感受，就是不想上班，这种感觉最强烈的时候是在假期最后一天的晚上。就像大学时体测，跑1000米，跑步前那种煎熬的心情胜过了跑步。讨厌上班，到底是在讨厌什么？想象出来的痛苦，讨厌……先这样吧，睡觉了，明天还得上班呢。
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/08/17/graduate/" title="打工人的一周"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg4.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="打工人的一周"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/08/17/graduate/" title="打工人的一周">打工人的一周</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-08-17T13:51:15.000Z" title="发表于 2024-08-17 21:51:15">2024-08-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">不知不觉，正式工作一个半月了。
-一开始工作，属于自己的时间更少了，一天平均十二多个小时呆在公司。晚上只有一点儿时间属于自己，沉浸在仅有的这点时间里，久久不肯入睡，真想静止在此刻。
-很快，时间来到了凌晨一两点，真的要去睡觉了，因为明天还要工作。好像刚刚进入梦乡，窗外发出一声巨响，垃圾车在倾倒垃圾，那是在每天早晨七点。半睡半醒，八点多了，睁开了沉重的眼皮，迈着沉重的步伐，又要去上班了。上班，时间过得很慢，仿佛静止在此刻。
-忙碌了五天，终于来到了周末。一周最开心的是周五晚上，它离周一那么远。短暂开心过后是无尽的空虚，周末无所事事，一觉睡到了中午，点个外卖，很快又到了晚上，再点个外卖。吃完这两顿外卖，一天就过去了，吃完这四顿外卖，周末就过去了，周一又来了。
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/01/01/2023/" title="2023年终总结"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/2024.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2023年终总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">一年又过去了，这是博客的第三个年终总结。
-回看了前两年的年终总结，都是那样普通平常，而且前两年赶上了疫情，要么延期开学，要么封校，要么提前放假。与博友们的丰富多彩的生活相比，我就像白活了一样。
-今年与往年有些不同，有了新的身份——实习生，活跃地点也由家和学校转移到了公司、出租屋。
-1-4月，开启人生第一份实习，新鲜又陌生，期待又恐惧。
-5月，担心挂科重回学校，4门必修课，大半学期没听课，最后考的还不错。所以说要活在当下，不要透支烦恼，你所想的种种麻烦大都不会发生，即便发生也都会顺利解决。
-8-10月，秋招。秋招并不顺利，我想这是心态的问题，心态差，做什么都无济于事了。每天只是麻木的做着测评、笔试、面试，事后没有复盘、反思。看似很努力，其实只将一件事重复了一次又一次。
-9月，大四开学，学校组织去外地实训，度过快乐、难忘的两周。一起去海边、聚餐、熬夜看鬼片，这才是大学生活。
-11月，秋招不顺利，二次实习。
-2024年了，虚岁24岁了，我不敢想。
-还记得小学英语课上一个小插曲，老师问大家里的梦想是什么，我说想做policeman，老师听成了postman（其实postman还挺符合我的，现在 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/12/17/shixi-again/" title="练习时长1个月"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/tigerBaby.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="练习时长1个月"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/12/17/shixi-again/" title="练习时长1个月">练习时长1个月</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-12-17T03:11:11.000Z" title="发表于 2023-12-17 11:11:11">2023-12-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快，上次发文说去实习了，转眼间实习一个多月了。
-第一段实习是大三上学期学期末，疫情刚放开，进京不需要各种***了。趁着寒假，快乐地实习了一段时间。大三下学期开学后，实习就不那么快乐了。学校各种破事，还有四五门必修课和一堆水课，最后在学期末离职回学校了。现在想想其实应该再坚持一下，最坏不就是挂科嘛，工作都找不到，挂几科能怎样。
-第一次找实习的过程还是挺顺利的，拿了两个offer，最后来了滴滴实习。当时在想，都说找工作难，这不也还行吗？现在看是运气好罢了。如果不是秋招，我还以为我前途一片光明呢。我的岗位是测开，但更多的是开发，接触到的测试很少。大多数公司测开还是以测试为主，所以秋招在面试时实习可能并没有带来多少加分。
-秋招大寄，所以又来实习了。这次找实习也很顺利，为什么我的秋招不能这样顺利😭这次实习主要是测试，和第一段实习刚好互补了。希望能留下了或者春招能找到个满意的工作🙏。相比第一段实习，这次似乎从容了很多，一是心态上好了很多，因为除了实习，好像没有更好的选择了，不再care学校的一些破事了（最好别让我毕业，这样还能参加明年秋招🤬），二是对实习的环境也更熟悉，包括租房、出 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/11/05/ontheway/" title="在路上"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在路上"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/11/05/ontheway/" title="在路上">在路上</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-11-05T02:11:01.000Z" title="发表于 2023-11-05 10:11:01">2023-11-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时隔一个月，又回家了。在家睡觉就是舒服、踏实，在学校每天入睡困难，一两点睡觉是常事，回到家躺上床没十分钟就睡着了，真是家到病除。
-这次回家呆几天，收拾收拾东西，下周又要去实习了。之前博客说过，我今年年初去实习了。实习期间认识了不少小伙伴，这些小伙伴都拿到了大厂offer，有些还不止一个。只有我，整个秋招只拿到一个小厂offer。我也知道，不要只问收获，不问耕耘。我也知道，不要和他人比较，做好自己。我也知道，我不知道。
-秋招可以说是结束了，金九银十过去了，目前只拿到一个小厂offer。我有不错的实习经历，有时也自认为有不错的能力（在面试顺利时），对这样的结果还是不甘心。所以我决定再去实习一段时间，期望能有更好的结果。
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/10/03/national-day/" title="国庆节"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="国庆节"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/10/03/national-day/" title="国庆节">国庆节</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-10-03T05:25:01.000Z" title="发表于 2023-10-03 13:25:01">2023-10-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">
-回家过节啦，学校离家近，不到3个小时就到家了。又是一年一度的中秋国庆节，不知道从什么时候开始，中秋和国庆凑到一起过了。在什么情况下3+7等于8？答：在完美的调休制度下3+7=8。3+7=调休？8：10。回家了，好好放松下，虽说在学校也没少放松。
-姐姐也回家了，带着不到两岁的小神兽。神兽已经能走路、说话了，整天“妈妈”，“抱抱”，&amp;*%…，十分可爱。想起了我小时候，在我不到两岁的时候，我……我还没有记事😅。但我想应该也特别可爱，想哭就哭，想笑就笑，哭了有人哄，饿了有人喂。谁都有童年，谁都有过童年。就像歌词写道：“一代人终将老去 但总有人正年轻”。我今年22岁了，童年离我越来越远了。
-上小学时，每个学期末都盼着拿到奖状，这样在拜年时特别有面，是亲戚口中的别人家的孩子。所以好好学习就是天大的事，期末考的好就开心，考的不好就难过。
-上初中时，学习不如之前勤奋了，沉迷上了游戏，几乎所有腾讯的游戏都玩了个遍，成绩也不如之前好了。虽说成绩变差了，但也是中等偏上，因为小学成绩太好了，父母的期待变高了。所以得出一个完美的结论：小时候成绩不要太好😅！成绩忽高忽低，父母的批评、管束变多了，而且 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/06/30/relax-summer/" title="暑假第一天"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="暑假第一天"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/30/relax-summer/" title="暑假第一天">暑假第一天</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-30T14:00:15.000Z" title="发表于 2023-06-30 22:00:15">2023-06-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">今天是放假第一天，刷刷短视频、看看综艺，一天就过去了。
-这可能是比较放松的一个暑假，也是为数不多的一个暑假。考研er暑假得准备考研，甚至很多同学都没有回家，自然是没有暑假了。也有一些认识的、不打算就业的人正在大厂实习，自然也是没有暑假了。而我，这个时候再找份实习有点晚了，也快该秋招了，就呆家里刷刷算法、学学技术，过个舒服点的暑假吧。
-昨天和两个高中同学一起回来的。一个是药学专业，打算考研，暑假在家备考；一个护理专业，过几天就去医院实习了，一实习就是8个月。和他们相比，似乎我是最轻松的。可眼看就要秋招了，什么都没准备好；就业压力这么大，失业人数那么多；互联网不景气，没有发展了……一大堆的问题接踵而至，我有啥可轻松的，我应该焦虑才对。
-焦虑有用吗？因为焦虑，我能在秋招找到一份好工作吗？因为焦虑，互联网寒冬就能过去，就业岗位就能增加吗？显然不能，焦虑过度只能过度的焦虑。身边的人越来越焦虑，身边的人弦时刻紧绷着，我不要和他们一样。这个暑假，我要放轻松。轻松不是无所事事，虚度光阴，而是不焦虑，不强求。每天进步一点，哪怕只有一点，就很好。
-九月份应该就要秋招了，可能会神仙打架，结果不尽人意，但秋招 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/06/19/junior-year/" title="我的大三下学期"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我的大三下学期"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/19/junior-year/" title="我的大三下学期">我的大三下学期</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-19T08:51:15.000Z" title="发表于 2023-06-19 16:51:15">2023-06-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">又到毕业季，看着校园里学生们穿着毕业服到处拍着照片，各个学院举办着毕业典礼，随处都是离别的声音。时间很快，来年6月，就到我了。
-2月27号，开学。这月底，大三下学期就结束了。这一学期，过得不太一样。
-不一样的是，疫情走了，花开了，人多了。不再封校，不再做核酸，不再戴口罩……校园内外充满了朝气，图书馆不再隔位就坐，网课大学成为过去，商业街热闹了起来。劳动节和同学在学校附近玩了一天，很开心，三年了第一次去学校外面逛。好的大学，没有围墙。我们就这样被困了两年多。
-不一样的是，这学期一半多时间都去实习了，体验了一把打工人的苦与乐。
-通过实习，认识了一些同龄的实习生，每到周末可以一起出去玩。几个月内，去了天安门、故宫、八达岭长城等景点，度过了一个个难忘的周末。赶上了组里的团建，玩得也很开心。还恰逢公司周年庆，领了个周年文化衫，留作纪念……这些都很快乐，都是很难得的经历。
-实习学业难平衡。一边要忙着实习的事，完成导师给的需求，一边要忙着学校的事，生怕考试挂科。每次学校有考试，都要早上五点起床，坐最早的高铁赶到学校，哪怕这样，还有一次晚点了。下班时间晚，没有个人生活。哪怕只是实习生，大部分时间也晚上 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/02/25/wake-up/" title="浑浑噩噩，一个月又过去了……"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="浑浑噩噩，一个月又过去了……"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/02/25/wake-up/" title="浑浑噩噩，一个月又过去了……">浑浑噩噩，一个月又过去了……</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-02-25T07:15:15.000Z" title="发表于 2023-02-25 15:15:15">2023-02-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">浑浑噩噩，一个月又过去了……算上放假，已经实习50多天了。
-工作日时间过的很快，8点多起床，刷牙洗脸挤公交，接近10点到公司，晚上早的话7点多下班，晚的话9点多下班，到家后刷刷手机，十二点、一点多入睡。一天就这样过去了。
-周六日时间过得很慢，一天无所事事，刷刷手机，听听音乐，一遍又一遍地打开聊天软件，总在盼望，总在失望。一天就这样过去了。
-实习就像一个分水岭。在实习前我虽然会放纵，但总的来说是处于学习的状态，并且有动力来学习充实自己。在实习后，我就彻底放飞自我，停止了学习。我会一遍一遍又一遍地自我安慰说上班时间少，工作很累了没时间学习，但我知道这是借口罢了。我知道这样下去很危险，但又懒惰地不想做出改变，我知道这样下去很危险……
-下周一就要开学了，因为没有考研的准备，我选择继续实习。就在我整天浑浑噩噩的同时，醒着的人正在为实现自己的目标而努力。还有几个月就要秋招了，现在还不是做梦的时候。醒醒吧，别再沉浸在实习的美梦中了，也许，这本就是场噩梦。
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/01/21/2022/" title="2022年终总结"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/bg2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2022年终总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快啊，今天就是大年三十了，一年又这样过去了。
-没什么可写的，但又想写点什么，毕竟好久没写记录自己的日常了，连”个站商店“也把我网站删除了。与其说是年终总结，不如说是流水账。
-
-《个站商店》给你发了单独的邮件，
-hi 胖虎同学 ：
-很抱歉，你的网站《胖虎同学》未能通过『个站商店』的审核，主要原因是内容非原创，多是技术类或者转载类，这类网站一般比较少人看。等你整改后，欢迎再来哦！
-———— 祝生活愉快！ 邮件来自《个站商店》 2023-01-18 12:51:59
-
-今年也和往年一样，疫情，开学，放假……
-2月28日，开学，开学没几天，疫情严重，在校上网课。5月25日，请假离校，提前过上暑假生活……
-9月5号开始返校，已经是大三的老家伙了，因家里疫情被延期返校，13日回校。开学没几天，疫情严重，在校上网课。11月26日，请假离校，提前过上寒假生活……
-除了开学放假外，今年有两件事可以说说。一件好事，一件坏事。
-一件好事就是找到了实习。12月，我开始准备找实习的事，很幸运在12月30日拿到了实习offer。
-1月5号，去公司报到，开始实习生活。1月21也就是今天，回家过年。这月只工 ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#content-inner">10</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/logo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">胖虎同学</div><div class="author-info__description">保持热爱，找寻自我</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panghutx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">你好，感谢访问小站。这里是我的内心自留地，主要分享生活日常、学习笔记，欢迎留下脚印哦~</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/03/new-work/" title="近期碎碎念">近期碎碎念</a><time datetime="2025-06-03T15:57:01.000Z" title="发表于 2025-06-03 23:57:01">2025-06-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/17/graduate/" title="打工人的一周">打工人的一周</a><time datetime="2024-08-17T13:51:15.000Z" title="发表于 2024-08-17 21:51:15">2024-08-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/17/shixi-again/" title="练习时长1个月">练习时长1个月</a><time datetime="2023-12-17T03:11:11.000Z" title="发表于 2023-12-17 11:11:11">2023-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/05/ontheway/" title="在路上">在路上</a><time datetime="2023-11-05T02:11:01.000Z" title="发表于 2023-11-05 10:11:01">2023-11-05</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+  pageType: 'home'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="胖虎同学" type="application/atom+xml">
+</head><body><div id="web_bg" style="background-image: url(https://offer.youngsay.cn/blog/background1.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/logo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">93</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">胖虎同学</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">胖虎同学</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/2025/07/05/new-work/" title="近期碎碎念"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="近期碎碎念"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/07/05/new-work/" title="近期碎碎念">近期碎碎念</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-07-05T09:35:01.000Z" title="发表于 2025-07-05 17:35:01">2025-07-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快，还没来得及写2024年终总结，2025又已经过半了。好久没写博客了，某天心血来潮想要写点啥，打开记事本，又不知道从何说起。 姥姥走了 去年12月，姥姥得了脑梗，慢慢地越来越严重，说不了话，吃不了饭，也不认得人了，只能靠流食维持生命。今年4月，姥姥走了。 去年10月，国庆放假回了一次家，那时姥姥还没生病。再回去就是12月，觉得好久没回去了，想要回去看看。回去后才知道姥姥已经住院一周了，家里一直没和我说，那时候还有些意识，慢慢听也知道再说些什么。慢慢地，越来越严重，也没了意识。看着姥姥的样子，很难受，后悔没能多陪陪姥姥。 上大学的时候，写了一篇博客，我与姥姥，后来觉得太矫情，就删了，一直存在电脑本地。很多中国家庭，亲人间的感情都是很含蓄的，相互惦记却不懂得表达。我更是如此。长大后，和姥姥的见面次数越来越少。上高中后，一两周见一次，上大学后，几个月见一次。现在，再也见不到了。 姥姥操劳了一辈子，能帮子女做点什么就绝不闲着，有什么病能忍着就忍着，生怕自己给家人添麻烦。我的傻姥姥，为什么不多对自己好一点。 人都是会死的，生离死别都是人生的必经阶段，珍惜眼前人。没有什么东西是永...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/08/17/graduate/" title="打工人的一周"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="打工人的一周"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/08/17/graduate/" title="打工人的一周">打工人的一周</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-08-17T13:51:15.000Z" title="发表于 2024-08-17 21:51:15">2024-08-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">不知不觉，正式工作一个半月了。 一开始工作，属于自己的时间更少了，一天平均十二多个小时呆在公司。晚上只有一点儿时间属于自己，沉浸在仅有的这点时间里，久久不肯入睡，真想静止在此刻。 很快，时间来到了凌晨一两点，真的要去睡觉了，因为明天还要工作。好像刚刚进入梦乡，窗外发出一声巨响，垃圾车在倾倒垃圾，那是在每天早晨七点。半睡半醒，八点多了，睁开了沉重的眼皮，迈着沉重的步伐，又要去上班了。上班，时间过得很慢，仿佛静止在此刻。 忙碌了五天，终于来到了周末。一周最开心的是周五晚上，它离周一那么远。短暂开心过后是无尽的空虚，周末无所事事，一觉睡到了中午，点个外卖，很快又到了晚上，再点个外卖。吃完这两顿外卖，一天就过去了，吃完这四顿外卖，周末就过去了，周一又来了。 </div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2024/01/01/2023/" title="2023年终总结"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2023年终总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">一年又过去了，这是博客的第三个年终总结。 回看了前两年的年终总结，都是那样普通平常，而且前两年赶上了疫情，要么延期开学，要么封校，要么提前放假。与博友们的丰富多彩的生活相比，我就像白活了一样。 今年与往年有些不同，有了新的身份——实习生，活跃地点也由家和学校转移到了公司、出租屋。 1-4月，开启人生第一份实习，新鲜又陌生，期待又恐惧。 5月，担心挂科重回学校，4门必修课，大半学期没听课，最后考的还不错。所以说要活在当下，不要透支烦恼，你所想的种种麻烦大都不会发生，即便发生也都会顺利解决。 8-10月，秋招。秋招并不顺利，我想这是心态的问题，心态差，做什么都无济于事了。每天只是麻木的做着测评、笔试、面试，事后没有复盘、反思。看似很努力，其实只将一件事重复了一次又一次。 9月，大四开学，学校组织去外地实训，度过快乐、难忘的两周。一起去海边、聚餐、熬夜看鬼片，这才是大学生活。 11月，秋招不顺利，二次实习。 2024年了，虚岁24岁了，我不敢想。 还记得小学英语课上一个小插曲，老师问大家里的梦想是什么，我说想做policeman，老师听成了postman（其实postman还挺符合我的...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/12/17/shixi-again/" title="练习时长1个月"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="练习时长1个月"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/12/17/shixi-again/" title="练习时长1个月">练习时长1个月</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-12-17T03:11:11.000Z" title="发表于 2023-12-17 11:11:11">2023-12-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快，上次发文说去实习了，转眼间实习一个多月了。 第一段实习是大三上学期学期末，疫情刚放开，进京不需要各种***了。趁着寒假，快乐地实习了一段时间。大三下学期开学后，实习就不那么快乐了。学校各种破事，还有四五门必修课和一堆水课，最后在学期末离职回学校了。现在想想其实应该再坚持一下，最坏不就是挂科嘛，工作都找不到，挂几科能怎样。 第一次找实习的过程还是挺顺利的，拿了两个offer，最后来了滴滴实习。当时在想，都说找工作难，这不也还行吗？现在看是运气好罢了。如果不是秋招，我还以为我前途一片光明呢。我的岗位是测开，但更多的是开发，接触到的测试很少。大多数公司测开还是以测试为主，所以秋招在面试时实习可能并没有带来多少加分。 秋招大寄，所以又来实习了。这次找实习也很顺利，为什么我的秋招不能这样顺利😭这次实习主要是测试，和第一段实习刚好互补了。希望能留下了或者春招能找到个满意的工作🙏。相比第一段实习，这次似乎从容了很多，一是心态上好了很多，因为除了实习，好像没有更好的选择了，不再care学校的一些破事了（最好别让我毕业，这样还能参加明年秋招🤬），二是对实习的环境也更熟悉，包括租...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/11/05/ontheway/" title="在路上"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在路上"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/11/05/ontheway/" title="在路上">在路上</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-11-05T02:11:01.000Z" title="发表于 2023-11-05 10:11:01">2023-11-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时隔一个月，又回家了。在家睡觉就是舒服、踏实，在学校每天入睡困难，一两点睡觉是常事，回到家躺上床没十分钟就睡着了，真是家到病除。 这次回家呆几天，收拾收拾东西，下周又要去实习了。之前博客说过，我今年年初去实习了。实习期间认识了不少小伙伴，这些小伙伴都拿到了大厂offer，有些还不止一个。只有我，整个秋招只拿到一个小厂offer。我也知道，不要只问收获，不问耕耘。我也知道，不要和他人比较，做好自己。我也知道，我不知道。 秋招可以说是结束了，金九银十过去了，目前只拿到一个小厂offer。我有不错的实习经历，有时也自认为有不错的能力（在面试顺利时），对这样的结果还是不甘心。所以我决定再去实习一段时间，期望能有更好的结果。 </div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/10/03/national-day/" title="国庆节"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="国庆节"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/10/03/national-day/" title="国庆节">国庆节</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-10-03T05:25:01.000Z" title="发表于 2023-10-03 13:25:01">2023-10-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content"> 回家过节啦，学校离家近，不到3个小时就到家了。又是一年一度的中秋国庆节，不知道从什么时候开始，中秋和国庆凑到一起过了。在什么情况下3+7等于8？答：在完美的调休制度下3+7=8。3+7=调休？8：10。回家了，好好放松下，虽说在学校也没少放松。 姐姐也回家了，带着不到两岁的小神兽。神兽已经能走路、说话了，整天“妈妈”，“抱抱”，&amp;*%…，十分可爱。想起了我小时候，在我不到两岁的时候，我……我还没有记事😅。但我想应该也特别可爱，想哭就哭，想笑就笑，哭了有人哄，饿了有人喂。谁都有童年，谁都有过童年。就像歌词写道：“一代人终将老去 但总有人正年轻”。我今年22岁了，童年离我越来越远了。 上小学时，每个学期末都盼着拿到奖状，这样在拜年时特别有面，是亲戚口中的别人家的孩子。所以好好学习就是天大的事，期末考的好就开心，考的不好就难过。 上初中时，学习不如之前勤奋了，沉迷上了游戏，几乎所有腾讯的游戏都玩了个遍，成绩也不如之前好了。虽说成绩变差了，但也是中等偏上，因为小学成绩太好了，父母的期待变高了。所以得出一个完美的结论：小时候成绩不要太好😅！成绩忽高忽低，父母的批评、管束变多了...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/06/30/relax-summer/" title="暑假第一天"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="暑假第一天"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/30/relax-summer/" title="暑假第一天">暑假第一天</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-30T14:00:15.000Z" title="发表于 2023-06-30 22:00:15">2023-06-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">今天是放假第一天，刷刷短视频、看看综艺，一天就过去了。 这可能是比较放松的一个暑假，也是为数不多的一个暑假。考研er暑假得准备考研，甚至很多同学都没有回家，自然是没有暑假了。也有一些认识的、不打算就业的人正在大厂实习，自然也是没有暑假了。而我，这个时候再找份实习有点晚了，也快该秋招了，就呆家里刷刷算法、学学技术，过个舒服点的暑假吧。 昨天和两个高中同学一起回来的。一个是药学专业，打算考研，暑假在家备考；一个护理专业，过几天就去医院实习了，一实习就是8个月。和他们相比，似乎我是最轻松的。可眼看就要秋招了，什么都没准备好；就业压力这么大，失业人数那么多；互联网不景气，没有发展了……一大堆的问题接踵而至，我有啥可轻松的，我应该焦虑才对。 焦虑有用吗？因为焦虑，我能在秋招找到一份好工作吗？因为焦虑，互联网寒冬就能过去，就业岗位就能增加吗？显然不能，焦虑过度只能过度的焦虑。身边的人越来越焦虑，身边的人弦时刻紧绷着，我不要和他们一样。这个暑假，我要放轻松。轻松不是无所事事，虚度光阴，而是不焦虑，不强求。每天进步一点，哪怕只有一点，就很好。 九月份应该就要秋招了，可能会神仙打架，结果不尽人意，...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/06/19/junior-year/" title="我的大三下学期"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我的大三下学期"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/19/junior-year/" title="我的大三下学期">我的大三下学期</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-19T08:51:15.000Z" title="发表于 2023-06-19 16:51:15">2023-06-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">又到毕业季，看着校园里学生们穿着毕业服到处拍着照片，各个学院举办着毕业典礼，随处都是离别的声音。时间很快，来年6月，就到我了。 2月27号，开学。这月底，大三下学期就结束了。这一学期，过得不太一样。 不一样的是，疫情走了，花开了，人多了。不再封校，不再做核酸，不再戴口罩……校园内外充满了朝气，图书馆不再隔位就坐，网课大学成为过去，商业街热闹了起来。劳动节和同学在学校附近玩了一天，很开心，三年了第一次去学校外面逛。好的大学，没有围墙。我们就这样被困了两年多。 不一样的是，这学期一半多时间都去实习了，体验了一把打工人的苦与乐。 通过实习，认识了一些同龄的实习生，每到周末可以一起出去玩。几个月内，去了天安门、故宫、八达岭长城等景点，度过了一个个难忘的周末。赶上了组里的团建，玩得也很开心。还恰逢公司周年庆，领了个周年文化衫，留作纪念……这些都很快乐，都是很难得的经历。 实习学业难平衡。一边要忙着实习的事，完成导师给的需求，一边要忙着学校的事，生怕考试挂科。每次学校有考试，都要早上五点起床，坐最早的高铁赶到学校，哪怕这样，还有一次晚点了。下班时间晚，没有个人生活。哪怕只是实习生，大部分时间...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/02/25/wake-up/" title="浑浑噩噩，一个月又过去了……"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="浑浑噩噩，一个月又过去了……"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/02/25/wake-up/" title="浑浑噩噩，一个月又过去了……">浑浑噩噩，一个月又过去了……</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-02-25T07:15:15.000Z" title="发表于 2023-02-25 15:15:15">2023-02-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">浑浑噩噩，一个月又过去了……算上放假，已经实习50多天了。 工作日时间过的很快，8点多起床，刷牙洗脸挤公交，接近10点到公司，晚上早的话7点多下班，晚的话9点多下班，到家后刷刷手机，十二点、一点多入睡。一天就这样过去了。 周六日时间过得很慢，一天无所事事，刷刷手机，听听音乐，一遍又一遍地打开聊天软件，总在盼望，总在失望。一天就这样过去了。 实习就像一个分水岭。在实习前我虽然会放纵，但总的来说是处于学习的状态，并且有动力来学习充实自己。在实习后，我就彻底放飞自我，停止了学习。我会一遍一遍又一遍地自我安慰说上班时间少，工作很累了没时间学习，但我知道这是借口罢了。我知道这样下去很危险，但又懒惰地不想做出改变，我知道这样下去很危险…… 下周一就要开学了，因为没有考研的准备，我选择继续实习。就在我整天浑浑噩噩的同时，醒着的人正在为实现自己的目标而努力。还有几个月就要秋招了，现在还不是做梦的时候。醒醒吧，别再沉浸在实习的美梦中了，也许，这本就是场噩梦。 </div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/2023/01/21/2022/" title="2022年终总结"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2022年终总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8/">日常</a></span></div><div class="content">时间过得真快啊，今天就是大年三十了，一年又这样过去了。 没什么可写的，但又想写点什么，毕竟好久没写记录自己的日常了，连”个站商店“也把我网站删除了。与其说是年终总结，不如说是流水账。  《个站商店》给你发了单独的邮件， hi 胖虎同学 ： 很抱歉，你的网站《胖虎同学》未能通过『个站商店』的审核，主要原因是内容非原创，多是技术类或者转载类，这类网站一般比较少人看。等你整改后，欢迎再来哦！ ———— 祝生活愉快！ 邮件来自《个站商店》 2023-01-18 12:51:59  今年也和往年一样，疫情，开学，放假…… 2月28日，开学，开学没几天，疫情严重，在校上网课。5月25日，请假离校，提前过上暑假生活…… 9月5号开始返校，已经是大三的老家伙了，因家里疫情被延期返校，13日回校。开学没几天，疫情严重，在校上网课。11月26日，请假离校，提前过上寒假生活…… 除了开学放假外，今年有两件事可以说说。一件好事，一件坏事。 一件好事就是找到了实习。12月，我开始准备找实习的事，很幸运在12月30日拿到了实习offer。 1月5号，去公司报到，开始实习生活。1月21也就是今天，回家过年。这...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#content-inner">10</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/logo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">胖虎同学</div><div class="author-info-description">保持热爱，找寻自我</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">93</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panghutx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">你好，感谢访问小站。这里是我的内心自留地，主要分享生活日常、学习笔记，欢迎留下脚印哦~</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/05/new-work/" title="近期碎碎念">近期碎碎念</a><time datetime="2025-07-05T09:35:01.000Z" title="发表于 2025-07-05 17:35:01">2025-07-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/08/17/graduate/" title="打工人的一周">打工人的一周</a><time datetime="2024-08-17T13:51:15.000Z" title="发表于 2024-08-17 21:51:15">2024-08-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/17/shixi-again/" title="练习时长1个月">练习时长1个月</a><time datetime="2023-12-17T03:11:11.000Z" title="发表于 2023-12-17 11:11:11">2023-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/05/ontheway/" title="在路上">在路上</a><time datetime="2023-11-05T02:11:01.000Z" title="发表于 2023-11-05 10:11:01">2023-11-05</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%88%86%E4%BA%AB/"><span class="card-category-list-name">分享</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">学习</span><span class="card-category-list-count">69</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/"><span class="card-category-list-name">日常</span><span class="card-category-list-count">19</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/IO/" style="font-size: 1.1em; color: #999">IO</a> <a href="/tags/JavaSE/" style="font-size: 1.37em; color: #99a4b2">JavaSE</a> <a href="/tags/JavaScript/" style="font-size: 1.41em; color: #99a5b7">JavaScript</a> <a href="/tags/JavaWeb/" style="font-size: 1.19em; color: #999da1">JavaWeb</a> <a href="/tags/MySQL/" style="font-size: 1.14em; color: #999b9d">MySQL</a> <a href="/tags/Python/" style="font-size: 1.1em; color: #999">Python</a> <a href="/tags/Vue-js/" style="font-size: 1.1em; color: #999">Vue.js</a> <a href="/tags/c/" style="font-size: 1.5em; color: #99a9bf">c</a> <a href="/tags/css/" style="font-size: 1.46em; color: #99a7bb">css</a> <a href="/tags/html/" style="font-size: 1.19em; color: #999da1">html</a> <a href="/tags/linux/" style="font-size: 1.28em; color: #99a0aa">linux</a> <a href="/tags/socket/" style="font-size: 1.1em; color: #999">socket</a> <a href="/tags/yaml/" style="font-size: 1.1em; color: #999">yaml</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 1.1em; color: #999">事务</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.32em; color: #99a2ae">多线程</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 1.19em; color: #999da1">年终总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">数据结构和算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 1.1em; color: #999">索引</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 1.23em; color: #999ea6">阅读</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/06/"><span class="card-archive-list-date">六月 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/01/"><span class="card-archive-list-date">一月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/02/"><span class="card-archive-list-date">二月 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">92</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-03-28T16:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">97k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-06-03T16:29:05.531Z"></div></div></div></div></div></div></main><footer id="footer" style="background: rgb(81, 101, 126)"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By 胖虎同学</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a target="_blank" href="https://beian.miit.gov.cn/">津ICP备2021003211号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
-  if (typeof pangu === 'object') pangu.autoSpacingPage()
-  else {
-    getScript('https://testingcf.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
-      .then(() => {
-        pangu.autoSpacingPage()
-      })
-  }
-}
-
-function panguInit () {
-  if (false){
-    GLOBAL_CONFIG_SITE.isPost && panguFn()
-  } else {
-    panguFn()
-  }
-}
-
-document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div></div></body></html>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%88%86%E4%BA%AB/"><span class="card-category-list-name">分享</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">学习</span><span class="card-category-list-count">69</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/"><span class="card-category-list-name">日常</span><span class="card-category-list-count">20</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.32em; color: #99a2ae">多线程</a> <a href="/tags/JavaWeb/" style="font-size: 1.19em; color: #999da1">JavaWeb</a> <a href="/tags/linux/" style="font-size: 1.28em; color: #99a0aa">linux</a> <a href="/tags/Vue-js/" style="font-size: 1.1em; color: #999">Vue.js</a> <a href="/tags/c/" style="font-size: 1.5em; color: #99a9bf">c</a> <a href="/tags/JavaScript/" style="font-size: 1.41em; color: #99a5b7">JavaScript</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 1.23em; color: #999ea6">阅读</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 1.1em; color: #999">事务</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">数据结构和算法</a> <a href="/tags/yaml/" style="font-size: 1.1em; color: #999">yaml</a> <a href="/tags/IO/" style="font-size: 1.1em; color: #999">IO</a> <a href="/tags/socket/" style="font-size: 1.1em; color: #999">socket</a> <a href="/tags/html/" style="font-size: 1.19em; color: #999da1">html</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 1.19em; color: #999da1">年终总结</a> <a href="/tags/css/" style="font-size: 1.46em; color: #99a7bb">css</a> <a href="/tags/JavaSE/" style="font-size: 1.37em; color: #99a4b2">JavaSE</a> <a href="/tags/MySQL/" style="font-size: 1.14em; color: #999b9d">MySQL</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 1.1em; color: #999">索引</a> <a href="/tags/Python/" style="font-size: 1.1em; color: #999">Python</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/08/">
+            <span class="card-archive-list-date">
+              八月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/01/">
+            <span class="card-archive-list-date">
+              一月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              十二月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/11/">
+            <span class="card-archive-list-date">
+              十一月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/10/">
+            <span class="card-archive-list-date">
+              十月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/06/">
+            <span class="card-archive-list-date">
+              六月 2023
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/02/">
+            <span class="card-archive-list-date">
+              二月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">93</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-03-28T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">98.4k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-07-05T13:20:38.293Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2021 - 2025 By 胖虎同学</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.1</a></span></div><div class="footer_custom_text"><a target="_blank" href="https://beian.miit.gov.cn/">津ICP备2021003211号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div></div></body></html>

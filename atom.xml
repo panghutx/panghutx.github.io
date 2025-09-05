@@ -6,7 +6,7 @@
   <link href="https://youngsay.cn/atom.xml" rel="self"/>
   
   <link href="https://youngsay.cn/"/>
-  <updated>2025-07-05T13:17:40.315Z</updated>
+  <updated>2025-09-05T14:46:48.324Z</updated>
   <id>https://youngsay.cn/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>你有多久没思考了？</title>
+    <link href="https://youngsay.cn/2025/09/05/think-again/"/>
+    <id>https://youngsay.cn/2025/09/05/think-again/</id>
+    <published>2025-09-05T14:46:01.000Z</published>
+    <updated>2025-09-05T14:46:48.324Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>“人为什么要活着？”，“我也没想过，我看他们都活着”。</p></blockquote><p>不知从什么时候开始，变得一切都习以为常，变得麻木，变得失去了自己。</p><p>你把“不再思考”美化成适应性强，事少。当他人问出个问题，你不屑地听，心想，”这都要问？”“你怎么这么多事“。</p><p>殊不知，“不思考”只是你懒、不想费力的借口。慢慢地，从“懒”变成了“傻”，不再思考，也不会思考，变得越来越平庸。</p><p>近日，老板找我沟通，问了我很多问题，我都答不上来，我也从来没有想过。“工作到现在你有哪些成长？”“你觉得怎样算是工作出色？”“你负责的业务有哪些特点？”……一系列问题，我都没有想过，我想着，我只想着，“这不很显而易见嘛”，“这也值得问嘛”，“这是不是在pua我”。</p><p>深受网络的影响，短视频的影响，“停止思考，生活美好”，“只是工作罢了”，喝多了这些毒鸡汤，便真的中毒了。人与众不同，是因为有思想，当你不再思考，没了思想，还剩下什么。只是工作罢了，但工作已经占据了生活的大半部分，又有多少人能不工作。如果不能不工作，为什么不做好自己的工作。</p><p>毕业后，感觉自己一直在被推着走。为什么走？我没想过。要走多快？我没想过。走哪去？我没想过。还要走多久，我也没想过。走到现在，工作，没什么长进，生活，没什么生活。上班盼着下班，下班焦虑上班。</p><p>写到这里，我问了下豆包，这种 “不想思考、倾向于选择容易的事情而回避困难” 的现象，心理学上叫“认知吝啬鬼”（Cognitive Miser），是**人类在认知过程中，会本能地节省心理资源，倾向于采用简单、省力的思考方式（如直觉、经验判断），而避免耗费更多精力的深度思考或复杂决策。**同时，豆包也给了我几个建议，克服这种现象。我简单总结下。</p><ol><li>凡事过下脑子，暂停几秒再决策。用笔思考，想到什么写下来。</li><li>主动“找别扭”，多问为什么。切换视角，用陌生人、朋友等局外人视角想问题。</li><li>拆解任务，以大化小，降低思考门槛。</li><li>慢阅读，多停下来思考总结。</li></ol><p>知易行难，难难难难。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;“人为什么要活着？”，“我也没想过，我看他们都活着”。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不知从什么时候开始，变得一切都习以为常，变得麻木，变得失去了自己。&lt;/p&gt;
+&lt;p&gt;你把“不再思考”美化成适应性强，事少。当他人问出个问题，你不屑地听，</summary>
+      
+    
+    
+    
+    <category term="日常" scheme="https://youngsay.cn/categories/%E6%97%A5%E5%B8%B8/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>近期碎碎念</title>
@@ -482,33 +508,6 @@
 &lt;h3 id=&quot;造成线程不安全的原因&quot;&gt;造成线程不安全的原因&lt;/h3&gt;
 &lt;ol&gt;
 &lt;</summary>
-      
-    
-    
-    
-    <category term="学习" scheme="https://youngsay.cn/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="多线程" scheme="https://youngsay.cn/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java单例模式：懒汉模式和饿汉模式</title>
-    <link href="https://youngsay.cn/2022/09/21/Java-Singleton/"/>
-    <id>https://youngsay.cn/2022/09/21/Java-Singleton/</id>
-    <published>2022-09-21T13:04:41.000Z</published>
-    <updated>2022-11-14T04:21:23.114Z</updated>
-    
-    <content type="html"><![CDATA[<p>单例模式，就是一个类中只有一个实例。主要有懒汉模式和饿汉模式。</p><p>饿汉模式是在类加载的同时就创建实例，而懒汉模式是使用时才创建实例。</p><h3 id="饿汉模式">饿汉模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.使用static创建一个实例，并且立即实例化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">    <span class="comment">//2.为了防止在其他地方不小心new这个Singleton，把方法构造为private</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供一个方法，让外面能够拿到唯一实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>在多线程中，多个线程对同一数据进行读操作，线程安全。</p><h3 id="懒汉模式">懒汉模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton1 instance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton1 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>多线程中，多个线程对同一对象进行读、写操作，线程不安全。线程不安全出现在首次创建实例时，多个线程同时调用getInstance方法，可能创造出多个实例。</p><p>改进1：</p><p>对getInstance方法加锁，保证操作的原子性，实现线程安全。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>但这种方法性能较差，毕竟线程不安全只出现在首次创建实例时，为getInstance方法加锁后每次都要加锁解锁，所以做如下改进。</p><p>改进2：</p><p>进入getInstance方法后首先判断instance是否为空，即是否为第一次创建实例，是才需要加锁，否则不需要加锁。同时为了避免 “内存可见性” 导致读取的 instance 出现偏差, 因此为instance加上volatile。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Singleton1 instance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;单例模式，就是一个类中只有一个实例。主要有懒汉模式和饿汉模式。&lt;/p&gt;
-&lt;p&gt;饿汉模式是在类加载的同时就创建实例，而懒汉模式是使用时才创建实例。&lt;/p&gt;
-&lt;h3 id=&quot;饿汉模式&quot;&gt;饿汉模式&lt;/h3&gt;
-&lt;figure class=&quot;highlight java&quot;&gt;&lt;tabl</summary>
       
     
     

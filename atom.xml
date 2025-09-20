@@ -6,7 +6,7 @@
   <link href="https://youngsay.cn/atom.xml" rel="self"/>
   
   <link href="https://youngsay.cn/"/>
-  <updated>2025-09-18T16:19:58.871Z</updated>
+  <updated>2025-09-20T13:20:55.179Z</updated>
   <id>https://youngsay.cn/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>又到周末，不知道要做什么</title>
+    <link href="https://youngsay.cn/2025/09/20/on-the-way/"/>
+    <id>https://youngsay.cn/2025/09/20/on-the-way/</id>
+    <published>2025-09-20T13:12:01.000Z</published>
+    <updated>2025-09-20T13:20:55.179Z</updated>
+    
+    <content type="html"><![CDATA[<p>一上班就盼周末，工作五天，终于盼来了周末。</p><p>周六早上，不到七点就醒了。一到周末就早醒，不知道什么原因，可能不想错过宝贵的周末，想让周末更长一点。醒来后，<strong>不知道要做什么</strong>，手机刷抖音、小红书，电脑看b站，看的当下打发了时间，回过头来看满是空虚。<strong>不知道要做什么</strong>，玩了两局游戏，不好玩。同样的游戏，不知道为什么初中高中的时候那么爱玩。某个希腊哲学人家说，人不能两次踏入同一条河流。一切都在变化，我也一样。临到中午，骑上电车，在外面转了一圈，<strong>不知道要做什么</strong>，骑到附近的市场吃饭，吃过午饭，买了点水果，回出租屋。</p><p>回到出租屋，<strong>不知道要做什么</strong>，继续刷着手机，看着电脑。看了两集《圆桌派7》，准确的说是1.5集，看着看着睡着了。一集主题是老友，哪怕第二次刷了，看完也没留下什么。第二集主题是照护，北大教授照护患胡泳照护阿尔默兹海默症的母亲。人的境况，生老病死，而生只占一个字，老病死的分量要比生占得多得多。我们会刻意回避老病死，直到不得不面对它，我们是那样无力，生老病死，哪一样都由不得你我。</p><p>有些困意，看着看着睡着了，不知道睡了多久，醒来已经下午四点了。<strong>不知道要做什么</strong>，继续刷着手机，看着电脑。到晚饭时间了，开始打开外卖软件，看看吃点什么。点完外卖，<strong>不知道要做什么</strong>，看会综艺《王牌对王牌》，等着外卖的到来。六点，外卖来了，就着下饭综艺，吃完了外卖。</p><p>吃过晚饭，<strong>不知道要做什么</strong>，去外面转转。骑上电车，向东一直骑，这是我从来没走过的路。骑到快没电，开始返程。一路上，我看见有人在饭店吃饭，看见有人在路边等餐，看见有人在路上走着。有的人不慌不忙，有说有笑，有的人忙着赶路，面无表情。骑到快没电了，返程回家。</p><p>回到出租屋，已经七点半了，<strong>不知道要做什么</strong>，写下这篇博客。</p><p><strong>我知道要做什么</strong>。我有很多书没读，我有很多事没做。我想开发人尽皆知的产品，我想学习理财知识，我想做自媒体，我想读买过的书，我想…，我想的太多。杨绛说，**你的问题在于书读得太少，而想得太多。**是啊，想的太多，做的太少，很多事仅仅停留在想，却从来没有开始。<strong>我不知道要做什么。</strong></p><p>周末的美好，总在想象与期盼中被无限放大，而当它真正到来时，那份悸动却一点点褪去。就像上学时，心里有着一个目标，有人想要毕业有一份满意的工作，有人想要考一个满意的研究生，每个人都为目标而努力着。当时不觉得多么快乐，以为终点最快乐。等到了终点，才发现快乐在路上。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;一上班就盼周末，工作五天，终于盼来了周末。&lt;/p&gt;
+&lt;p&gt;周六早上，不到七点就醒了。一到周末就早醒，不知道什么原因，可能不想错过宝贵的周末，想让周末更长一点。醒来后，&lt;strong&gt;不知道要做什么&lt;/strong&gt;，手机刷抖音、小红书，电脑看b站，看的当下打发了时间，回过头</summary>
+      
+    
+    
+    
+    <category term="日常" scheme="https://youngsay.cn/categories/%E6%97%A5%E5%B8%B8/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>性格决定命运？</title>
@@ -477,31 +500,6 @@
     <summary type="html">&lt;p&gt;定时器是实际开发中常用的组件，例如文章的定时发布，双11的准点抢购活动等。&lt;/p&gt;
 &lt;p&gt;下面我们来看一下Java标准库中的定时器。&lt;/p&gt;
 &lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;</summary>
-      
-    
-    
-    
-    <category term="学习" scheme="https://youngsay.cn/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="多线程" scheme="https://youngsay.cn/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>多线程实例：阻塞队列</title>
-    <link href="https://youngsay.cn/2022/11/14/Java-BlockingQueue/"/>
-    <id>https://youngsay.cn/2022/11/14/Java-BlockingQueue/</id>
-    <published>2022-11-14T04:04:41.000Z</published>
-    <updated>2022-11-14T04:21:36.271Z</updated>
-    
-    <content type="html"><![CDATA[<p>阻塞队列是一种具有阻塞功能的队列，满足队列“先进先出”的特点，是一种线性安全的数据结构。当队列为空时，执行出队操作会进行阻塞，直到队列中有元素为止；当队列已经满了，执行入堆操作会进行阻塞，知道队列有空间为止。</p><p>阻塞队列的一个典型应用常见就是“生产者消费者”模型。毫无疑问，该模型有两个主体：生产者和消费者。生产者线程负责生产产品，将生产好的产品放进阻塞队列。消费者线程负责消费产品，直接从阻塞队列取产品。</p><p>生产者消费者模型具有解耦、平衡速度差异的特点。</p><p>解耦：生产者无需关注是谁在消费产品，消费了多少产品，只需关注生产操作即可；消费者无需关注是谁在生产产品，生产了多少产品，只需关注消费操作即可。</p><p>平衡速度差异：设想11.11，大量用户向服务器发送了大量的支付请求，一次性将这些请求交给服务器处理，服务器可能会hole不住，因此将这些请求都放进阻塞队列，消费者线程从阻塞队列一个一个地来处理请求就好了。这样就起到了“削峰填谷”的作用，平衡了生产者和消费者之间的速度差异。</p><h3 id="标准库中的阻塞队列：">标准库中的阻塞队列：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    BlockingDeque&lt;String&gt; queue = <span class="keyword">new</span> LinkedBlockingDeque&lt;&gt;();</span><br><span class="line">    queue.put(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    String s = queue.take();</span><br><span class="line">    System.out.println(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>BlockingQueue 是一个接口. 真正实现的类是 LinkedBlockingQueue.</li><li>put 方法用于阻塞式的入队列, take 用于阻塞式的出队列.</li><li>BlockingQueue 也有 offer, poll, peek 等方法, 但是这些方法不带有阻塞特性</li></ul><h3 id="模拟实现阻塞队列：">模拟实现阻塞队列：</h3><ul><li>循环队列+阻塞等待</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] elem = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> head;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> tail;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Object locker = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> val)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (locker)&#123;</span><br><span class="line">            <span class="comment">//队列满了，阻塞等待</span></span><br><span class="line">            <span class="keyword">if</span>(size==elem.length)&#123;</span><br><span class="line">                locker.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//一轮循环，让尾指针指向数组下标为0的位置</span></span><br><span class="line">            <span class="keyword">if</span>(tail==elem.length)&#123;</span><br><span class="line">                tail=<span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            elem[tail++]=val;</span><br><span class="line">            size++;</span><br><span class="line">            <span class="comment">//唤醒消费者线程的堵塞等待</span></span><br><span class="line">            locker.notify();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (locker)&#123;</span><br><span class="line">            <span class="comment">//队列空了，阻塞等待</span></span><br><span class="line">            <span class="keyword">if</span>(size==<span class="number">0</span>)&#123;</span><br><span class="line">                locker.wait();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(head==elem.length)&#123;</span><br><span class="line">                head=<span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> ret = elem[head];</span><br><span class="line">            head++;</span><br><span class="line">            size--;</span><br><span class="line">            <span class="comment">//唤醒生产者线程的堵塞等待</span></span><br><span class="line">            locker.notify();</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//测试代码</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MyQueue queue = <span class="keyword">new</span> MyQueue();</span><br><span class="line">        <span class="comment">//生产者线程</span></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    queue.put(i);</span><br><span class="line">                    System.out.println(<span class="string">&quot;生产了：&quot;</span>+i);</span><br><span class="line">                    i++;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//消费者线程</span></span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> take = queue.take();</span><br><span class="line">                    System.out.println(<span class="string">&quot;消费了：&quot;</span>+take);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;阻塞队列是一种具有阻塞功能的队列，满足队列“先进先出”的特点，是一种线性安全的数据结构。当队列为空时，执行出队操作会进行阻塞，直到队列中有元素为止；当队列已经满了，执行入堆操作会进行阻塞，知道队列有空间为止。&lt;/p&gt;
-&lt;p&gt;阻塞队列的一个典型应用常见就是“生产者消费者”模型</summary>
       
     
     

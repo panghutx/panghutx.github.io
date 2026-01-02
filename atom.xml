@@ -6,7 +6,7 @@
   <link href="https://youngsay.cn/atom.xml" rel="self"/>
   
   <link href="https://youngsay.cn/"/>
-  <updated>2025-12-14T08:45:10.935Z</updated>
+  <updated>2026-01-02T13:44:40.124Z</updated>
   <id>https://youngsay.cn/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hexo部署至服务器</title>
+    <link href="https://youngsay.cn/2026/01/02/new-hexo/"/>
+    <id>https://youngsay.cn/2026/01/02/new-hexo/</id>
+    <published>2026-01-02T13:44:15.000Z</published>
+    <updated>2026-01-02T13:44:40.124Z</updated>
+    
+    <content type="html"><![CDATA[<p>test</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;test&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    <category term="分享" scheme="https://youngsay.cn/categories/%E5%88%86%E4%BA%AB/"/>
+    
+    
+    <category term="hexo" scheme="https://youngsay.cn/tags/hexo/"/>
+    
+  </entry>
   
   <entry>
     <title>2025年终总结</title>
@@ -511,31 +536,6 @@
     
     
     <category term="JavaSE" scheme="https://youngsay.cn/tags/JavaSE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>动态内存分配基本使用及常见问题</title>
-    <link href="https://youngsay.cn/2022/04/09/C-malloc/"/>
-    <id>https://youngsay.cn/2022/04/09/C-malloc/</id>
-    <published>2022-04-09T13:23:41.000Z</published>
-    <updated>2022-04-09T13:28:25.964Z</updated>
-    
-    <content type="html"><![CDATA[<p>为什么需要动态内存管理？创建一个数组，我们要为数组指定大小，<code>int arr[10];</code>，这属于静态创建一个数组，数组arr存放在栈上。这样的创建方式有一些局限性，小了呢不够用，大了呢又浪费空间，因此要引入动态内存管理。</p><p>动态创建一个数组，不再受元素个数的限制，当元素个数与容量相等时，可以很方便地扩容。</p><p>如何动态内存管理，我们来介绍几个函数。</p><p><strong><code>malloc</code></strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void* malloc (size_t size);</span><br></pre></td></tr></table></figure><p>参数size为要为空间开辟的字节数，开辟成功后返回值为该空间的首地址，失败则返回<code>NULL</code>.<strong>当size为0时，要看编译器如何处理，具体返回什么不确定</strong>。</p><p>动态开辟内存后，不需要再使用这块空间时，要使用<code>free</code>函数释放内存。，否则会内存泄漏。free释放后这块内存可以再次被分配，但被释放的空间的值没有被改变，它仍然指向相同（无效）的位置。</p><p><code>free</code>专门用来释放动态分配的空间，如果空间为空，不执行任何操作。切记不可以用free来释放静态分配的内存空间。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span>* p =(<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="number">40</span>); <span class="comment">//动态开辟10字节的空间</span></span><br><span class="line"><span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123; <span class="comment">//判断是否开辟成功</span></span><br><span class="line">perror(<span class="string">&quot;malloc&quot;</span>);</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">*(p + i) = i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, *(p + i));</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">free</span>(p); <span class="comment">//释放p空间</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong><code>calloc</code></strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void* calloc (size_t num, size_t size);</span><br></pre></td></tr></table></figure><p>与<code>malloc</code>相似，但是会在开辟后为空间初始化为0.参数num为要分配的元素数，size为每个元素的大小，总的内存空间为num*size个字节。</p><p>与malloc用法一致，不在举例。</p><p><strong><code>realloc</code></strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void* realloc (void* ptr, size_t size);</span><br></pre></td></tr></table></figure><p>该函数可以为动态空间扩容，参数ptr为要扩容的空间，size为扩容后的内存大小。</p><p>扩容成功返回该空间的首地址，失败返回空，所以为空间扩容时先创建一块临时变量指向该空间，为临时变量扩容，扩容成功再让要扩容的空间等于临时变量，以防扩容失败内容丢失。</p><p>扩容会遇到两种情况，1种是该块空间后没有额外的空间来扩容，这时会分配一块新空间，将旧空间的内容移到新空间，返回值自然也是新空间的首地址，2是该块空间空间充足，这就可以在该空间后连续扩容，无需再寻找新的空间。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span>* p = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="number">40</span>); <span class="comment">//动态开辟10字节的空间</span></span><br><span class="line"><span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123; <span class="comment">//判断是否开辟成功</span></span><br><span class="line">perror(<span class="string">&quot;malloc&quot;</span>);</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">*(p + i) = i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, *(p + i));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//扩容</span></span><br><span class="line"><span class="keyword">int</span>* tmp=(<span class="keyword">int</span>*)<span class="built_in">realloc</span>(p, <span class="number">80</span>);</span><br><span class="line"><span class="keyword">if</span> (tmp != <span class="literal">NULL</span>) &#123; <span class="comment">//判断是否扩容成功</span></span><br><span class="line">p = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">10</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">*(p + i) = i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, *(p + i));</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">free</span>(p);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>输出结果为0~19，扩容成功。</p><p><strong>问题</strong></p><p>了解了动态内存分配函数的一些基础使用后，我们来看一些常见的问题。</p><p>代码1:这段代码有什么问题？</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GetMemory</span><span class="params">(<span class="keyword">char</span> *p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">p = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> *str = <span class="literal">NULL</span>;</span><br><span class="line">GetMemory(str);</span><br><span class="line"><span class="built_in">strcpy</span>(str, <span class="string">&quot;hello world&quot;</span>);</span><br><span class="line"><span class="built_in">printf</span>(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>p是一个局部变量，是实参的一份临时拷贝，出了GetMemory函数会自动销毁。我们为p开辟了100个字节的空间，出了函数后p销毁，找不到这块空间的首地址，却没对该空间进行内存释放，会造成内存泄漏。</p><p>此外str仍是空指针，将“hello world”拷贝到一块空指针，会造成非法访问，程序崩溃。</p><p>我们可以试着修改，将传值调用改成传址调用，这样p和str指向了同一块空间，最后别忘了free释放内存。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GetMemory</span><span class="params">(<span class="keyword">char</span> *p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">p = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> *str = <span class="literal">NULL</span>;</span><br><span class="line">GetMemory(&amp;str); <span class="comment">//传地址</span></span><br><span class="line"><span class="built_in">strcpy</span>(str, <span class="string">&quot;hello world&quot;</span>);</span><br><span class="line"><span class="built_in">printf</span>(str);</span><br><span class="line"><span class="built_in">free</span>(str); <span class="comment">//别忘了释放哦~</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>代码2：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">GetMemory</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> p[] = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line"><span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> *str = <span class="literal">NULL</span>;</span><br><span class="line">str = GetMemory();</span><br><span class="line"><span class="built_in">printf</span>(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>p是一个局部变量，是实参的一份临时拷贝，<code>return p</code>返回的是局部变量p的首地址，str收到了这个地址。不巧的是出了GetMemory函数p这块地址就还给了操作系统，所以str找不到这块地址，造成了野指针。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;为什么需要动态内存管理？创建一个数组，我们要为数组指定大小，&lt;code&gt;int arr[10];&lt;/code&gt;，这属于静态创建一个数组，数组arr存放在栈上。这样的创建方式有一些局限性，小了呢不够用，大了呢又浪费空间，因此要引入动态内存管理。&lt;/p&gt;
-&lt;p&gt;动态创建一个数组</summary>
-      
-    
-    
-    
-    <category term="学习" scheme="https://youngsay.cn/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="c" scheme="https://youngsay.cn/tags/c/"/>
     
   </entry>
   

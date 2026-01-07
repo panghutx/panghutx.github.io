@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>c语言：操作符误区总结 | panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content=" 左移操作符：&amp;lt;&amp;lt;   左边丢弃，右边补0  12345678int main()&amp;#123;	int a = 2;	//把a的二进制位向左移动一位	int b = a &amp;lt;&amp;lt; 1;	printf(&amp;quot;b = %d\n&amp;quot;, b);//输出为4	retur..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "c语言：操作符误区总结",
+  "url": "https://youngsay.cn/2021/10/24/c-operator/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-21kqkm.png",
+  "datePublished": "2021-10-24T14:31:01.000Z",
+  "dateModified": "2022-01-23T12:10:10.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/2021/10/24/c-operator/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'c语言：操作符误区总结',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">c语言：操作符误区总结</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">c语言：操作符误区总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-24T14:31:01.000Z" title="发表于 2021-10-24 22:31:01">2021-10-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-01-23T12:10:10.000Z" title="更新于 2022-01-23 20:10:10">2022-01-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div><article class="container post-content" id="article-container"><ul>
+<li>左移操作符：<code>&lt;&lt;</code></li>
+</ul>
+<blockquote>
+<p>左边丢弃，右边补0</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">2</span>;</span><br><span class="line">	<span class="comment">//把a的二进制位向左移动一位</span></span><br><span class="line">	<span class="type">int</span> b = a &lt;&lt; <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;b = %d\n&quot;</span>, b);<span class="comment">//输出为4</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>右移操作符：<code>&gt;&gt;</code></li>
+</ul>
+<blockquote>
+<p>1.算术右移：右边丢弃，左边补原符号位</p>
+<p>2.逻辑右移：右边丢弃，左边补0</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">-3</span>;</span><br><span class="line">	<span class="type">int</span> b = a &gt;&gt; <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, b); <span class="comment">//输出为-2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>负数在内存中存放的是二进制的补码。</p>
+<p>原码：直接根据数值写出的二进制序列</p>
+<p>反码：符号位不变，其他位按位取反</p>
+<p>补码：反码+1</p>
+</blockquote>
+<p>以-3为例：</p>
+<p>原码：10000000000000000000000000000011</p>
+<p>反码：11111111111111111111111111111100</p>
+<p>补码：11111111111111111111111111111101</p>
+<hr>
+<ul>
+<li>异或：<code>^</code></li>
+</ul>
+<blockquote>
+<p>同为0，异为1</p>
+</blockquote>
+<p>练习：a=3，b=5，交换a、b两个数的值</p>
+<p>方法1：创建中间变量</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">3</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">5</span>;</span><br><span class="line">	<span class="type">int</span> temp = <span class="number">0</span>;</span><br><span class="line">	temp = a;</span><br><span class="line">	a = b;</span><br><span class="line">	b = temp;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;a=%d,b=%d&quot;</span>, a, b); <span class="comment">//a=5,b=3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法2：加减运算（数值太大可能溢出）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">3</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">5</span>;</span><br><span class="line">	a = a + b;</span><br><span class="line">	b = a - b; </span><br><span class="line">	a = a - b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;a=%d,b=%d&quot;</span>, a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法三：异或运算</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a = <span class="number">3</span>;</span><br><span class="line">	<span class="type">int</span> b = <span class="number">5</span>;</span><br><span class="line">	a = a ^ b;</span><br><span class="line">	b = a ^ b; </span><br><span class="line">	a = a ^ b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;a=%d,b=%d&quot;</span>, a,b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同值异或值为0，任何值异或0都是值本身。a^a=0     0^a=a</p>
+<hr>
+<p>单目运算符：</p>
+<p><code>sizeof</code>也是单目运算符，可以计算变量所占空间的大小，单位是字节。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">5</span>;</span><br><span class="line"><span class="type">int</span> arr[<span class="number">5</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(a));<span class="comment">//4    </span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>));<span class="comment">//4   </span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(arr));<span class="comment">//20  sizeof(数组名)</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(<span class="type">int</span> [<span class="number">5</span>]));<span class="comment">//20  sizeof(数组类型)</span></span><br></pre></td></tr></table></figure>
+<p><code>sizeof</code>()，括号内可以说变量名，也可以是变量类型，如果是变量名可以去掉小括号，如<code>sizeof a</code></p>
+<p>思考一下下面这段代码，两次输出是什么？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">short</span> s = <span class="number">5</span>;</span><br><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(s = a + <span class="number">2</span>));</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, s);</span><br></pre></td></tr></table></figure>
+<p>输出结果是2、5。s的类型是short，sizeof(short)结果必然是2，而<strong>sizeof括号里的表达式不参与运算</strong>，所以s仍未5。</p>
+<p>前置和后置：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> b = a++;<span class="comment">//后置++，先使用，再++</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a);<span class="comment">//11</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, b);<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> b = ++a;<span class="comment">//前置++，先++，后使用</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a);<span class="comment">//11</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, b);<span class="comment">//11</span></span><br></pre></td></tr></table></figure>
+<p><strong>指针大小永远是4字节或8字节</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">(<span class="type">int</span> arr[])</span><span class="comment">//相当于int *arr</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(arr));<span class="comment">//4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">(<span class="type">char</span> ch[])</span><span class="comment">//相当于char *arr</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(ch));<span class="comment">//4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> arr[<span class="number">10</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="type">char</span> ch[<span class="number">10</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(arr));<span class="comment">//40</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="keyword">sizeof</span>(ch));<span class="comment">//10</span></span><br><span class="line">	test1(arr);</span><br><span class="line">	test2(arr);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>结构成员访问操作符：<code>.</code> <code>-&gt;</code></p>
+<blockquote>
+<p>. 结构体.成员名</p>
+<p>-&gt; 结构体指针-&gt;成员名</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">students</span></span></span><br><span class="line"><span class="class">&#123;</span>   <span class="comment">//结构体的成员（变量）</span></span><br><span class="line">	<span class="type">char</span> name[<span class="number">10</span>];</span><br><span class="line">	<span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">students</span> <span class="title">a</span> =</span> &#123; <span class="string">&quot;胖虎&quot;</span>,<span class="number">20</span> &#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">students</span> *<span class="title">pb</span> =</span> &amp;a; <span class="comment">//说明pb是struct students类型的指针</span></span><br><span class="line">	<span class="comment">//结构体变量名.成员名</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;姓名：%s，年龄：%d\n&quot;</span>, a.name,a.age);</span><br><span class="line">	<span class="comment">//结构体指针-&gt;成员名</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;姓名：%s，年龄：%d&quot;</span>, pb-&gt;name,pb-&gt;age);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20211024214557.png" alt="image-20211024164538183"></p>
+<hr>
+<p>整型提升：</p>
+<p>C的整型算术运算总是至少以缺省整型类型的精度来进行的。 为了获得这个精度，表达式中的字符和短整型操作数在使用之前被转换为普通整型，这种转换称为整型提升。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> a = <span class="number">3</span>;</span><br><span class="line">	<span class="comment">//0000000000000000000000000000011   (int a)</span></span><br><span class="line">	<span class="comment">//00000011  --a</span></span><br><span class="line">	<span class="comment">//0000000000000000000000000000011   (a的整型提升)</span></span><br><span class="line">	<span class="type">char</span> b = <span class="number">127</span>;</span><br><span class="line">	<span class="comment">//0000000000000000000000001111111   (int b)</span></span><br><span class="line">	<span class="comment">//01111111   --b</span></span><br><span class="line">	<span class="comment">//0000000000000000000000001111111   (b的整型提升)</span></span><br><span class="line">	<span class="comment">//0000000000000000000000010000010   int c</span></span><br><span class="line">	<span class="comment">//10000010   --c</span></span><br><span class="line">	<span class="comment">//1111111111111111111111110000010  补码 (c的整型提升)</span></span><br><span class="line">	<span class="comment">//1000000000000000000000001111101  反码</span></span><br><span class="line">	<span class="comment">//1000000000000000000000001111110  原码</span></span><br><span class="line">	<span class="type">char</span> c = a + b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, c);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>整形提升是按照变量的数据类型的符号位来提升的</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//负数的整形提升</span></span><br><span class="line"><span class="type">char</span> c1 = <span class="number">-1</span>;</span><br><span class="line">变量c1的二进制位(补码)中只有<span class="number">8</span>个比特位：</span><br><span class="line"><span class="number">1111111</span></span><br><span class="line">因为 <span class="type">char</span> 为有符号的 <span class="type">char</span></span><br><span class="line">所以整形提升的时候，高位补充符号位，即为<span class="number">1</span></span><br><span class="line">提升之后的结果是：</span><br><span class="line"><span class="number">11111111111111111111111111111111</span></span><br><span class="line"><span class="comment">//正数的整形提升</span></span><br><span class="line"><span class="type">char</span> c2 = <span class="number">1</span>;</span><br><span class="line">变量c2的二进制位(补码)中只有<span class="number">8</span>个比特位：</span><br><span class="line"><span class="number">00000001</span></span><br><span class="line">因为 <span class="type">char</span> 为有符号的 <span class="type">char</span></span><br><span class="line">所以整形提升的时候，高位补充符号位，即为<span class="number">0</span></span><br><span class="line">提升之后的结果是：</span><br><span class="line"><span class="number">00000000000000000000000000000001</span></span><br><span class="line"><span class="comment">//无符号整形提升，高位补0</span></span><br></pre></td></tr></table></figure>
+<p>总结：char和short类型，在参与表达式运算时达不到整型长度，会发生整型提升。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2021/10/24/c-operator/">https://youngsay.cn/2021/10/24/c-operator/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/10/31/es6/" title="ECMAScript 6入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ECMAScript 6入门</div></div><div class="info-2"><div class="info-item-1">let var和let声明变量的区别：  let声明的变量是块级变量，只存在{}内。  1234if(true)&#123;    let a=0;&#125;console.log(a); 会出现Uncaught ReferenceError: a is not defined的报错，而在{}内打印console.log(a)而不会报错。  let声明的变量没有变量提升  12console.log(a);let a=0; 如上代码会报错Uncaught ReferenceError: Cannot access 'a' before initialization  let声明的变量会出现暂时死区  在{}外用var声明变量，{}内用let声明一个相同的变量，{}外用var声明的变量便没有意义。 12345var a=10;if(true)&#123;  console.log(a);  let a=20;&#125; 如上代码依旧会报错Uncaught ReferenceError: Cannot access 'a' before initialization const ...</div></div></div></a><a class="pagination-related" href="/2021/10/22/c-array/" title="c语言：数组误区总结"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">c语言：数组误区总结</div></div><div class="info-2"><div class="info-item-1"> 创建数组时，数组的长度必须用常量表达式进行定义，较好的方法是用宏来定义数组。  12#define N 10;int arr[N]; 但在C99中的变长数组，也可以使用非常量表达式。   关于字符数组的初始化，使用方法2初始化数组会在末尾自动创建\0。  12char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#x27;g&#x27;,&#x27;h&#x27;,&#x27;u&#x27; &#125;;char ch2[] = &quot;panghu&quot;;  这就会导致打印结果、字符串长度的不同。 strlen() 函数从字符串的开头位置依次向后计数，直到遇见\0，然后返回计时器的值。最终统计的字符串长度不包括\0。 12345678910#include &lt;stdio.h&gt;#include&lt;string.h&gt;int main()&#123;	char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/04/09/C-malloc/" title="动态内存分配基本使用及常见问题"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-09</div><div class="info-item-2">动态内存分配基本使用及常见问题</div></div><div class="info-2"><div class="info-item-1">为什么需要动态内存管理？创建一个数组，我们要为数组指定大小，int arr[10];，这属于静态创建一个数组，数组arr存放在栈上。这样的创建方式有一些局限性，小了呢不够用，大了呢又浪费空间，因此要引入动态内存管理。 动态创建一个数组，不再受元素个数的限制，当元素个数与容量相等时，可以很方便地扩容。 如何动态内存管理，我们来介绍几个函数。 malloc 1void* malloc (size_t size); 参数size为要为空间开辟的字节数，开辟成功后返回值为该空间的首地址，失败则返回NULL.当size为0时，要看编译器如何处理，具体返回什么不确定。 动态开辟内存后，不需要再使用这块空间时，要使用free函数释放内存。，否则会内存泄漏。free释放后这块内存可以再次被分配，但被释放的空间的值没有被改变，它仍然指向相同（无效）的位置。 free专门用来释放动态分配的空间，如果空间为空，不执行任何操作。切记不可以用free来释放静态分配的内存空间。 12345678910111213141516#include &lt;stdio.h&gt;#include&lt;stdlib...</div></div></div></a><a class="pagination-related" href="/2022/02/28/C-reverse/" title="倒置字符串，我爱中国，中国爱我。"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-28</div><div class="info-item-2">倒置字符串，我爱中国，中国爱我。</div></div><div class="info-2"><div class="info-item-1">描述：将一句话的单词进行倒置，标点不倒置。比如 I like China. 经过函数后变为：China. like I 有些时候，主语和宾语位置互换词义不会改变。比如，一件衣服穿两天，两天穿一件衣服。北京是首都，首都是北京。如果你已经读完了这段话，恭喜你已经浪费了几秒钟，这和这道编程题没什么关系…… 思路：我们可以两次使用字符串逆序，第一次先将字符串整体逆序，第二次将单个单词再逆序。逆序字符串，无非是找到字符串的起始位置和结束位置，也就是左下标和右下标，当左下标地址小于右下标地址时，互换两个下标位置的字符串。关键在于寻找起始位置和结束位置，例如字符串arr，第一次字符串整体逆序，起始位置就是字符串的首地址arr，结束位置就是起始位置+字符串长度-1.第二次逆序每个单词，起始位置就是每个单词的起始位置，结束位置是空格或字符串0的前一位置。逆序每个单词要注意何时进行逆序，遍历整个字符串，当arr[i]的元素为空格或字符串0时，进行单词的逆序。 1234567891011121314151617181920212223242526272829303132333435#include&l...</div></div></div></a><a class="pagination-related" href="/2021/08/09/c-date-type/" title="c语言：数据类型"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-09</div><div class="info-item-2">c语言：数据类型</div></div><div class="info-2"><div class="info-item-1">整数   char：1字节（8比特） -128~127   short：2字节 -32768~32767   int：取决于编译器（CPU），通常意义是“1个字”   long：取决于编译器（CPU），通常意义是“1个字”   long long：8字节   整数的内部表达都是二进制 补码 补码的意义就是拿补码和原码可以加出一个溢出的“零” 0-1=-1 (1)00000000 - 00000001 --&gt; 11111111 11111111被看作纯二进制看待时，是255，被当作补码看待时是-1 同理，-a的补码是0-a，实际上是    (n是这种类型的位数) 2n−a2^n-a 2n−a 8进制和16进制：  一个以0开始的数字字面量是8进制 一个以x开始的数字字面量是16进制 %0用于8进制，%x用于16进制 8进制和16进制只是如何把数字表达为字符串，与内部如何表达数字无关  浮点数    类型 字长 有效数字 scanf printf     float 32 7 %f %f，%e   double 64 15 %lf %f，%e     输出精度：在%和f之间加上...</div></div></div></a><a class="pagination-related" href="/2021/08/10/c-function/" title="c语言：函数"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-10</div><div class="info-item-2">c语言：函数</div></div><div class="info-2"><div class="info-item-1">函数是一块代码，接收零个或多个参数，做一件事情，并返回零个或一个值。  调用函数 函数名() ()起到了表示函数调用的作用，即使没有参数也需要()；如果有参数，则需要给出正确的数量和顺序，这些值会被按照顺序依次用来初始化函数中的参数。 123456789101112131415#include&lt;stdio.h&gt;void sum(int begain, int end)&#123;	int i = 0;	int sum = 0;	for (i=begain; i &lt;= end; i++) &#123;		sum += i;	&#125;	printf(&quot;%d到%d的和是%d&quot;, begain, end, sum);&#125;int main()&#123;	sum(1, 10);	return 0;&#125; 从函数中返回值 return停止函数的执行，并返回一个值。 12345678910111213141516171819#include&lt;stdio.h&gt;int max(int a, int b)&#123;	int ret...</div></div></div></a><a class="pagination-related" href="/2021/10/22/c-array/" title="c语言：数组误区总结"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-22</div><div class="info-item-2">c语言：数组误区总结</div></div><div class="info-2"><div class="info-item-1"> 创建数组时，数组的长度必须用常量表达式进行定义，较好的方法是用宏来定义数组。  12#define N 10;int arr[N]; 但在C99中的变长数组，也可以使用非常量表达式。   关于字符数组的初始化，使用方法2初始化数组会在末尾自动创建\0。  12char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#x27;g&#x27;,&#x27;h&#x27;,&#x27;u&#x27; &#125;;char ch2[] = &quot;panghu&quot;;  这就会导致打印结果、字符串长度的不同。 strlen() 函数从字符串的开头位置依次向后计数，直到遇见\0，然后返回计时器的值。最终统计的字符串长度不包括\0。 12345678910#include &lt;stdio.h&gt;#include&lt;string.h&gt;int main()&#123;	char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#...</div></div></div></a><a class="pagination-related" href="/2021/11/13/c-pointer/" title="c语言：指针误区总结"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="info-item-2">c语言：指针误区总结</div></div><div class="info-2"><div class="info-item-1">4个二进制位可以表示一个16进制数字 1111 --&gt;f  指针类型的意义：   指针类型决定了：指针解引用的权限有多大（整型指针解引用访问4个字节，字符型指针解引用只能访问1个字节） 指针类型决定了，指针走一步，能走多远（步长）   例题1： 123456   int a = 0x11223344;char* pc = &amp;a;*pc = 0; //只改变一个字节int* pa = &amp;a;*pa = 0;//改变了四个字节  char* 的指针解引用就只能访问一个字节，而 int* 的指针的解引用能访问四个字节。 例题2： 1234567int arr[10] = &#123; 0 &#125;;int* p = arr;char* pc = arr;printf(&quot;%p\n&quot;, p);printf(&quot;%p\n&quot;, p + 1);//加了4，因为int4字节printf(&quot;%p\n&quot;, pc);printf(&quot;%p\n&quot;, pc + 1);//加了1，因为char1字节   野指...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"emojiCDN":"https://testingcf.jsdelivr.net/gh/GamerNoTitle/ValineCDN/"}
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nKtN81THEqdpFPQP6484D0Dw-gzGzoHsz',
+      appKey: 'Elo90cRADuj3PvXaL8PiKkMG',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: {"alu2":"alu/不出所料.png","alu3":"alu/不说话.png","alu4":"alu/不高兴.png","alu5":"alu/中刀.png","alu6":"alu/中指.png","alu7":"alu/中枪.png","alu8":"alu/亲亲.png","alu9":"alu/便便.png","alu10":"alu/内伤.png","alu11":"alu/击掌.png","alu12":"alu/口水.png","alu13":"alu/吐.png","alu14":"alu/吐舌.png","alu15":"alu/吐血倒地.png","alu16":"alu/呲牙.png","alu17":"alu/咽气.png","alu18":"alu/哭泣.png","alu19":"alu/喜极而泣.png","alu20":"alu/喷水.png","alu21":"alu/喷血.png","alu22":"alu/坐等.png","alu23":"alu/害羞.png","alu24":"alu/小眼睛.png","alu25":"alu/尴尬.png","alu26":"alu/得意.png","alu27":"alu/惊喜.png","alu28":"alu/想一想.png","alu29":"alu/愤怒.png","alu30":"alu/扇耳光.png","alu31":"alu/投降.png","alu32":"alu/抠鼻.png","alu33":"alu/抽烟.png","alu34":"alu/无奈.png","alu35":"alu/无所谓.png","alu36":"alu/无语.png","alu37":"alu/暗地观察.png","alu38":"alu/期待.png","alu39":"alu/欢呼.png","alu40":"alu/汗.png","alu41":"alu/深思.png","alu42":"alu/狂汗.png","alu43":"alu/献花.png","alu44":"alu/献黄瓜.png","alu45":"alu/皱眉.png","alu46":"alu/看不见.png","alu47":"alu/看热闹.png","alu48":"alu/瞅你.png","alu49":"alu/肿包.png","alu50":"alu/脸红.png","alu51":"alu/蜡烛.png","alu52":"alu/装大款.png","alu53":"alu/观察.png","alu54":"alu/赞一个.png","alu55":"alu/邪恶.png","alu56":"alu/锁眉.png","alu57":"alu/长草.png","alu58":"alu/阴暗.png","alu59":"alu/高兴.png","alu60":"alu/黑线.png","alu61":"alu/鼓掌.png","bilibilitv2":"bilibilitv/[tv_doge].png","bilibilitv3":"bilibilitv/[tv_亲亲].png","bilibilitv4":"bilibilitv/[tv_偷笑].png","bilibilitv5":"bilibilitv/[tv_再见].png","bilibilitv6":"bilibilitv/[tv_冷漠].png","bilibilitv7":"bilibilitv/[tv_发怒].png","bilibilitv8":"bilibilitv/[tv_发财].png","bilibilitv9":"bilibilitv/[tv_可爱].png","bilibilitv10":"bilibilitv/[tv_吐血].png","bilibilitv11":"bilibilitv/[tv_呆].png","bilibilitv12":"bilibilitv/[tv_呕吐].png","bilibilitv13":"bilibilitv/[tv_困].png","bilibilitv14":"bilibilitv/[tv_坏笑].png","bilibilitv15":"bilibilitv/[tv_大佬].png","bilibilitv16":"bilibilitv/[tv_大哭].png","bilibilitv17":"bilibilitv/[tv_委屈].png","bilibilitv18":"bilibilitv/[tv_害羞].png","bilibilitv19":"bilibilitv/[tv_尴尬].png","bilibilitv20":"bilibilitv/[tv_微笑].png","bilibilitv21":"bilibilitv/[tv_思考].png","bilibilitv22":"bilibilitv/[tv_惊吓].png","bilibilitv23":"bilibilitv/[tv_打脸].png","bilibilitv24":"bilibilitv/[tv_抓狂].png","bilibilitv25":"bilibilitv/[tv_抠鼻].png","bilibilitv26":"bilibilitv/[tv_斜眼笑].png","bilibilitv27":"bilibilitv/[tv_无奈].png","bilibilitv28":"bilibilitv/[tv_晕].png","bilibilitv29":"bilibilitv/[tv_流汗].png","bilibilitv30":"bilibilitv/[tv_流泪].png","bilibilitv31":"bilibilitv/[tv_流鼻血].png","bilibilitv32":"bilibilitv/[tv_点赞].png","bilibilitv33":"bilibilitv/[tv_生气].png","bilibilitv34":"bilibilitv/[tv_生病].png","bilibilitv35":"bilibilitv/[tv_疑问].png","bilibilitv36":"bilibilitv/[tv_白眼].png","bilibilitv37":"bilibilitv/[tv_皱眉].png","bilibilitv38":"bilibilitv/[tv_目瞪口呆].png","bilibilitv39":"bilibilitv/[tv_睡着].png","bilibilitv40":"bilibilitv/[tv_笑哭].png","bilibilitv41":"bilibilitv/[tv_腼腆].png","bilibilitv42":"bilibilitv/[tv_色].png","bilibilitv43":"bilibilitv/[tv_调侃].png","bilibilitv44":"bilibilitv/[tv_调皮].png","bilibilitv45":"bilibilitv/[tv_鄙视].png","bilibilitv46":"bilibilitv/[tv_闭嘴].png","bilibilitv47":"bilibilitv/[tv_难过].png","bilibilitv48":"bilibilitv/[tv_馋].png","bilibilitv49":"bilibilitv/[tv_鬼脸].png","bilibilitv50":"bilibilitv/[tv_黑人问号].png","bilibilitv51":"bilibilitv/[tv_鼓掌].png","Tieba-New2":"Tieba-New/image_emoticon.png","Tieba-New3":"Tieba-New/image_emoticon10.png","Tieba-New4":"Tieba-New/image_emoticon100.png","Tieba-New5":"Tieba-New/image_emoticon101.png","Tieba-New6":"Tieba-New/image_emoticon102.png","Tieba-New7":"Tieba-New/image_emoticon103.png","Tieba-New8":"Tieba-New/image_emoticon104.png","Tieba-New9":"Tieba-New/image_emoticon105.png","Tieba-New10":"Tieba-New/image_emoticon106.png","Tieba-New11":"Tieba-New/image_emoticon107.png","Tieba-New12":"Tieba-New/image_emoticon108.png","Tieba-New13":"Tieba-New/image_emoticon109.png","Tieba-New14":"Tieba-New/image_emoticon11.png","Tieba-New15":"Tieba-New/image_emoticon110.png","Tieba-New16":"Tieba-New/image_emoticon111.png","Tieba-New17":"Tieba-New/image_emoticon112.png","Tieba-New18":"Tieba-New/image_emoticon113.png","Tieba-New19":"Tieba-New/image_emoticon114.png","Tieba-New20":"Tieba-New/image_emoticon115.png","Tieba-New21":"Tieba-New/image_emoticon116.png","Tieba-New22":"Tieba-New/image_emoticon117.png","Tieba-New23":"Tieba-New/image_emoticon118.png","Tieba-New24":"Tieba-New/image_emoticon119.png","Tieba-New25":"Tieba-New/image_emoticon12.png","Tieba-New26":"Tieba-New/image_emoticon120.png","Tieba-New27":"Tieba-New/image_emoticon121.png","Tieba-New28":"Tieba-New/image_emoticon122.png","Tieba-New29":"Tieba-New/image_emoticon123.png","Tieba-New30":"Tieba-New/image_emoticon124.png","Tieba-New31":"Tieba-New/image_emoticon13.png","Tieba-New32":"Tieba-New/image_emoticon14.png","Tieba-New33":"Tieba-New/image_emoticon15.png","Tieba-New34":"Tieba-New/image_emoticon16.png","Tieba-New35":"Tieba-New/image_emoticon17.png","Tieba-New36":"Tieba-New/image_emoticon18.png","Tieba-New37":"Tieba-New/image_emoticon19.png","Tieba-New38":"Tieba-New/image_emoticon2.png","Tieba-New39":"Tieba-New/image_emoticon20.png","Tieba-New40":"Tieba-New/image_emoticon21.png","Tieba-New41":"Tieba-New/image_emoticon22.png","Tieba-New42":"Tieba-New/image_emoticon23.png","Tieba-New43":"Tieba-New/image_emoticon24.png","Tieba-New44":"Tieba-New/image_emoticon25.png","Tieba-New45":"Tieba-New/image_emoticon26.png","Tieba-New46":"Tieba-New/image_emoticon27.png","Tieba-New47":"Tieba-New/image_emoticon28.png","Tieba-New48":"Tieba-New/image_emoticon29.png","Tieba-New49":"Tieba-New/image_emoticon3.png","Tieba-New50":"Tieba-New/image_emoticon30.png","Tieba-New51":"Tieba-New/image_emoticon31.png","Tieba-New52":"Tieba-New/image_emoticon32.png","Tieba-New53":"Tieba-New/image_emoticon33.png","Tieba-New54":"Tieba-New/image_emoticon34.png","Tieba-New55":"Tieba-New/image_emoticon35.png","Tieba-New56":"Tieba-New/image_emoticon36.png","Tieba-New57":"Tieba-New/image_emoticon37.png","Tieba-New58":"Tieba-New/image_emoticon38.png","Tieba-New59":"Tieba-New/image_emoticon39.png","Tieba-New60":"Tieba-New/image_emoticon4.png","Tieba-New61":"Tieba-New/image_emoticon40.png","Tieba-New62":"Tieba-New/image_emoticon41.png","Tieba-New63":"Tieba-New/image_emoticon42.png","Tieba-New64":"Tieba-New/image_emoticon43.png","Tieba-New65":"Tieba-New/image_emoticon44.png","Tieba-New66":"Tieba-New/image_emoticon45.png","Tieba-New67":"Tieba-New/image_emoticon46.png","Tieba-New68":"Tieba-New/image_emoticon47.png","Tieba-New69":"Tieba-New/image_emoticon48.png","Tieba-New70":"Tieba-New/image_emoticon49.png","Tieba-New71":"Tieba-New/image_emoticon5.png","Tieba-New72":"Tieba-New/image_emoticon50.png","Tieba-New73":"Tieba-New/image_emoticon6.png","Tieba-New74":"Tieba-New/image_emoticon66.png","Tieba-New75":"Tieba-New/image_emoticon67.png","Tieba-New76":"Tieba-New/image_emoticon68.png","Tieba-New77":"Tieba-New/image_emoticon69.png","Tieba-New78":"Tieba-New/image_emoticon7.png","Tieba-New79":"Tieba-New/image_emoticon70.png","Tieba-New80":"Tieba-New/image_emoticon71.png","Tieba-New81":"Tieba-New/image_emoticon72.png","Tieba-New82":"Tieba-New/image_emoticon73.png","Tieba-New83":"Tieba-New/image_emoticon74.png","Tieba-New84":"Tieba-New/image_emoticon75.png","Tieba-New85":"Tieba-New/image_emoticon76.png","Tieba-New86":"Tieba-New/image_emoticon77.png","Tieba-New87":"Tieba-New/image_emoticon78.png","Tieba-New88":"Tieba-New/image_emoticon79.png","Tieba-New89":"Tieba-New/image_emoticon8.png","Tieba-New90":"Tieba-New/image_emoticon80.png","Tieba-New91":"Tieba-New/image_emoticon81.png","Tieba-New92":"Tieba-New/image_emoticon82.png","Tieba-New93":"Tieba-New/image_emoticon83.png","Tieba-New94":"Tieba-New/image_emoticon84.png","Tieba-New95":"Tieba-New/image_emoticon85.png","Tieba-New96":"Tieba-New/image_emoticon86.png","Tieba-New97":"Tieba-New/image_emoticon87.png","Tieba-New98":"Tieba-New/image_emoticon88.png","Tieba-New99":"Tieba-New/image_emoticon89.png","Tieba-New100":"Tieba-New/image_emoticon9.png","Tieba-New101":"Tieba-New/image_emoticon90.png","Tieba-New102":"Tieba-New/image_emoticon91.png","Tieba-New103":"Tieba-New/image_emoticon92.png","Tieba-New104":"Tieba-New/image_emoticon93.png","Tieba-New105":"Tieba-New/image_emoticon94.png","Tieba-New106":"Tieba-New/image_emoticon95.png","Tieba-New107":"Tieba-New/image_emoticon96.png","Tieba-New108":"Tieba-New/image_emoticon97.png","Tieba-New109":"Tieba-New/image_emoticon98.png","Tieba-New110":"Tieba-New/image_emoticon99.png"},
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

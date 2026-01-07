@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我是panghutx，现居中国北京，程序员，测试开发工程师，博客涉及编程、互联网、个人感想等内容。"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/page/5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'panghutx\'s blog',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">panghutx's blog</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/03/python5/" title="Python笔记：条件、循环及其他语句">Python笔记：条件、循环及其他语句</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-03T11:25:01.000Z" title="发表于 2021-11-03 19:25:01">2021-11-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content"> Python基础教程（第三版）第5章：条件、循环及其他语句  print() end=''   //不换行 sep=''  //自定义分隔符 123print(&quot;my name is&quot;,end=&#x27;&#x27;)print(&quot;panghu&quot;) //打印结果：my name is panghuprint(&quot;I&quot;,&quot;love&quot;,&quot;you&quot;,sep=&quot;!&quot;) //I!love!you import 当你确定要导入模块中的一切时，可使用from somemodule import *如果有两个模块，都包某一函数时，可使用as 12import math as foobarprint(foobar.sqrt(4)) //2.0 序列解包 1234values=1,2,3x,y,z=valuesprint(values) //(1,2,3)print(z) //3 *元素符：分配多余的值 12345values=1,2,3,4x,*y,z=valuesprint(...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/10/31/es6/" title="ECMAScript 6入门">ECMAScript 6入门</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-10-31T04:25:01.000Z" title="发表于 2021-10-31 12:25:01">2021-10-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">let var和let声明变量的区别：  let声明的变量是块级变量，只存在{}内。  1234if(true)&#123;    let a=0;&#125;console.log(a); 会出现Uncaught ReferenceError: a is not defined的报错，而在{}内打印console.log(a)而不会报错。  let声明的变量没有变量提升  12console.log(a);let a=0; 如上代码会报错Uncaught ReferenceError: Cannot access 'a' before initialization  let声明的变量会出现暂时死区  在{}外用var声明变量，{}内用let声明一个相同的变量，{}外用var声明的变量便没有意义。 12345var a=10;if(true)&#123;  console.log(a);  let a=20;&#125; 如上代码依旧会报错Uncaught ReferenceError: Cannot access 'a' before initialization const ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/10/24/c-operator/" title="c语言：操作符误区总结">c语言：操作符误区总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-10-24T14:31:01.000Z" title="发表于 2021-10-24 22:31:01">2021-10-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content"> 左移操作符：&lt;&lt;   左边丢弃，右边补0  12345678int main()&#123;	int a = 2;	//把a的二进制位向左移动一位	int b = a &lt;&lt; 1;	printf(&quot;b = %d\n&quot;, b);//输出为4	return 0;&#125;   右移操作符：&gt;&gt;   1.算术右移：右边丢弃，左边补原符号位 2.逻辑右移：右边丢弃，左边补0  1234567#include&lt;stdio.h&gt;int main()&#123;	int a = -3;	int b = a &gt;&gt; 1;	printf(&quot;%d&quot;, b); //输出为-2&#125;   负数在内存中存放的是二进制的补码。 原码：直接根据数值写出的二进制序列 反码：符号位不变，其他位按位取反 补码：反码+1  以-3为例： 原码：10000000000000000000000000000011 反码：11111111111111111111111111111100 补码：11111111111111...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/10/22/c-array/" title="c语言：数组误区总结">c语言：数组误区总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-10-22T12:31:01.000Z" title="发表于 2021-10-22 20:31:01">2021-10-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content"> 创建数组时，数组的长度必须用常量表达式进行定义，较好的方法是用宏来定义数组。  12#define N 10;int arr[N]; 但在C99中的变长数组，也可以使用非常量表达式。   关于字符数组的初始化，使用方法2初始化数组会在末尾自动创建\0。  12char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#x27;g&#x27;,&#x27;h&#x27;,&#x27;u&#x27; &#125;;char ch2[] = &quot;panghu&quot;;  这就会导致打印结果、字符串长度的不同。 strlen() 函数从字符串的开头位置依次向后计数，直到遇见\0，然后返回计时器的值。最终统计的字符串长度不包括\0。 12345678910#include &lt;stdio.h&gt;#include&lt;string.h&gt;int main()&#123;	char ch1[] = &#123; &#x27;p&#x27;,&#x27;a&#x27;,&#x27;n&#x27;,&#...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/16/js-shijian/" title="WebApiⅢ：事件、事件对象">WebApiⅢ：事件、事件对象</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-09-16T09:45:54.000Z" title="发表于 2021-09-16 17:45:54">2021-09-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">注册事件  传统方式   btn.onclick = function() &#123;&#125;  传统事件注册具有唯一性：同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数  方法监听注册方式  1eventTarget.addEventListener(type,listener[,useCapture]) type：事件类型字符串，比如 click、mouseover。这里不需要加on listener：事件处理函数，事件发生时，会调用该监听函数 useCapture：可选参数，是一个布尔值，默认是false。 1234567891011121314151617181920212223242526272829&lt;body&gt;    &lt;button&gt;        传统注册事件    &lt;/button&gt;    &lt;button&gt;        事件监听注册事件    &lt;/button&gt;    &lt;script&gt;    	var btns = document.querySe...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/13/js-node/" title="WebApiⅡ：自定义属性、节点">WebApiⅡ：自定义属性、节点</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-09-13T13:45:54.000Z" title="发表于 2021-09-13 21:45:54">2021-09-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">自定义属性 获取属性值   element.属性 ：获取内置属性值   element.getAttribute(‘属性’) ：获取自定义属性值 12345678910&lt;div id=&quot;demo&quot; index=&quot;1&quot; class=&quot;nav&quot;&gt;&lt;/div&gt;&lt;script&gt;    var div = document.querySelector(&#x27;div&#x27;);    // 1. 获取元素的属性值    // (1) element.属性    console.log(div.id);  //demo    //(2) element.getAttribute(&#x27;属性&#x27;)     console.log(div.getAttribute(&#x27;id&#x27;)); //demo    console.log(div.getAttribute(&#x27;index&#x27;)); //1&lt;/script&gt;   设置属性值  ele...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/09/05/read-renzhi/" title="读《认知觉醒》">读《认知觉醒》</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-09-05T10:49:01.000Z" title="发表于 2021-09-05 18:49:01">2021-09-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></span></div><div class="content"> 年轻的时候，人人都自命不凡，认定美好生活会自然到来。后来他们不得不敲碎那颗高傲的心，在无奈和叹息中接受平庸的自己。  杨绛说：“你的问题在于想得太多，读书太少”。学而不思则罔，思而不学则怠，学习和思考是缺一不可的。看完《认知觉醒》，我觉得还有一点更重要的，行动。“道理我都懂，就是做不到”，“听过很多道理，依然过不好这一生”，都是因为缺少行动。懂得百点不如改变一点，真正的成长不是懂得多少道理，而是做出多少改变。 做出行动和改变 急于求成、避难趋易是人的天性。从难度上来讲，阅读&lt;思考&lt;行动，一些人往往选择最简单的阅读，却不愿行动，这是避难趋易的天性；读完一本书马不停蹄地读下一本，没有思考和行动，却又想立刻见到成效，这是急于求成的天性。就功课的学习而言，我喜欢看视频学习，很少刷题。我知道刷题能取得更快的提升，但我还是看视频来麻木自己。因为相对刷题，看视频是更省力的方式，这都是避难趋易的天性在作怪。所以一件事如何去做，不必去找什么方法技巧，你最不愿意尝试的那个就是最有效的方法。什么最重要，每个人都心知肚明，却不愿面对，人们愿意活在自己的舒适区。  正确的行动往往是反天性的，...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/20/read-allmeans/" title="读《你的第一本哲学书》">读《你的第一本哲学书》</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-20T12:49:01.000Z" title="发表于 2021-08-20 20:49:01">2021-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></span></div><div class="content">引言 《你的第一本哲学书》是本很精简的哲学入门书，没有专业术语，没有各种学派，直接面向最基本的哲学问题。看译后记发现个有趣的事：原著书名是“What does it all mean”，译者综合考虑译为《哲学冒险》，结果出版社考虑对读者的吸引力，起名为“你的第一本哲学书”😂  我们每天都使用一些平常的概念，却从未加以反思；而哲学的主要工作就是去询问和理解这些概念。 你要探究的概念越是基础，可以帮助你的工具也就越是匮乏。  以我的能力读这本书还是很费力，作者谈及的都是一些习以为常的事情，都是在平时没有思考过而默认的概念。 自由意志 假设在学习和娱乐面前，我选择了娱乐。期末考试要来了，我后悔地说道：“我本可以好好学习”。 “我本可以好好学习”这句话什么意思？在同样的时间、环境、条件下，我仍然可以选择学习。人们在外在条件一模一样的情况下，并不需要发生任何不同的事情作为前提，就能够做某些他们实际上并没有做的事情。这意味着什么呢？ 这说明在选择娱乐之前，学习仍是开放的可能性，选择学习还是娱乐是由我的自由意志决定的，不由外界决定。 不过，决定论认为我们做什么事情都是事先决定好的，永远也不可...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/20/read-richdad/" title="《穷爸爸 富爸爸》读书分享">《穷爸爸 富爸爸》读书分享</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-20T07:49:01.000Z" title="发表于 2021-08-20 15:49:01">2021-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></span></div><div class="content">前言 《穷爸爸 富爸爸》是暑假读的第二本书，关于这本书也褒贬不一。取其精华，去其糟粕。关于财富，书中提到：**财富就是支撑一个人生存多长时间的能力，或者说，如果我今天停止工作，我还能活多久？**财富的增加不是依靠收入，而是资产的积累。头脑是真正的资产，要养成终身学习的习惯，再次引用书中一段话：轻松的道路往往会越走越艰难，而艰难的道路往往会越走越轻松。 不为钱而工作 人们为了实现欲望而工作。他们认为钱能买来快乐，可用钱买来的快乐往往是短暂的，所以不久他们就需要更多的钱来买更多的快乐、更多的开心、更多的舒适和更多的安全感。于是他们继续工作，以为钱能安抚他们备受恐惧和欲望折磨的灵魂，但实际上钱是无法做到这一点的。 **工作只是试图用暂时的办法来解决长期的问题。**钱控制了他们的生活，确切地说是，对钱的无知和恐惧控制了他们的生活。所以他们拼命工作。他们的思想被他们的感情，而不是他们的头脑控制着。” 不为钱而工作不是说不在乎钱，不谈钱就像依赖钱一样是一种精神上的疾病。我们不能陷入为钱工作的死循环，要看到他人看不到的东西。 资产和负债   书中写道：资产是能把钱放进你口袋里的东西。负债是把钱...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/08/20/read-courage/" title="读《被讨厌的勇气》">读《被讨厌的勇气》</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-20T03:49:01.000Z" title="发表于 2021-08-20 11:49:01">2021-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></span></div><div class="content">『因为拥有了被讨厌的勇气，于是有了真正幸福的可能』 前言 暑假快结束了，想为假期读过几本书写几篇读书笔记。暑假读的第一本书是《被讨厌的勇气》，书中有很多启发我的观点。其中之一是自卑和自卑情结，这我在之前谈到过；还有一个是对人生的描述，人生是点状的，是每一个刹那，不是一条线、一个整体。书中还有个有趣的比喻：当你站在舞台上，聚光灯打向你，你什么也看不见。当聚光灯打向“此时此刻”，也就看不到过去和将来。书中很难理解和践行的是共同体的概念，要做到自我接纳、他者信任和他者贡献。用了一上午时间，略读了一遍，不知不觉写了3000字。 像《理想国》一样，这本书由现代不常用的对话体写就，通过哲人和青年五夜的对话，向我们阐释了阿德勒心理学。 不幸来源 弗洛伊德的原因论认为，过去决定了现在的我们，现在的不幸、行为都能在过去找到原因，如果是这样，我们将没有能力改变现状，我们将是无力、痛苦的。阿德勒心理学否认了弗洛伊德的原因论，他认为过去并不重要，重要的是我们赋予过去的意义。你的不幸、痛苦不是因为过去，而是因为你的选择。 「你在人生的某个阶段里选择了“不幸”。这既不是因为你生在了不幸的环境中，也不是因为你...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/4/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#content-inner">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/#content-inner">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#content-inner">9</a><a class="extend next" rel="next" href="/page/6/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%88%86%E4%BA%AB/"><span class="card-category-list-name">分享</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">学习</span><span class="card-category-list-count">69</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%84%9F%E6%83%B3/"><span class="card-category-list-name">感想</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%98%85%E8%AF%BB/"><span class="card-category-list-name">阅读</span><span class="card-category-list-count">4</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JavaSE/" style="font-size: 1.37em; color: #99a4b2">JavaSE</a> <a href="/tags/linux/" style="font-size: 1.28em; color: #99a0aa">linux</a> <a href="/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">数据结构和算法</a> <a href="/tags/Vue-js/" style="font-size: 1.1em; color: #999">Vue.js</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 1.23em; color: #999ea6">阅读</a> <a href="/tags/MySQL/" style="font-size: 1.14em; color: #999b9d">MySQL</a> <a href="/tags/JavaWeb/" style="font-size: 1.19em; color: #999da1">JavaWeb</a> <a href="/tags/socket/" style="font-size: 1.1em; color: #999">socket</a> <a href="/tags/Python/" style="font-size: 1.1em; color: #999">Python</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 1.1em; color: #999">索引</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 1.23em; color: #999ea6">年终总结</a> <a href="/tags/c/" style="font-size: 1.5em; color: #99a9bf">c</a> <a href="/tags/IO/" style="font-size: 1.1em; color: #999">IO</a> <a href="/tags/JavaScript/" style="font-size: 1.41em; color: #99a5b7">JavaScript</a> <a href="/tags/html/" style="font-size: 1.19em; color: #999da1">html</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 1.1em; color: #999">事务</a> <a href="/tags/yaml/" style="font-size: 1.1em; color: #999">yaml</a> <a href="/tags/css/" style="font-size: 1.46em; color: #99a7bb">css</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.32em; color: #99a2ae">多线程</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/01/">
+            <span class="card-archive-list-date">
+              一月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/01/">
+            <span class="card-archive-list-date">
+              一月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/11/">
+            <span class="card-archive-list-date">
+              十一月 2022
+            </span>
+            <span class="card-archive-list-count">7</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/10/">
+            <span class="card-archive-list-date">
+              十月 2022
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/09/">
+            <span class="card-archive-list-date">
+              九月 2022
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/06/">
+            <span class="card-archive-list-date">
+              六月 2022
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">85</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-03-28T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">95.2k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-01-07T17:03:02.171Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

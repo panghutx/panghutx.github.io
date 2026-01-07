@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我是panghutx，现居中国北京，程序员，测试开发工程师，博客涉及编程、互联网、个人感想等内容。"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/page/4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'panghutx\'s blog',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">panghutx's blog</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/16/C-branch-loop/" title="【C语言】分支和循环语句常见问题">【C语言】分支和循环语句常见问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-16T06:33:41.000Z" title="发表于 2022-01-16 14:33:41">2022-01-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">分支语句 if-else语句 12345678910111213#include &lt;stdio.h&gt;int main()&#123;    int a = 0;    int b = 2;    if (a == 1)        if (b == 2)            printf(&quot;hello\n&quot;);    else        printf(&quot;panghu\n&quot;);    return 0;&#125;//输出结果： 123456789101112131415#include &lt;stdio.h&gt;int main()&#123;    int a = 0;    int b = 2;    if (a == 1)        if (b == 2)            printf(&quot;hello\n&quot;);    else        printf(&quot;胖虎\n&quot;);    else        printf(&quot;panghu\n&quot;);  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/14/Java-class-object/" title="【JavaSE】类和对象">【JavaSE】类和对象</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-14T03:40:41.000Z" title="发表于 2022-01-14 11:40:41">2022-01-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">类的成员：字段、方法、代码块、内部类和接口等 字段 1234class Person&#123;    public int age;    public String name;    public String sex; age，name，sex这些类中方法外的变量，是字段、属性、成员变量（3种称呼均可） 123456789public class TestDemo &#123;    public static void main(String[] args) &#123;        //类的实例化        Person person=new Person();        System.out.println(person.name);//null        System.out.println(person.age);//0           &#125;&#125; 对象的字段如果没有初始化，访问时会被设置成默认值。  默认值规则   对于各种数字类型, 默认值为 0.   对于 boolean 类型,默认值为 false.   对于引用类型(Str...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/12/Java-array/" title="【JavaSE】数组的定义和使用">【JavaSE】数组的定义和使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-12T14:40:41.000Z" title="发表于 2022-01-12 22:40:41">2022-01-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">一维数组 一维数组的定义 123int[] arr=&#123;1,2,3,4,5&#125;; //静态创建int[] arr1=new int[]&#123;1,2,3,4,5&#125;; //动态创建int[] arr2=new int[5]; 一维数组的遍历 method 1： 123for (int i = 0; i &lt; arr.length; i++) &#123;    System.out.print(arr[i]);&#125; method 2： 123for (int x:arr) &#123;    System.out.print(x);&#125; method 3： 1System.out.println(Arrays.toString(arr)); 理解引用 int[] arr=new int[]&#123;1,2,3&#125;创建一个数组，变量arr是一个引用类型，里面只保存了一个整数（数组的起始内存地址），指向&#123;1，2，3&#125;的存储地址。  引用，本质上就是存放了一个地址。当数组作为方法的参数时，其实是将数组的首地址...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/08/C-prime-knowledge/" title="【C语言】基础语法的简单概括">【C语言】基础语法的简单概括</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-08T01:33:41.000Z" title="发表于 2022-01-08 09:33:41">2022-01-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">数据类型 为了更加丰富地表达生活中的各种值，C语言中有不同的数据类型。每个数据类型有其占用空间的大小。我们用sizeof可以获取某个数据类型所占用空间的字节数。 下面这段代码： 1234567printf(&quot;%d&quot;, sizeof(char));printf(&quot;%d&quot;, sizeof(short));printf(&quot;%d&quot;, sizeof(int));printf(&quot;%d&quot;, sizeof(long));printf(&quot;%d&quot;, sizeof(long long));printf(&quot;%d&quot;, sizeof(float));printf(&quot;%d&quot;, sizeof(double)); 在vs2019运行时，输出结果是：1244848 在linux平台运行时，结果是：1248848 对比发现，long在不同的编译器结果不同。c语言并没有规定long的大小，只是规定了sizeof(long)&gt;=sizeof(int)。 变量的作用域和生命周期 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/01/2021/" title="2021年度总结">2021年度总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-01T09:24:01.000Z" title="发表于 2022-01-01 17:24:01">2022-01-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%84%9F%E6%83%B3/">感想</a></span></div><div class="content"> 2022年来了，我又长大了一岁。 过去这一年，有快乐有失落，有收获有遗憾。 伤感的话不再说，遗憾的事不再提，新的一年继续好好生活。  等等，在好好生活之前还是写一下年终总结吧，虽然今天已经是2022年…… 回顾过去的这一年，**每一天都很平常，有时很快乐，有时会难过，也许有成长，难免有遗憾。**就在这平凡的一天又一天中，平凡的我又长大了一岁。 我没有写日记的习惯，很多事过去了就过去了，也许以后就再也不会想起。比如现在我想写一个年度总结，我不知道写些什么。好在有这样一个博客，或多或少能留存一些当时的记忆。  2021年3月29日，新博客建成，发布第一篇博客：  新学期，新博客，新开始!  在此之前也搭建过其他博客，总是写着写着感觉没啥意思，最终都删库跑路了。这是我持续时间最长的博客，我会一直让它活下去（希望别被打脸）。 回看第一篇博客，感慨万千。当时写到“我想学计算机相关专业，但无奈被调剂到了应用物理”，现在我已经是计算机科学与技术专业的学生了，2021/9/17 收到了转专业成功的消息，这个可以算是今年很开心的一件事。当时我提到“一直对编程感兴趣，尤其是前端”，现在我已经俩月没...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/23/Java-method/" title="【JavaSE】方法及递归的使用">【JavaSE】方法及递归的使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-23T05:05:41.000Z" title="发表于 2021-11-23 13:05:41">2021-11-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">初识方法 Java中的方法类似于c语言中的函数 观察下面代码，体会方法的好处。 123456789101112//求两个数的最大值public static int maxTwoNum(int a,int b) &#123;    return a&gt;b ? a : b;&#125;//求三个数的最大值public static int maxThreeNum(int a,int b,int c) &#123;    int max=maxTwoNum(a,b);    return maxTwoNum(max,c);&#125;public static void main(String[] args) &#123;    int a=10,b=23,c=4;    System.out.println(maxThreeNum(a,b,c)); 灵活使用方法，可以减少重复代码，使代码更简单。 实参、形参的关系 Java当中只有按值传递 分析如下代码：交换两个整型变量 12345678910111213public static void swap(int x,int y)&...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/20/Java-logic-control/" title="【JavaSE】程序逻辑控制练习">【JavaSE】程序逻辑控制练习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-20T08:55:41.000Z" title="发表于 2021-11-20 16:55:41">2021-11-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">输入1-7，输出工作日或休息日 1234567891011121314151617Scanner scan = new Scanner(System.in);switch(scan.nextInt()) &#123;    case 1:    case 2:    case 3:    case 4:    case 5:        System.out.println(&quot;工作日&quot;);        break;    case 6:    case 7:        System.out.println(&quot;休息日&quot;);        break;    default:        System.out.println(&quot;输入错误&quot;);        break;&#125;  switch 中的值只能是 整数|枚举|字符|字符串，long、double、float、boolean不能作为switch参数的类型。  判断一个数是否为素数（3种方法） 1234567891011121314Scanner sca...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/20/Java-data-type/" title="【JavaSE】数据类型与运算符">【JavaSE】数据类型与运算符</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-20T03:27:41.000Z" title="发表于 2021-11-20 11:27:41">2021-11-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">初识Java 第一个java程序 12345public class HelloWorld &#123;    public static void main(String[] args) &#123;        System.out.println(&quot;HelloWorld&quot;);    &#125;&#125;   一个java文件中，只能有一个public类，且类名要与文件相同。   类存在于源文件里面；方法存在于类中；语句存在于方法中。   类名要采用大驼峰形式（首字母均大写）命名。   面试问题： main方法为什么是static：main方法是程序的入口，如果不是静态的话，要启动就必须创建一个实例，但是main是程序入口，创建一个实例又得从main开始。如果一个方法不是静态的，则要先实例化该类，比如要这样 test t=new test(); 然后才能调用 t.main(); 而这对于运行一个程序的主函数来说是不现实的，所以比如把main函数定义为static，使t.main()可以直接被调用。 String[] args的作用是什么：运行时命令行...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/13/c-pointer/" title="c语言：指针误区总结">c语言：指针误区总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-13T03:31:01.000Z" title="发表于 2021-11-13 11:31:01">2021-11-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">4个二进制位可以表示一个16进制数字 1111 --&gt;f  指针类型的意义：   指针类型决定了：指针解引用的权限有多大（整型指针解引用访问4个字节，字符型指针解引用只能访问1个字节） 指针类型决定了，指针走一步，能走多远（步长）   例题1： 123456   int a = 0x11223344;char* pc = &amp;a;*pc = 0; //只改变一个字节int* pa = &amp;a;*pa = 0;//改变了四个字节  char* 的指针解引用就只能访问一个字节，而 int* 的指针的解引用能访问四个字节。 例题2： 1234567int arr[10] = &#123; 0 &#125;;int* p = arr;char* pc = arr;printf(&quot;%p\n&quot;, p);printf(&quot;%p\n&quot;, p + 1);//加了4，因为int4字节printf(&quot;%p\n&quot;, pc);printf(&quot;%p\n&quot;, pc + 1);//加了1，因为char1字节   野指...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2021/11/06/vue1/" title="Vue笔记：指令">Vue笔记：指令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-11-06T11:25:01.000Z" title="发表于 2021-11-06 19:25:01">2021-11-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">什么是vue  构建用户界面   用vue往html里填充数据   框架   框架是一套现成的解决方案，只能遵守框架规范写自己的业务功能  vue的特性  数据驱动视图  数据的变化会驱动视图自动更新  双向数据绑定   在网页中，form表单负责采集数据，Ajax负责提交数据   js数据的变化，会被自动渲染到页面上 页面上表单采集的数据发生变化时，会被vue自动获取到，更新到js数据中   数据驱动视图和双向数据绑定的底层原理是MVVM（Mode数据源、View视图、ViewModel就是vue实例  vue的基本使用 1234567891011121314151617&lt;body&gt;    &lt;!-- 希望vue控制div，把数据填充到div内部 --&gt;    &lt;div id=&quot;app&quot;&gt;&#123;&#123; username &#125;&#125;&lt;/div&gt;    &lt;!-- 1.导入Vue库文件，在window全局就有了vue这个构造函数 --&gt;    &lt;script src=&quo...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/3/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#content-inner">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#content-inner">9</a><a class="extend next" rel="next" href="/page/5/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%88%86%E4%BA%AB/"><span class="card-category-list-name">分享</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">学习</span><span class="card-category-list-count">69</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%84%9F%E6%83%B3/"><span class="card-category-list-name">感想</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%98%85%E8%AF%BB/"><span class="card-category-list-name">阅读</span><span class="card-category-list-count">4</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JavaSE/" style="font-size: 1.37em; color: #99a4b2">JavaSE</a> <a href="/tags/linux/" style="font-size: 1.28em; color: #99a0aa">linux</a> <a href="/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">数据结构和算法</a> <a href="/tags/Vue-js/" style="font-size: 1.1em; color: #999">Vue.js</a> <a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 1.23em; color: #999ea6">阅读</a> <a href="/tags/MySQL/" style="font-size: 1.14em; color: #999b9d">MySQL</a> <a href="/tags/JavaWeb/" style="font-size: 1.19em; color: #999da1">JavaWeb</a> <a href="/tags/socket/" style="font-size: 1.1em; color: #999">socket</a> <a href="/tags/Python/" style="font-size: 1.1em; color: #999">Python</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 1.1em; color: #999">索引</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 1.23em; color: #999ea6">年终总结</a> <a href="/tags/c/" style="font-size: 1.5em; color: #99a9bf">c</a> <a href="/tags/IO/" style="font-size: 1.1em; color: #999">IO</a> <a href="/tags/JavaScript/" style="font-size: 1.41em; color: #99a5b7">JavaScript</a> <a href="/tags/html/" style="font-size: 1.19em; color: #999da1">html</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 1.1em; color: #999">事务</a> <a href="/tags/yaml/" style="font-size: 1.1em; color: #999">yaml</a> <a href="/tags/css/" style="font-size: 1.46em; color: #99a7bb">css</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.32em; color: #99a2ae">多线程</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/01/">
+            <span class="card-archive-list-date">
+              一月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/01/">
+            <span class="card-archive-list-date">
+              一月 2023
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/11/">
+            <span class="card-archive-list-date">
+              十一月 2022
+            </span>
+            <span class="card-archive-list-count">7</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/10/">
+            <span class="card-archive-list-date">
+              十月 2022
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/09/">
+            <span class="card-archive-list-date">
+              九月 2022
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2022/06/">
+            <span class="card-archive-list-date">
+              六月 2022
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">85</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-03-28T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">95.2k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-01-07T17:03:02.171Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

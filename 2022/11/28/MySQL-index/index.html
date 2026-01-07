@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL数据库：索引 | panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="索引是一种用于快速查找和检索数据的数据结构，类似于图书的目录，通过索引可以更快地找到对应的数据。 索引的优缺点 优点：  提高了查找的效率 通过创建唯一性索引，确保了每一行数据的唯一性。  缺点：  索引使用物理文件存储，带来了空间的消耗。 创建和维护索引需要耗费时间。当数据发生更改时，索引也..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MySQL数据库：索引",
+  "url": "https://youngsay.cn/2022/11/28/MySQL-index/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg",
+  "datePublished": "2022-11-28T13:04:41.000Z",
+  "dateModified": "2022-11-28T13:18:48.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/2022/11/28/MySQL-index/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL数据库：索引',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">MySQL数据库：索引</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">MySQL数据库：索引</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-28T13:04:41.000Z" title="发表于 2022-11-28 21:04:41">2022-11-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-28T13:18:48.000Z" title="更新于 2022-11-28 21:18:48">2022-11-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">673</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span></div></div></div><article class="container post-content" id="article-container"><p>索引是一种用于快速查找和检索数据的数据结构，类似于图书的目录，通过索引可以更快地找到对应的数据。</p>
+<h3 id="索引的优缺点">索引的优缺点</h3>
+<p>优点：</p>
+<ul>
+<li>提高了查找的效率</li>
+<li>通过创建唯一性索引，确保了每一行数据的唯一性。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>索引使用物理文件存储，带来了空间的消耗。</li>
+<li>创建和维护索引需要耗费时间。当数据发生更改时，索引也会动态修改，降低SQL执行效率。</li>
+</ul>
+<h3 id="索引SQL">索引SQL</h3>
+<h4 id="查看索引">查看索引</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> 索引名 <span class="keyword">from</span> 表名(列名);</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cos.youngsay.cn/blog/202211282118307.png" alt="image-20221128161811672"></p>
+<h4 id="创建索引">创建索引</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> index 索引名 <span class="keyword">on</span> 表名(列名);</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cos.youngsay.cn/blog/202211282118347.png" alt="image-20221128162120786"></p>
+<h4 id="删除索引">删除索引</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> index 索引名 <span class="keyword">on</span> 表名</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cos.youngsay.cn/blog/202211282118794.png" alt="image-20221128162440340"></p>
+<h3 id="索引底层的数据结构">索引底层的数据结构</h3>
+<p>索引是一种查找更快的数据结果。</p>
+<p>数组和链表的查找都需要遍历，最先淘汰。</p>
+<p>二叉搜索树最坏情况下会变成单支树，查找的时间复杂度变为O(N)，淘汰。</p>
+<p>AVL树和红黑树使得左右子树高度相对平衡，但数据量太大时，树的高度过高，比较次数过多，即磁盘IO过多，淘汰。</p>
+<p>哈希表查找的时间复杂度是O(1)，是不是可以作为索引的数据结构了呢？NO！哈希表不支持顺序和范围查找，而SQL要经常进行排序和</p>
+<p>范围查询，淘汰。</p>
+<p><strong>目前大多数数据库采用B树或B+树作为索引结构</strong>，在MySQL中，MyISAM 引擎和 InnoDB 引擎都是使用 B+树 作为索引结构。</p>
+<p>B树称为多路平衡查找树，B+树是在B树基础上的变现，二者都是多叉平衡树。</p>
+<h4 id="B树">B树</h4>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cos.youngsay.cn/blog/202211282118366.png" alt="image-20221128203706890"></p>
+<h4 id="B-树">B+树</h4>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cos.youngsay.cn/blog/202211282118609.png" alt="image-20221128203611266"></p>
+<h4 id="区别和联系">区别和联系</h4>
+<ul>
+<li>
+<p>B树N个值，划分为N+1个结点；B+树N个值，划分为N个结点。</p>
+</li>
+<li>
+<p>B树叶子结点相互独立;B+树叶子结点是链式结构，指向相邻结点。</p>
+</li>
+<li>
+<p>B树每个结点既存放key，又存放data；B+树只有叶子结点既存放key，又存放data，其他结点只存key。</p>
+</li>
+<li>
+<p>B树的查找过程是对每个关键字二分查找，可能没有到叶子结点就检索到了；B+树更加稳定，每次查找都是从根节点开始，到叶子结点结束。</p>
+</li>
+</ul>
+<h4 id="索引为什么要用B-树">索引为什么要用B+树</h4>
+<ul>
+<li>每次都是从根节点到叶子结点，IO次数都差不多，查询效率稳定。</li>
+<li>磁盘IO请求数少，查询速度快。</li>
+<li>叶子结点采用链式存储结构，方便数据范围查询。</li>
+<li>非叶子结点只存储key，占用空间小，甚至可以缓存到内存中。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2022/11/28/MySQL-index/">https://youngsay.cn/2022/11/28/MySQL-index/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a><a class="post-meta__tags" href="/tags/%E7%B4%A2%E5%BC%95/">索引</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">MySQL数据库：事务</div></div><div class="info-2"><div class="info-item-1">事务的概念 事务是逻辑上的一组操作，能够将各SQL语句打包执行，要么全都执行，要么全都不执行。 想象我们在操作数据库时，数据库突然挂了，或者多个线程写入数据库时覆盖了彼此的更改……一系列操作都会导致数据库数据的不一致性，基于这些问题，数据库有了事务这一机制。 拿转账举例，A想要向B转账500元，该操作分为两步：  A的账户减少500元 B的账户增加500元  事务会将这两步打包在一起执行，要么全都执行，要么全都不执行。不会出现A的账户少了500，而B账户没有增加500的情况。 如何使用事务 ①开启事务 1start transaction; ②执行多条SQL语句 1234-- A账户减少500update accout set money=money-500 where name = &#x27;A&#x27;;-- B账户增加500update accout set money=money+500 where name = &#x27;B&#x27;; ③回滚或提交：rollback/commit; 1commit; 说明：rollback即是全部失败，commit即是全部成功...</div></div></div></a><a class="pagination-related" href="/2022/11/22/Java-Socket/" title="socket套接字网络编程"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">socket套接字网络编程</div></div><div class="info-2"><div class="info-item-1">网络编程使计算机不再是一个孤立的个体，而是一个互联的整体，通过网络编程，可实现主机各进程间的数据传输。网络编程的核心就是套接字socket。socket是由系统提供用于网络通信的技术，是基于TCP/IP协议的网络通信的基本操作单元。 socket主要分为三类：流套接字、数据报套接字、原始套接字。我们这里主要介绍前两种： 流套接字：使用传输层TCP协议，提供面向连接、可靠的数据传输，面向字节流，有接收缓冲区和发送缓冲区，传输数据大小无限制。 数据报套接字：使用传输层UDP协议，提供无连接、不可靠传输，面向数据报，只有接收缓冲区，传输大小受限，一次最多传输64K。 下面我们来看下Java中是如何使用socket来进行网络编程的。 数据报套接字 Java数据报套接字编程有两个核心的类，DatagramSocket和DatagramPacket。 两个核心类 DatagramSocket用于创建一个数据报套接字，用于发送和接收数据报。主要的构造方法如下：    方法名 说明     DatagramSocket() 创建一个UDP数据报套接字的Socket，绑定到本机任意一个随机端口 （...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-29</div><div class="info-item-2">MySQL数据库：事务</div></div><div class="info-2"><div class="info-item-1">事务的概念 事务是逻辑上的一组操作，能够将各SQL语句打包执行，要么全都执行，要么全都不执行。 想象我们在操作数据库时，数据库突然挂了，或者多个线程写入数据库时覆盖了彼此的更改……一系列操作都会导致数据库数据的不一致性，基于这些问题，数据库有了事务这一机制。 拿转账举例，A想要向B转账500元，该操作分为两步：  A的账户减少500元 B的账户增加500元  事务会将这两步打包在一起执行，要么全都执行，要么全都不执行。不会出现A的账户少了500，而B账户没有增加500的情况。 如何使用事务 ①开启事务 1start transaction; ②执行多条SQL语句 1234-- A账户减少500update accout set money=money-500 where name = &#x27;A&#x27;;-- B账户增加500update accout set money=money+500 where name = &#x27;B&#x27;; ③回滚或提交：rollback/commit; 1commit; 说明：rollback即是全部失败，commit即是全部成功...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">索引的优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95SQL"><span class="toc-text">索引SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%B4%A2%E5%BC%95"><span class="toc-text">查看索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="toc-text">创建索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="toc-text">删除索引</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%BA%95%E5%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">索引底层的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#B%E6%A0%91"><span class="toc-text">B树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-%E6%A0%91"><span class="toc-text">B+树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB%E5%92%8C%E8%81%94%E7%B3%BB"><span class="toc-text">区别和联系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8B-%E6%A0%91"><span class="toc-text">索引为什么要用B+树</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"emojiCDN":"https://testingcf.jsdelivr.net/gh/GamerNoTitle/ValineCDN/"}
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nKtN81THEqdpFPQP6484D0Dw-gzGzoHsz',
+      appKey: 'Elo90cRADuj3PvXaL8PiKkMG',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: {"alu2":"alu/不出所料.png","alu3":"alu/不说话.png","alu4":"alu/不高兴.png","alu5":"alu/中刀.png","alu6":"alu/中指.png","alu7":"alu/中枪.png","alu8":"alu/亲亲.png","alu9":"alu/便便.png","alu10":"alu/内伤.png","alu11":"alu/击掌.png","alu12":"alu/口水.png","alu13":"alu/吐.png","alu14":"alu/吐舌.png","alu15":"alu/吐血倒地.png","alu16":"alu/呲牙.png","alu17":"alu/咽气.png","alu18":"alu/哭泣.png","alu19":"alu/喜极而泣.png","alu20":"alu/喷水.png","alu21":"alu/喷血.png","alu22":"alu/坐等.png","alu23":"alu/害羞.png","alu24":"alu/小眼睛.png","alu25":"alu/尴尬.png","alu26":"alu/得意.png","alu27":"alu/惊喜.png","alu28":"alu/想一想.png","alu29":"alu/愤怒.png","alu30":"alu/扇耳光.png","alu31":"alu/投降.png","alu32":"alu/抠鼻.png","alu33":"alu/抽烟.png","alu34":"alu/无奈.png","alu35":"alu/无所谓.png","alu36":"alu/无语.png","alu37":"alu/暗地观察.png","alu38":"alu/期待.png","alu39":"alu/欢呼.png","alu40":"alu/汗.png","alu41":"alu/深思.png","alu42":"alu/狂汗.png","alu43":"alu/献花.png","alu44":"alu/献黄瓜.png","alu45":"alu/皱眉.png","alu46":"alu/看不见.png","alu47":"alu/看热闹.png","alu48":"alu/瞅你.png","alu49":"alu/肿包.png","alu50":"alu/脸红.png","alu51":"alu/蜡烛.png","alu52":"alu/装大款.png","alu53":"alu/观察.png","alu54":"alu/赞一个.png","alu55":"alu/邪恶.png","alu56":"alu/锁眉.png","alu57":"alu/长草.png","alu58":"alu/阴暗.png","alu59":"alu/高兴.png","alu60":"alu/黑线.png","alu61":"alu/鼓掌.png","bilibilitv2":"bilibilitv/[tv_doge].png","bilibilitv3":"bilibilitv/[tv_亲亲].png","bilibilitv4":"bilibilitv/[tv_偷笑].png","bilibilitv5":"bilibilitv/[tv_再见].png","bilibilitv6":"bilibilitv/[tv_冷漠].png","bilibilitv7":"bilibilitv/[tv_发怒].png","bilibilitv8":"bilibilitv/[tv_发财].png","bilibilitv9":"bilibilitv/[tv_可爱].png","bilibilitv10":"bilibilitv/[tv_吐血].png","bilibilitv11":"bilibilitv/[tv_呆].png","bilibilitv12":"bilibilitv/[tv_呕吐].png","bilibilitv13":"bilibilitv/[tv_困].png","bilibilitv14":"bilibilitv/[tv_坏笑].png","bilibilitv15":"bilibilitv/[tv_大佬].png","bilibilitv16":"bilibilitv/[tv_大哭].png","bilibilitv17":"bilibilitv/[tv_委屈].png","bilibilitv18":"bilibilitv/[tv_害羞].png","bilibilitv19":"bilibilitv/[tv_尴尬].png","bilibilitv20":"bilibilitv/[tv_微笑].png","bilibilitv21":"bilibilitv/[tv_思考].png","bilibilitv22":"bilibilitv/[tv_惊吓].png","bilibilitv23":"bilibilitv/[tv_打脸].png","bilibilitv24":"bilibilitv/[tv_抓狂].png","bilibilitv25":"bilibilitv/[tv_抠鼻].png","bilibilitv26":"bilibilitv/[tv_斜眼笑].png","bilibilitv27":"bilibilitv/[tv_无奈].png","bilibilitv28":"bilibilitv/[tv_晕].png","bilibilitv29":"bilibilitv/[tv_流汗].png","bilibilitv30":"bilibilitv/[tv_流泪].png","bilibilitv31":"bilibilitv/[tv_流鼻血].png","bilibilitv32":"bilibilitv/[tv_点赞].png","bilibilitv33":"bilibilitv/[tv_生气].png","bilibilitv34":"bilibilitv/[tv_生病].png","bilibilitv35":"bilibilitv/[tv_疑问].png","bilibilitv36":"bilibilitv/[tv_白眼].png","bilibilitv37":"bilibilitv/[tv_皱眉].png","bilibilitv38":"bilibilitv/[tv_目瞪口呆].png","bilibilitv39":"bilibilitv/[tv_睡着].png","bilibilitv40":"bilibilitv/[tv_笑哭].png","bilibilitv41":"bilibilitv/[tv_腼腆].png","bilibilitv42":"bilibilitv/[tv_色].png","bilibilitv43":"bilibilitv/[tv_调侃].png","bilibilitv44":"bilibilitv/[tv_调皮].png","bilibilitv45":"bilibilitv/[tv_鄙视].png","bilibilitv46":"bilibilitv/[tv_闭嘴].png","bilibilitv47":"bilibilitv/[tv_难过].png","bilibilitv48":"bilibilitv/[tv_馋].png","bilibilitv49":"bilibilitv/[tv_鬼脸].png","bilibilitv50":"bilibilitv/[tv_黑人问号].png","bilibilitv51":"bilibilitv/[tv_鼓掌].png","Tieba-New2":"Tieba-New/image_emoticon.png","Tieba-New3":"Tieba-New/image_emoticon10.png","Tieba-New4":"Tieba-New/image_emoticon100.png","Tieba-New5":"Tieba-New/image_emoticon101.png","Tieba-New6":"Tieba-New/image_emoticon102.png","Tieba-New7":"Tieba-New/image_emoticon103.png","Tieba-New8":"Tieba-New/image_emoticon104.png","Tieba-New9":"Tieba-New/image_emoticon105.png","Tieba-New10":"Tieba-New/image_emoticon106.png","Tieba-New11":"Tieba-New/image_emoticon107.png","Tieba-New12":"Tieba-New/image_emoticon108.png","Tieba-New13":"Tieba-New/image_emoticon109.png","Tieba-New14":"Tieba-New/image_emoticon11.png","Tieba-New15":"Tieba-New/image_emoticon110.png","Tieba-New16":"Tieba-New/image_emoticon111.png","Tieba-New17":"Tieba-New/image_emoticon112.png","Tieba-New18":"Tieba-New/image_emoticon113.png","Tieba-New19":"Tieba-New/image_emoticon114.png","Tieba-New20":"Tieba-New/image_emoticon115.png","Tieba-New21":"Tieba-New/image_emoticon116.png","Tieba-New22":"Tieba-New/image_emoticon117.png","Tieba-New23":"Tieba-New/image_emoticon118.png","Tieba-New24":"Tieba-New/image_emoticon119.png","Tieba-New25":"Tieba-New/image_emoticon12.png","Tieba-New26":"Tieba-New/image_emoticon120.png","Tieba-New27":"Tieba-New/image_emoticon121.png","Tieba-New28":"Tieba-New/image_emoticon122.png","Tieba-New29":"Tieba-New/image_emoticon123.png","Tieba-New30":"Tieba-New/image_emoticon124.png","Tieba-New31":"Tieba-New/image_emoticon13.png","Tieba-New32":"Tieba-New/image_emoticon14.png","Tieba-New33":"Tieba-New/image_emoticon15.png","Tieba-New34":"Tieba-New/image_emoticon16.png","Tieba-New35":"Tieba-New/image_emoticon17.png","Tieba-New36":"Tieba-New/image_emoticon18.png","Tieba-New37":"Tieba-New/image_emoticon19.png","Tieba-New38":"Tieba-New/image_emoticon2.png","Tieba-New39":"Tieba-New/image_emoticon20.png","Tieba-New40":"Tieba-New/image_emoticon21.png","Tieba-New41":"Tieba-New/image_emoticon22.png","Tieba-New42":"Tieba-New/image_emoticon23.png","Tieba-New43":"Tieba-New/image_emoticon24.png","Tieba-New44":"Tieba-New/image_emoticon25.png","Tieba-New45":"Tieba-New/image_emoticon26.png","Tieba-New46":"Tieba-New/image_emoticon27.png","Tieba-New47":"Tieba-New/image_emoticon28.png","Tieba-New48":"Tieba-New/image_emoticon29.png","Tieba-New49":"Tieba-New/image_emoticon3.png","Tieba-New50":"Tieba-New/image_emoticon30.png","Tieba-New51":"Tieba-New/image_emoticon31.png","Tieba-New52":"Tieba-New/image_emoticon32.png","Tieba-New53":"Tieba-New/image_emoticon33.png","Tieba-New54":"Tieba-New/image_emoticon34.png","Tieba-New55":"Tieba-New/image_emoticon35.png","Tieba-New56":"Tieba-New/image_emoticon36.png","Tieba-New57":"Tieba-New/image_emoticon37.png","Tieba-New58":"Tieba-New/image_emoticon38.png","Tieba-New59":"Tieba-New/image_emoticon39.png","Tieba-New60":"Tieba-New/image_emoticon4.png","Tieba-New61":"Tieba-New/image_emoticon40.png","Tieba-New62":"Tieba-New/image_emoticon41.png","Tieba-New63":"Tieba-New/image_emoticon42.png","Tieba-New64":"Tieba-New/image_emoticon43.png","Tieba-New65":"Tieba-New/image_emoticon44.png","Tieba-New66":"Tieba-New/image_emoticon45.png","Tieba-New67":"Tieba-New/image_emoticon46.png","Tieba-New68":"Tieba-New/image_emoticon47.png","Tieba-New69":"Tieba-New/image_emoticon48.png","Tieba-New70":"Tieba-New/image_emoticon49.png","Tieba-New71":"Tieba-New/image_emoticon5.png","Tieba-New72":"Tieba-New/image_emoticon50.png","Tieba-New73":"Tieba-New/image_emoticon6.png","Tieba-New74":"Tieba-New/image_emoticon66.png","Tieba-New75":"Tieba-New/image_emoticon67.png","Tieba-New76":"Tieba-New/image_emoticon68.png","Tieba-New77":"Tieba-New/image_emoticon69.png","Tieba-New78":"Tieba-New/image_emoticon7.png","Tieba-New79":"Tieba-New/image_emoticon70.png","Tieba-New80":"Tieba-New/image_emoticon71.png","Tieba-New81":"Tieba-New/image_emoticon72.png","Tieba-New82":"Tieba-New/image_emoticon73.png","Tieba-New83":"Tieba-New/image_emoticon74.png","Tieba-New84":"Tieba-New/image_emoticon75.png","Tieba-New85":"Tieba-New/image_emoticon76.png","Tieba-New86":"Tieba-New/image_emoticon77.png","Tieba-New87":"Tieba-New/image_emoticon78.png","Tieba-New88":"Tieba-New/image_emoticon79.png","Tieba-New89":"Tieba-New/image_emoticon8.png","Tieba-New90":"Tieba-New/image_emoticon80.png","Tieba-New91":"Tieba-New/image_emoticon81.png","Tieba-New92":"Tieba-New/image_emoticon82.png","Tieba-New93":"Tieba-New/image_emoticon83.png","Tieba-New94":"Tieba-New/image_emoticon84.png","Tieba-New95":"Tieba-New/image_emoticon85.png","Tieba-New96":"Tieba-New/image_emoticon86.png","Tieba-New97":"Tieba-New/image_emoticon87.png","Tieba-New98":"Tieba-New/image_emoticon88.png","Tieba-New99":"Tieba-New/image_emoticon89.png","Tieba-New100":"Tieba-New/image_emoticon9.png","Tieba-New101":"Tieba-New/image_emoticon90.png","Tieba-New102":"Tieba-New/image_emoticon91.png","Tieba-New103":"Tieba-New/image_emoticon92.png","Tieba-New104":"Tieba-New/image_emoticon93.png","Tieba-New105":"Tieba-New/image_emoticon94.png","Tieba-New106":"Tieba-New/image_emoticon95.png","Tieba-New107":"Tieba-New/image_emoticon96.png","Tieba-New108":"Tieba-New/image_emoticon97.png","Tieba-New109":"Tieba-New/image_emoticon98.png","Tieba-New110":"Tieba-New/image_emoticon99.png"},
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

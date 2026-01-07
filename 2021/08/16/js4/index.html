@@ -1,0 +1,480 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>js基础Ⅳ：内置对象 | panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1 - 内置对象 1.1 内置对象 ​		 JavaScript 中的对象分为3种：自定义对象 、内置对象、 浏览器对象 ​		前面两种对象是JS 基础 内容，属于 ECMAScript；  第三个浏览器对象属于 JS 独有的， JS API 讲解内置对象就是指 JS 语言自带的一些对象，这些..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "js基础Ⅳ：内置对象",
+  "url": "https://youngsay.cn/2021/08/16/js4/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-21kqkm.png",
+  "datePublished": "2021-08-16T08:26:54.000Z",
+  "dateModified": "2021-08-16T09:27:48.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/2021/08/16/js4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'js基础Ⅳ：内置对象',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">js基础Ⅳ：内置对象</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">js基础Ⅳ：内置对象</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-16T08:26:54.000Z" title="发表于 2021-08-16 16:26:54">2021-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-16T09:27:48.000Z" title="更新于 2021-08-16 17:27:48">2021-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="1-内置对象">1 - 内置对象</h2>
+<h3 id="1-1-内置对象">1.1 内置对象</h3>
+<p>​		 JavaScript 中的对象分为3种：<strong>自定义对象 、内置对象、 浏览器对象</strong><br>
+​		前面两种对象是JS 基础 内容，属于 ECMAScript；  第三个浏览器对象属于 JS 独有的， JS API 讲解内置对象就是指 JS 语言自带的一些对象，这些对象供开发者使用，并提供了一些常用的或是<strong>最基本而必要的功能</strong>（属性和方法），内置对象最大的优点就是帮助我们快速开发</p>
+<p>​	 	JavaScript 提供了多个内置对象：Math、 Date 、Array、String等</p>
+<h3 id="1-2-查文档">1.2 查文档</h3>
+<p>Mozilla 开发者网络（MDN）提供了有关开放网络技术（Open Web）的信息，包括 HTML、CSS 和万维网及 HTML5 应用的 API。<br>
+​		MDN:<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/">https://developer.mozilla.org/zh-CN/</a></p>
+<h3 id="1-3-Math对象">1.3 Math对象</h3>
+<p>​		Math 对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值，取整、最大值等）可以使用 Math 中的成员。</p>
+<table>
+<thead>
+<tr>
+<th>属性、方法名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Math.PI</td>
+<td>圆周率</td>
+</tr>
+<tr>
+<td>Math.floor()</td>
+<td>向下取整</td>
+</tr>
+<tr>
+<td>Math.ceil()</td>
+<td>向上取整</td>
+</tr>
+<tr>
+<td>Math.round()</td>
+<td>四舍五入版 就近取整   注意 -3.5   结果是  -3</td>
+</tr>
+<tr>
+<td>Math.abs()</td>
+<td>绝对值</td>
+</tr>
+<tr>
+<td>Math.max()/Math.min()</td>
+<td>求最大和最小值</td>
+</tr>
+<tr>
+<td>Math.random()</td>
+<td>获取范围在[0,1)内的随机值</td>
+</tr>
+</tbody>
+</table>
+<p>​	注意：上面的方法使用时必须带括号</p>
+<p>​	<strong>获取指定范围内的随机整数</strong>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getRandom</span>(<span class="params">min, max</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * (max - min + <span class="number">1</span>)) + min; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-Date对象">1.4 Date对象</h3>
+<p>​	 	Date 对象和 Math 对象不一样，Date是一个<strong>构造函数</strong>，使用时需要实例化后才能使用其中具体方法和属性。Date 实例用来处理日期和时间</p>
+<ul>
+<li>
+<p>使用Date实例化日期对象</p>
+<ul>
+<li>获取当前时间必须实例化：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取指定时间的日期对象</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> future = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="string">&#x27;2022-8-16 16:50:00&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>注意：如果创建实例时并未传入参数，则得到的日期对象是当前时间对应的日期对象</p>
+</li>
+<li>
+<p>使用Date实例的方法和属性</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165653.png" alt=""></p>
+</li>
+<li>
+<p>通过Date实例获取总毫秒数</p>
+<ul>
+<li>
+<p>总毫秒数的含义</p>
+<p>​	基于1970年1月1日（世界标准时间）起的毫秒数</p>
+</li>
+<li>
+<p>获取总毫秒数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实例化Date对象</span></span><br><span class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line"><span class="comment">// 1. 用于获取对象的原始值</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">valueOf</span>())	</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">getTime</span>())	</span><br><span class="line"><span class="comment">// 2. ★简单写可以这么做</span></span><br><span class="line"><span class="keyword">var</span> now = + <span class="keyword">new</span> <span class="title class_">Date</span>();			</span><br><span class="line"><span class="comment">// 3. HTML5中提供的方法，有兼容性问题</span></span><br><span class="line"><span class="keyword">var</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-5-数组对象">1.5 数组对象</h3>
+<h4 id="创建数组的两种方式">创建数组的两种方式</h4>
+<ul>
+<li>
+<p>字面量方式</p>
+<ul>
+<li>
+<p>示例代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="string">&quot;test&quot;</span>,<span class="literal">true</span>];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>new Array()</p>
+<ul>
+<li>
+<p>示例代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var arr = new Array();</span><br></pre></td></tr></table></figure>
+<p>注意：上面代码中arr创建出的是一个空数组，如果需要使用构造函数Array创建非空数组，可以在创建数组时传入参数</p>
+<p>​	参数传递规则如下：</p>
+<ul>
+<li>
+<p>如果只传入一个参数，则参数规定了数组的长度</p>
+</li>
+<li>
+<p>如果传入了多个参数，则参数称为数组的元素</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="检测是否为数组">检测是否为数组</h4>
+<ul>
+<li>
+<p>instanceof 运算符</p>
+<ul>
+<li>
+<p>instanceof 可以判断一个对象是否是某个构造函数的实例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">23</span>];</span><br><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr <span class="keyword">instanceof</span> <span class="title class_">Array</span>); <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj <span class="keyword">instanceof</span> <span class="title class_">Array</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>Array.isArray()</p>
+<ul>
+<li>
+<p>Array.isArray()用于判断一个对象是否为数组，isArray() 是 HTML5 中提供的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">23</span>];</span><br><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Array</span>.<span class="title function_">isArray</span>(arr));   <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Array</span>.<span class="title function_">isArray</span>(obj));   <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="添加删除数组元素的方法">添加删除数组元素的方法</h4>
+<ul>
+<li>
+<p>数组中有进行增加、删除元素的方法，部分方法如下表</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165706.png" alt=""></p>
+<p>注意：push、unshift为增加元素方法；pop、shift为删除元素的方法</p>
+</li>
+</ul>
+<h4 id="数组排序">数组排序</h4>
+<ul>
+<li>
+<p>数组中有对数组本身排序的方法，部分方法如下表</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165713.png" alt=""></p>
+<p>注意：sort方法需要传入参数来设置升序、降序排序</p>
+<ul>
+<li>
+<p>如果传入“function(a,b){ return a-b;}”，则为升序</p>
+</li>
+<li>
+<p>如果传入“function(a,b){ return b-a;}”，则为降序</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr=[<span class="number">1</span>,<span class="number">12</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line">arr.<span class="title function_">sort</span>(<span class="keyword">function</span>(<span class="params">a,b</span>)&#123; <span class="comment">//sort(函数)</span></span><br><span class="line">    <span class="keyword">return</span> a-b; <span class="comment">//升序</span></span><br><span class="line">&#125;)</span><br><span class="line"> <span class="variable language_">console</span>.<span class="title function_">log</span>(arr); <span class="comment">//1,3,4,12</span></span><br></pre></td></tr></table></figure>
+<h4 id="数组索引方法">数组索引方法</h4>
+<ul>
+<li>
+<p>数组中有获取数组指定元素索引值的方法，部分方法如下表</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165720.png" alt=""></p>
+</li>
+</ul>
+<h4 id="数组转换为字符串">数组转换为字符串</h4>
+<ul>
+<li>
+<p>数组中有把数组转化为字符串的方法，部分方法如下表</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165759.png" alt=""></p>
+<p>注意：join方法如果不传入参数，则按照 “ , ”拼接元素</p>
+</li>
+</ul>
+<h4 id="其他方法">其他方法</h4>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165818.png" alt=""></p>
+<h3 id="1-6-字符串对象">1.6 字符串对象</h3>
+<h4 id="基本包装类型">基本包装类型</h4>
+<p>​		为了方便操作基本数据类型，JavaScript 还提供了三个特殊的引用类型：String、Number和 Boolean。</p>
+<p>​		基本包装类型就是把简单数据类型包装成为复杂数据类型，这样基本数据类型就有了属性和方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面代码有什么问题？</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;andy&#x27;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str.<span class="property">length</span>);</span><br></pre></td></tr></table></figure>
+<p>​		按道理基本数据类型是没有属性和方法的，而对象才有属性和方法，但上面代码却可以执行，这是因为</p>
+<p>​		js 会把基本数据类型包装为复杂数据类型，其执行过程如下 ：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 生成临时变量，把简单类型包装为复杂数据类型</span></span><br><span class="line"><span class="keyword">var</span> temp = <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&#x27;andy&#x27;</span>);</span><br><span class="line"><span class="comment">// 2. 赋值给我们声明的字符变量</span></span><br><span class="line">str = temp;</span><br><span class="line"><span class="comment">// 3. 销毁临时变量</span></span><br><span class="line">temp = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="字符串的不可变">字符串的不可变</h4>
+<p>​		指的是里面的值不可变，虽然看上去可以改变内容，但其实是地址变了，内存中新开辟了一个内存空间。</p>
+<p>​		当重新给字符串变量赋值的时候，变量之前保存的字符串不会被修改，依然在内存中重新给字符串赋值，会重新在内存中开辟空间，这个特点就是字符串的不可变。<br>
+​		由于字符串的不可变，在<strong>大量拼接字符串</strong>的时候会有效率问题</p>
+<h4 id="根据字符返回位置">根据字符返回位置</h4>
+<p>​		字符串通过基本包装类型可以调用部分方法来操作字符串，以下是返回指定字符的位置的方法：</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816165949.png" alt=""></p>
+<p>​		案例：查找字符串&quot;abcoefoxyozzopp&quot;中所有o出现的位置以及次数</p>
+<ol>
+<li>
+<p>先查找第一个o出现的位置</p>
+</li>
+<li>
+<p>然后 只要indexOf 返回的结果不是 -1 就继续往后查找</p>
+</li>
+<li>
+<p>因为indexOf 只能查找到第一个，所以后面的查找，利用第二个参数，当前索引加1，从而继续查找</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;abcoefoxyozzopp&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> index = str.<span class="title function_">indexOf</span>(<span class="string">&#x27;o&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(index != -<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(index); <span class="comment">//3</span></span><br><span class="line">    num++;</span><br><span class="line">    index = str.<span class="title function_">indexOf</span>(<span class="string">&#x27;o&#x27;</span>,index+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;o出现的次数是：&#x27;</span>+ num +<span class="string">&#x27;次&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="根据位置返回字符">根据位置返回字符</h4>
+<p>​		字符串通过基本包装类型可以调用部分方法来操作字符串，以下是根据位置返回指定位置上的字符：</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816170225.png" alt=""></p>
+<p>​		案例：判断一个字符串 ‘abcoefoxyozzopp’ 中出现次数最多的字符，并统计其次数</p>
+<ol>
+<li>
+<p>核心算法：利用 charAt(） 遍历这个字符串</p>
+</li>
+<li>
+<p>把每个字符都存储给对象， 如果对象没有该属性，就为1，如果存在了就 +1</p>
+</li>
+<li>
+<p>遍历对象，得到最大值和该字符</p>
+<p>​	注意：在遍历的过程中，把字符串中的每个字符作为对象的属性存储在对象总，对应的属性值是该字符出现的次数</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;abcoefoxyozzopp&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; str.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> chars = str.<span class="title function_">charAt</span>(i); <span class="comment">// chars 是 字符串的每一个字符</span></span><br><span class="line">    <span class="keyword">if</span> (o[chars]) &#123; <span class="comment">// o[chars] 得到的是属性值</span></span><br><span class="line">        o[chars]++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        o[chars] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o);</span><br><span class="line"><span class="comment">// 2. 遍历对象</span></span><br><span class="line"><span class="keyword">var</span> max = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> ch = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> o) &#123;</span><br><span class="line">    <span class="comment">// k 得到是 属性名</span></span><br><span class="line">    <span class="comment">// o[k] 得到的是属性值</span></span><br><span class="line">    <span class="keyword">if</span> (o[k] &gt; max) &#123;</span><br><span class="line">        max = o[k];</span><br><span class="line">        ch = k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(max);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;最多的字符是&#x27;</span> + ch);</span><br></pre></td></tr></table></figure>
+<h4 id="字符串操作方法">字符串操作方法</h4>
+<p>​		字符串通过基本包装类型可以调用部分方法来操作字符串，以下是部分操作方法：</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816170329.png" alt=""></p>
+<h4 id="replace-方法">replace()方法</h4>
+<p>​		replace() 方法用于在字符串中用一些字符替换另一些字符，其使用格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">字符串.replace(被替换的字符串， 要替换为的字符串)；</span><br></pre></td></tr></table></figure>
+<h4 id="split-方法">split()方法</h4>
+<p>​		split()方法用于切分字符串，它可以将字符串切分为数组。在切分完毕之后，返回的是一个新数组。</p>
+<p>​		其使用格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">字符串.split(&quot;分割字符&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="2-简单数据类型和复杂数据类型">2 - 简单数据类型和复杂数据类型</h2>
+<h3 id="2-1-简单数据类型">2.1 简单数据类型</h3>
+<p>​		<strong>简单类型</strong>（<strong>基本数据类型</strong>、<strong>值类型</strong>）：在存储时变量中存储的是值本身，包括string ，number，boolean，undefined，null</p>
+<h3 id="2-2-复杂数据类型">2.2 复杂数据类型</h3>
+<p>​		<strong>复杂数据类型（引用类型）</strong>：在存储时变量中存储的仅仅是地址（引用），通过 new 关键字创建的对象（系统对象、自定义对象），如 Object、Array、Date等；</p>
+<h3 id="2-3-堆栈">2.3 堆栈</h3>
+<ul>
+<li>堆栈空间分配区别：</li>
+</ul>
+<p>1、栈（操作系统）：由操作系统自动分配释放存放函数的参数值、局部变量的值等。其操作方式类似于数据结构中的栈；</p>
+<p>简单数据类型存放到栈里面</p>
+<p>2、堆（操作系统）：存储复杂类型(对象)，一般由程序员分配释放，若程序员不释放，由垃圾回收机制回收。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816170347.png" alt=""></p>
+<ul>
+<li>
+<p>简单数据类型的存储方式</p>
+<p>​		值类型变量的数据直接存放在变量（栈空间）中</p>
+</li>
+</ul>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816170352.png" alt=""></p>
+<ul>
+<li>
+<p>复杂数据类型的存储方式</p>
+<p>​		引用类型变量（栈空间）里存放的是地址，真正的对象实例存放在堆空间中</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210816170407.png" alt=""></p>
+</li>
+</ul>
+<h3 id="2-4-简单类型传参">2.4 简单类型传参</h3>
+<p>​		函数的形参也可以看做是一个变量，当我们把一个值类型变量作为参数传给函数的形参时，其实是把变量在栈空间里的值复制了一份给形参，那么在方法内部对形参做任何修改，都不会影响到的外部变量。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">a</span>) &#123;</span><br><span class="line">    a++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a); </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="title function_">fn</span>(x);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(x);</span><br></pre></td></tr></table></figure>
+<p>​		运行结果是：11 10</p>
+<h3 id="2-5-复杂数据类型传参">2.5 复杂数据类型传参</h3>
+<p>​		函数的形参也可以看做是一个变量，当我们把引用类型变量传给形参时，其实是把变量在栈空间里保存的堆地址复制给了形参，形参和实参其实保存的是同一个堆地址，所以操作的是同一个对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params">name</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f1</span>(<span class="params">x</span>) &#123; <span class="comment">// x = p</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x.<span class="property">name</span>); <span class="comment">// 2. 这个输出什么 ?    </span></span><br><span class="line">    x.<span class="property">name</span> = <span class="string">&quot;罗志祥&quot;</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x.<span class="property">name</span>); <span class="comment">// 3. 这个输出什么 ?    </span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;吴亦凡&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(p.<span class="property">name</span>);    <span class="comment">// 1. 这个输出什么 ?   </span></span><br><span class="line"><span class="title function_">f1</span>(p);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(p.<span class="property">name</span>);    <span class="comment">// 4. 这个输出什么 ?  </span></span><br></pre></td></tr></table></figure>
+<p>​		运行结果是：吴亦凡 吴亦凡 罗志祥 罗志祥</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2021/08/16/js4/">https://youngsay.cn/2021/08/16/js4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/08/19/WebApi1/" title="WebApiⅠ：操作元素"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">WebApiⅠ：操作元素</div></div><div class="info-2"><div class="info-item-1">1.1. Web API介绍 1.1.1 API的概念 API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无需访问源码，无需理解其内部工作机制细节，只需直接调用使用即可。 1.1.2 Web  API的概念 ​	Web API 是浏览器提供的一套操作浏览器功能和页面元素的 API ( BOM 和 DOM )。 ​	MDN 详细 API : https://developer.mozilla.org/zh-CN/docs/Web/API ​	因为 Web API 很多，所以我们将这个阶段称为 Web APIs。 ​	此处的 Web API 特指浏览器提供的一系列API(很多函数或对象方法)，即操作网页的一系列工具。例如：操作html标签、操作页面地址的方法。 1.1.3 API 和 Web  API 总结   API 是为我们程序员提供的一个接口，帮助我们实现某种功能，我们会使用就可以了，不必纠结内部如何实现   Web API 主要是针对于浏览...</div></div></div></a><a class="pagination-related" href="/2021/08/15/js3/" title="js基础Ⅲ：作用域和对象"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">js基础Ⅲ：作用域和对象</div></div><div class="info-2"><div class="info-item-1">1 - 作用域 ​		通常来说，一段程序代码中所用到的名字并不总是有效和可用的，而限定这个名字的可用性的代码范围就是这个名字的作用域。作用域的使用提高了程序逻辑的局部性，增强了程序的可靠性，减少了名字冲突。 JavaScript（es6前）中的作用域有两种：  全局作用域：作用于所有代码执行的环境(整个script标签内部)或独立的js文件。 局部作用域（函数作用域）：作用于函数内的代码环境，就是局部作用域。 因为跟函数有关系，所以也称为函数作用域。  ❗ jS没有块级作用域   块作用域由 { } 包括。   在其他编程语言中（如 java、c#等），在 if 语句、循环语句中创建的变量，仅仅只能在本 if 语句、本循环语句中使用，如下面的Java代码： java有块级作用域： 12345if(true)&#123;  int num = 123;  system.out.print(num);  // 123&#125;system.out.print(num);    // 报错 ​		以上java代码会报错，是因为代码中 { } 即一块作用域，其中声明的变量 num，在 ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/10/31/es6/" title="ECMAScript 6入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-31</div><div class="info-item-2">ECMAScript 6入门</div></div><div class="info-2"><div class="info-item-1">let var和let声明变量的区别：  let声明的变量是块级变量，只存在{}内。  1234if(true)&#123;    let a=0;&#125;console.log(a); 会出现Uncaught ReferenceError: a is not defined的报错，而在{}内打印console.log(a)而不会报错。  let声明的变量没有变量提升  12console.log(a);let a=0; 如上代码会报错Uncaught ReferenceError: Cannot access 'a' before initialization  let声明的变量会出现暂时死区  在{}外用var声明变量，{}内用let声明一个相同的变量，{}外用var声明的变量便没有意义。 12345var a=10;if(true)&#123;  console.log(a);  let a=20;&#125; 如上代码依旧会报错Uncaught ReferenceError: Cannot access 'a' before initialization const ...</div></div></div></a><a class="pagination-related" href="/2021/08/12/js1/" title="js基础Ⅰ：变量和数据类型"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-12</div><div class="info-item-2">js基础Ⅰ：变量和数据类型</div></div><div class="info-2"><div class="info-item-1">JavaScript输入输出语句 为了方便信息的输入输出，JS中提供了一些输入输出语句，其常用的语句如下：    方法 说明 归属     alert(msg) 浏览器弹出警示框 浏览器   console.log(msg) 浏览器控制台打印输出信息 浏览器   prompt(info) 浏览器弹出输入框，用户可以输入 浏览器     注意：alert() 主要用来显示消息给用户，console.log() 用来给程序员自己看运行时的消息。  变量 什么是变量 白话：变量就是一个装东西的盒子。 通俗：变量是用于存放数据的容器。 我们通过 变量名 获取数据，甚至数据可以修改。  变量的使用 12345var age; //  声明一个 名称为age 的变量 age = 10; // 给 age  这个变量赋值为 10  var age  = 18;  // 声明变量同时赋值为 18// 声明一个变量并赋值， 我们称之为变量的初始化。var age = 10,  name = &#x27;zs&#x27;, sex = 2; //同时声明多个变量  声明变量特殊情况     情况 说...</div></div></div></a><a class="pagination-related" href="/2021/08/14/js-exercise/" title="js练习Ⅰ：循环、数组、函数"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-14</div><div class="info-item-2">js练习Ⅰ：循环、数组、函数</div></div><div class="info-2"><div class="info-item-1">🙂循环  一行打印★★★★★  12345var str = &#x27;&#x27;;for (var i = 1;i&lt;=5;i++) &#123;    str = str + &#x27;★&#x27;; //追加字符串&#125;     console.log(str);  倒序打印★ 第一行9个，第九行1个   12345678var str = &#x27;&#x27;;for (var i=1;i&lt;10; i++) &#123;  // 控制行数    for (var j=i;j&lt;10;j++) &#123; // 控制每一行★个数        str = str + &#x27;★&#x27;;    &#125;    str = str + &#x27;\n&#x27;; // 每行结尾换行&#125;    console.log(str);  正序打印★ 第一行1个，第九行9个   12345678var str = &#x27;&#x27;;for (var i=1;i&lt;10;i++) &#123;    for (var...</div></div></div></a><a class="pagination-related" href="/2021/08/19/WebApi1/" title="WebApiⅠ：操作元素"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-19</div><div class="info-item-2">WebApiⅠ：操作元素</div></div><div class="info-2"><div class="info-item-1">1.1. Web API介绍 1.1.1 API的概念 API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无需访问源码，无需理解其内部工作机制细节，只需直接调用使用即可。 1.1.2 Web  API的概念 ​	Web API 是浏览器提供的一套操作浏览器功能和页面元素的 API ( BOM 和 DOM )。 ​	MDN 详细 API : https://developer.mozilla.org/zh-CN/docs/Web/API ​	因为 Web API 很多，所以我们将这个阶段称为 Web APIs。 ​	此处的 Web API 特指浏览器提供的一系列API(很多函数或对象方法)，即操作网页的一系列工具。例如：操作html标签、操作页面地址的方法。 1.1.3 API 和 Web  API 总结   API 是为我们程序员提供的一个接口，帮助我们实现某种功能，我们会使用就可以了，不必纠结内部如何实现   Web API 主要是针对于浏览...</div></div></div></a><a class="pagination-related" href="/2021/09/13/js-node/" title="WebApiⅡ：自定义属性、节点"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-13</div><div class="info-item-2">WebApiⅡ：自定义属性、节点</div></div><div class="info-2"><div class="info-item-1">自定义属性 获取属性值   element.属性 ：获取内置属性值   element.getAttribute(‘属性’) ：获取自定义属性值 12345678910&lt;div id=&quot;demo&quot; index=&quot;1&quot; class=&quot;nav&quot;&gt;&lt;/div&gt;&lt;script&gt;    var div = document.querySelector(&#x27;div&#x27;);    // 1. 获取元素的属性值    // (1) element.属性    console.log(div.id);  //demo    //(2) element.getAttribute(&#x27;属性&#x27;)     console.log(div.getAttribute(&#x27;id&#x27;)); //demo    console.log(div.getAttribute(&#x27;index&#x27;)); //1&lt;/script&gt;   设置属性值  ele...</div></div></div></a><a class="pagination-related" href="/2021/08/15/js2/" title="js基础Ⅱ：数组和函数"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-15</div><div class="info-item-2">js基础Ⅱ：数组和函数</div></div><div class="info-2"><div class="info-item-1">1-数组 数组是指一组数据的集合，其中的每个数据被称作元素，在数组中可以存放任意类型的元素。 1-1创建数组 JS 中创建数组有两种方式： 利用  new 创建数组 12var 数组名 = new Array() ；var arr = new Array();   // 创建一个新的空数组 注意 Array () ，A 要大写 利用数组字面量创建数组 1234//1. 使用数组字面量方式创建空的数组var  数组名 = []；//2. 使用数组字面量方式创建带初始值的数组var  数组名 = [&#x27;胖虎&#x27;,&#x27;panghutx&#x27;,&#x27;blog.wangyouwu.cn&#x27;];   数组的字面量是方括号 [ ]   声明数组并赋值称为数组的初始化   数组元素的类型 数组中可以存放任意类型的数据，例如字符串，数字，布尔值等。 1var arrStus = [&#x27;小白&#x27;,12,true,28.9];   1-2获取数组中的元素 ​		索引 (下标) ：用来访问数组元素的序号（数组下标从 0 开始）。 1234// ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="toc-text">1 - 内置对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.1 内置对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%9F%A5%E6%96%87%E6%A1%A3"><span class="toc-text">1.2 查文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Math%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.3 Math对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-Date%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.4 Date对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.5 数组对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">创建数组的两种方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E6%98%AF%E5%90%A6%E4%B8%BA%E6%95%B0%E7%BB%84"><span class="toc-text">检测是否为数组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">添加删除数组元素的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F"><span class="toc-text">数组排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E7%B4%A2%E5%BC%95%E6%96%B9%E6%B3%95"><span class="toc-text">数组索引方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">数组转换为字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="toc-text">其他方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1"><span class="toc-text">1.6 字符串对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B"><span class="toc-text">基本包装类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-text">字符串的不可变</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%AD%97%E7%AC%A6%E8%BF%94%E5%9B%9E%E4%BD%8D%E7%BD%AE"><span class="toc-text">根据字符返回位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E4%BD%8D%E7%BD%AE%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6"><span class="toc-text">根据位置返回字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="toc-text">字符串操作方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#replace-%E6%96%B9%E6%B3%95"><span class="toc-text">replace()方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#split-%E6%96%B9%E6%B3%95"><span class="toc-text">split()方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2 - 简单数据类型和复杂数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.1 简单数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.2 复杂数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%A0%86%E6%A0%88"><span class="toc-text">2.3 堆栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%AE%80%E5%8D%95%E7%B1%BB%E5%9E%8B%E4%BC%A0%E5%8F%82"><span class="toc-text">2.4 简单类型传参</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%BC%A0%E5%8F%82"><span class="toc-text">2.5 复杂数据类型传参</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"emojiCDN":"https://testingcf.jsdelivr.net/gh/GamerNoTitle/ValineCDN/"}
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nKtN81THEqdpFPQP6484D0Dw-gzGzoHsz',
+      appKey: 'Elo90cRADuj3PvXaL8PiKkMG',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: {"alu2":"alu/不出所料.png","alu3":"alu/不说话.png","alu4":"alu/不高兴.png","alu5":"alu/中刀.png","alu6":"alu/中指.png","alu7":"alu/中枪.png","alu8":"alu/亲亲.png","alu9":"alu/便便.png","alu10":"alu/内伤.png","alu11":"alu/击掌.png","alu12":"alu/口水.png","alu13":"alu/吐.png","alu14":"alu/吐舌.png","alu15":"alu/吐血倒地.png","alu16":"alu/呲牙.png","alu17":"alu/咽气.png","alu18":"alu/哭泣.png","alu19":"alu/喜极而泣.png","alu20":"alu/喷水.png","alu21":"alu/喷血.png","alu22":"alu/坐等.png","alu23":"alu/害羞.png","alu24":"alu/小眼睛.png","alu25":"alu/尴尬.png","alu26":"alu/得意.png","alu27":"alu/惊喜.png","alu28":"alu/想一想.png","alu29":"alu/愤怒.png","alu30":"alu/扇耳光.png","alu31":"alu/投降.png","alu32":"alu/抠鼻.png","alu33":"alu/抽烟.png","alu34":"alu/无奈.png","alu35":"alu/无所谓.png","alu36":"alu/无语.png","alu37":"alu/暗地观察.png","alu38":"alu/期待.png","alu39":"alu/欢呼.png","alu40":"alu/汗.png","alu41":"alu/深思.png","alu42":"alu/狂汗.png","alu43":"alu/献花.png","alu44":"alu/献黄瓜.png","alu45":"alu/皱眉.png","alu46":"alu/看不见.png","alu47":"alu/看热闹.png","alu48":"alu/瞅你.png","alu49":"alu/肿包.png","alu50":"alu/脸红.png","alu51":"alu/蜡烛.png","alu52":"alu/装大款.png","alu53":"alu/观察.png","alu54":"alu/赞一个.png","alu55":"alu/邪恶.png","alu56":"alu/锁眉.png","alu57":"alu/长草.png","alu58":"alu/阴暗.png","alu59":"alu/高兴.png","alu60":"alu/黑线.png","alu61":"alu/鼓掌.png","bilibilitv2":"bilibilitv/[tv_doge].png","bilibilitv3":"bilibilitv/[tv_亲亲].png","bilibilitv4":"bilibilitv/[tv_偷笑].png","bilibilitv5":"bilibilitv/[tv_再见].png","bilibilitv6":"bilibilitv/[tv_冷漠].png","bilibilitv7":"bilibilitv/[tv_发怒].png","bilibilitv8":"bilibilitv/[tv_发财].png","bilibilitv9":"bilibilitv/[tv_可爱].png","bilibilitv10":"bilibilitv/[tv_吐血].png","bilibilitv11":"bilibilitv/[tv_呆].png","bilibilitv12":"bilibilitv/[tv_呕吐].png","bilibilitv13":"bilibilitv/[tv_困].png","bilibilitv14":"bilibilitv/[tv_坏笑].png","bilibilitv15":"bilibilitv/[tv_大佬].png","bilibilitv16":"bilibilitv/[tv_大哭].png","bilibilitv17":"bilibilitv/[tv_委屈].png","bilibilitv18":"bilibilitv/[tv_害羞].png","bilibilitv19":"bilibilitv/[tv_尴尬].png","bilibilitv20":"bilibilitv/[tv_微笑].png","bilibilitv21":"bilibilitv/[tv_思考].png","bilibilitv22":"bilibilitv/[tv_惊吓].png","bilibilitv23":"bilibilitv/[tv_打脸].png","bilibilitv24":"bilibilitv/[tv_抓狂].png","bilibilitv25":"bilibilitv/[tv_抠鼻].png","bilibilitv26":"bilibilitv/[tv_斜眼笑].png","bilibilitv27":"bilibilitv/[tv_无奈].png","bilibilitv28":"bilibilitv/[tv_晕].png","bilibilitv29":"bilibilitv/[tv_流汗].png","bilibilitv30":"bilibilitv/[tv_流泪].png","bilibilitv31":"bilibilitv/[tv_流鼻血].png","bilibilitv32":"bilibilitv/[tv_点赞].png","bilibilitv33":"bilibilitv/[tv_生气].png","bilibilitv34":"bilibilitv/[tv_生病].png","bilibilitv35":"bilibilitv/[tv_疑问].png","bilibilitv36":"bilibilitv/[tv_白眼].png","bilibilitv37":"bilibilitv/[tv_皱眉].png","bilibilitv38":"bilibilitv/[tv_目瞪口呆].png","bilibilitv39":"bilibilitv/[tv_睡着].png","bilibilitv40":"bilibilitv/[tv_笑哭].png","bilibilitv41":"bilibilitv/[tv_腼腆].png","bilibilitv42":"bilibilitv/[tv_色].png","bilibilitv43":"bilibilitv/[tv_调侃].png","bilibilitv44":"bilibilitv/[tv_调皮].png","bilibilitv45":"bilibilitv/[tv_鄙视].png","bilibilitv46":"bilibilitv/[tv_闭嘴].png","bilibilitv47":"bilibilitv/[tv_难过].png","bilibilitv48":"bilibilitv/[tv_馋].png","bilibilitv49":"bilibilitv/[tv_鬼脸].png","bilibilitv50":"bilibilitv/[tv_黑人问号].png","bilibilitv51":"bilibilitv/[tv_鼓掌].png","Tieba-New2":"Tieba-New/image_emoticon.png","Tieba-New3":"Tieba-New/image_emoticon10.png","Tieba-New4":"Tieba-New/image_emoticon100.png","Tieba-New5":"Tieba-New/image_emoticon101.png","Tieba-New6":"Tieba-New/image_emoticon102.png","Tieba-New7":"Tieba-New/image_emoticon103.png","Tieba-New8":"Tieba-New/image_emoticon104.png","Tieba-New9":"Tieba-New/image_emoticon105.png","Tieba-New10":"Tieba-New/image_emoticon106.png","Tieba-New11":"Tieba-New/image_emoticon107.png","Tieba-New12":"Tieba-New/image_emoticon108.png","Tieba-New13":"Tieba-New/image_emoticon109.png","Tieba-New14":"Tieba-New/image_emoticon11.png","Tieba-New15":"Tieba-New/image_emoticon110.png","Tieba-New16":"Tieba-New/image_emoticon111.png","Tieba-New17":"Tieba-New/image_emoticon112.png","Tieba-New18":"Tieba-New/image_emoticon113.png","Tieba-New19":"Tieba-New/image_emoticon114.png","Tieba-New20":"Tieba-New/image_emoticon115.png","Tieba-New21":"Tieba-New/image_emoticon116.png","Tieba-New22":"Tieba-New/image_emoticon117.png","Tieba-New23":"Tieba-New/image_emoticon118.png","Tieba-New24":"Tieba-New/image_emoticon119.png","Tieba-New25":"Tieba-New/image_emoticon12.png","Tieba-New26":"Tieba-New/image_emoticon120.png","Tieba-New27":"Tieba-New/image_emoticon121.png","Tieba-New28":"Tieba-New/image_emoticon122.png","Tieba-New29":"Tieba-New/image_emoticon123.png","Tieba-New30":"Tieba-New/image_emoticon124.png","Tieba-New31":"Tieba-New/image_emoticon13.png","Tieba-New32":"Tieba-New/image_emoticon14.png","Tieba-New33":"Tieba-New/image_emoticon15.png","Tieba-New34":"Tieba-New/image_emoticon16.png","Tieba-New35":"Tieba-New/image_emoticon17.png","Tieba-New36":"Tieba-New/image_emoticon18.png","Tieba-New37":"Tieba-New/image_emoticon19.png","Tieba-New38":"Tieba-New/image_emoticon2.png","Tieba-New39":"Tieba-New/image_emoticon20.png","Tieba-New40":"Tieba-New/image_emoticon21.png","Tieba-New41":"Tieba-New/image_emoticon22.png","Tieba-New42":"Tieba-New/image_emoticon23.png","Tieba-New43":"Tieba-New/image_emoticon24.png","Tieba-New44":"Tieba-New/image_emoticon25.png","Tieba-New45":"Tieba-New/image_emoticon26.png","Tieba-New46":"Tieba-New/image_emoticon27.png","Tieba-New47":"Tieba-New/image_emoticon28.png","Tieba-New48":"Tieba-New/image_emoticon29.png","Tieba-New49":"Tieba-New/image_emoticon3.png","Tieba-New50":"Tieba-New/image_emoticon30.png","Tieba-New51":"Tieba-New/image_emoticon31.png","Tieba-New52":"Tieba-New/image_emoticon32.png","Tieba-New53":"Tieba-New/image_emoticon33.png","Tieba-New54":"Tieba-New/image_emoticon34.png","Tieba-New55":"Tieba-New/image_emoticon35.png","Tieba-New56":"Tieba-New/image_emoticon36.png","Tieba-New57":"Tieba-New/image_emoticon37.png","Tieba-New58":"Tieba-New/image_emoticon38.png","Tieba-New59":"Tieba-New/image_emoticon39.png","Tieba-New60":"Tieba-New/image_emoticon4.png","Tieba-New61":"Tieba-New/image_emoticon40.png","Tieba-New62":"Tieba-New/image_emoticon41.png","Tieba-New63":"Tieba-New/image_emoticon42.png","Tieba-New64":"Tieba-New/image_emoticon43.png","Tieba-New65":"Tieba-New/image_emoticon44.png","Tieba-New66":"Tieba-New/image_emoticon45.png","Tieba-New67":"Tieba-New/image_emoticon46.png","Tieba-New68":"Tieba-New/image_emoticon47.png","Tieba-New69":"Tieba-New/image_emoticon48.png","Tieba-New70":"Tieba-New/image_emoticon49.png","Tieba-New71":"Tieba-New/image_emoticon5.png","Tieba-New72":"Tieba-New/image_emoticon50.png","Tieba-New73":"Tieba-New/image_emoticon6.png","Tieba-New74":"Tieba-New/image_emoticon66.png","Tieba-New75":"Tieba-New/image_emoticon67.png","Tieba-New76":"Tieba-New/image_emoticon68.png","Tieba-New77":"Tieba-New/image_emoticon69.png","Tieba-New78":"Tieba-New/image_emoticon7.png","Tieba-New79":"Tieba-New/image_emoticon70.png","Tieba-New80":"Tieba-New/image_emoticon71.png","Tieba-New81":"Tieba-New/image_emoticon72.png","Tieba-New82":"Tieba-New/image_emoticon73.png","Tieba-New83":"Tieba-New/image_emoticon74.png","Tieba-New84":"Tieba-New/image_emoticon75.png","Tieba-New85":"Tieba-New/image_emoticon76.png","Tieba-New86":"Tieba-New/image_emoticon77.png","Tieba-New87":"Tieba-New/image_emoticon78.png","Tieba-New88":"Tieba-New/image_emoticon79.png","Tieba-New89":"Tieba-New/image_emoticon8.png","Tieba-New90":"Tieba-New/image_emoticon80.png","Tieba-New91":"Tieba-New/image_emoticon81.png","Tieba-New92":"Tieba-New/image_emoticon82.png","Tieba-New93":"Tieba-New/image_emoticon83.png","Tieba-New94":"Tieba-New/image_emoticon84.png","Tieba-New95":"Tieba-New/image_emoticon85.png","Tieba-New96":"Tieba-New/image_emoticon86.png","Tieba-New97":"Tieba-New/image_emoticon87.png","Tieba-New98":"Tieba-New/image_emoticon88.png","Tieba-New99":"Tieba-New/image_emoticon89.png","Tieba-New100":"Tieba-New/image_emoticon9.png","Tieba-New101":"Tieba-New/image_emoticon90.png","Tieba-New102":"Tieba-New/image_emoticon91.png","Tieba-New103":"Tieba-New/image_emoticon92.png","Tieba-New104":"Tieba-New/image_emoticon93.png","Tieba-New105":"Tieba-New/image_emoticon94.png","Tieba-New106":"Tieba-New/image_emoticon95.png","Tieba-New107":"Tieba-New/image_emoticon96.png","Tieba-New108":"Tieba-New/image_emoticon97.png","Tieba-New109":"Tieba-New/image_emoticon98.png","Tieba-New110":"Tieba-New/image_emoticon99.png"},
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

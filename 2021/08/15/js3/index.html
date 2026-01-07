@@ -1,0 +1,397 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>js基础Ⅲ：作用域和对象 | panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1 - 作用域 ​		通常来说，一段程序代码中所用到的名字并不总是有效和可用的，而限定这个名字的可用性的代码范围就是这个名字的作用域。作用域的使用提高了程序逻辑的局部性，增强了程序的可靠性，减少了名字冲突。 JavaScript（es6前）中的作用域有两种：  全局作用域：作用于所有代码执行的..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "js基础Ⅲ：作用域和对象",
+  "url": "https://youngsay.cn/2021/08/15/js3/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg",
+  "datePublished": "2021-08-15T11:26:54.000Z",
+  "dateModified": "2021-08-15T11:44:32.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/2021/08/15/js3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'js基础Ⅲ：作用域和对象',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">js基础Ⅲ：作用域和对象</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">js基础Ⅲ：作用域和对象</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-15T11:26:54.000Z" title="发表于 2021-08-15 19:26:54">2021-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-15T11:44:32.000Z" title="更新于 2021-08-15 19:44:32">2021-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="1-作用域">1 - 作用域</h2>
+<p>​		通常来说，一段程序代码中所用到的名字并不总是有效和可用的，而限定这个名字的可用性的代码范围就是这个名字的作用域。作用域的使用提高了程序逻辑的局部性，增强了程序的可靠性，减少了名字冲突。</p>
+<p>JavaScript（es6前）中的作用域有两种：</p>
+<ul>
+<li>全局作用域：作用于所有代码执行的环境(整个script标签内部)或独立的js文件。</li>
+<li>局部作用域（函数作用域）：作用于函数内的代码环境，就是局部作用域。 因为跟函数有关系，所以也称为函数作用域。</li>
+</ul>
+<p>❗ <strong>jS没有块级作用域</strong></p>
+<ul>
+<li>
+<p>块作用域由 { } 包括。</p>
+</li>
+<li>
+<p>在其他编程语言中（如 java、c#等），在 if 语句、循环语句中创建的变量，仅仅只能在本 if 语句、本循环语句中使用，如下面的Java代码：</p>
+<p>java有块级作用域：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">  <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">123</span>;</span><br><span class="line">  system.out.print(num);  <span class="comment">// 123</span></span><br><span class="line">&#125;</span><br><span class="line">system.out.print(num);    <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<p>​		以上java代码会报错，是因为代码中 { } 即一块作用域，其中声明的变量 num，在 “{ }” 之外不能使用；而与之类似的JavaScript代码，则不会报错。</p>
+<p>js中没有块级作用域（在ES6之前）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> num = <span class="number">123</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">123</span>); <span class="comment">//123</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">123</span>);   <span class="comment">//123</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-变量的作用域">2 - 变量的作用域</h2>
+<p>在JavaScript中，根据作用域的不同，变量可以分为两种：</p>
+<ul>
+<li>全局变量</li>
+<li>局部变量</li>
+</ul>
+<p>2.1 全局变量</p>
+<p>在全局作用域下声明的变量叫做全局变量（在函数外部定义的变量）。</p>
+<ul>
+<li>全局变量在代码的任何位置都可以使用</li>
+<li>在全局作用域下 var 声明的变量 是全局变量</li>
+<li>特殊情况下，<strong>在函数内不使用 var 声明的变量也是全局变量</strong>（不建议使用）</li>
+</ul>
+<p>2.2 局部变量</p>
+<p>在局部作用域下声明的变量叫做局部变量（在函数内部定义的变量）</p>
+<ul>
+<li>局部变量只能在该函数内部使用</li>
+<li><strong>在函数内部 var 声明的变量是局部变量</strong></li>
+<li>函数的形参实际上就是局部变量</li>
+</ul>
+<p>2.3 全局变量和局部变量的区别</p>
+<ul>
+<li>全局变量：在任何一个地方都可以使用，只有在浏览器关闭时才会被销毁，因此比较占内存</li>
+<li>局部变量：只在函数内部使用，当其所在的代码块被执行时，会被初始化；当代码块运行结束后，就会被销毁，因此更节省内存空间</li>
+</ul>
+<h2 id="3-作用域链">3 - 作用域链</h2>
+<p>​		写在函数内部的是局部作用域，未写在任何函数内部即在全局作用域中；如果函数中还有函数，那么在这个作用域中就又可以诞生一个作用域；根据在**[内部函数可以访问外部函数变量]**的这种机制，用链式查找决定哪些数据能被内部函数访问，就称作作用域链。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">案例分析<span class="number">1</span>：</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> num = <span class="number">123</span>;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f2</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>( num );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">f2</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> num = <span class="number">456</span>;</span><br><span class="line"><span class="title function_">f1</span>();</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210815183848.png" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">作用域链：采取就近原则的方式来查找变量最终的值</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn1</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="string">&#x27;22&#x27;</span>;</span><br><span class="line">    <span class="title function_">fn2</span>();</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">fn2</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">        <span class="title function_">fn3</span>();</span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">fn3</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> a = <span class="number">4</span>;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">//a的值 ?</span></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">//b的值 ?</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn1</span>();</span><br></pre></td></tr></table></figure>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/panghutx/tuchuang/raw/master/20210815183956.png" alt=""></p>
+<h2 id="4-预解析">4 - 预解析</h2>
+<p>JavaScript 代码是由浏览器中的 JavaScript 解析器来执行的。JavaScript 解析器在运行 JavaScript 代码的时候分为两步：<strong>预解析和代码执行</strong>。</p>
+<ul>
+<li>
+<p>预解析：在当前作用域下, JS 代码执行之前，浏览器会默认把带有 var 和 function 声明的变量在内存中进行提前声明或者定义，预解析也叫做变量、函数提升。</p>
+</li>
+<li>
+<p>代码执行： 从上到下执行JS语句。</p>
+<p>注意：<strong>预解析会把变量和函数的声明在代码执行之前执行完成。</strong></p>
+</li>
+</ul>
+<ol start="4">
+<li>1变量预解析</li>
+</ol>
+<p>​	变量的声明会被提升到当前作用域的最上面，变量的赋值不会提升。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(num);  <span class="comment">// 结果是多少？</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="number">10</span>;      <span class="comment">// ？</span></span><br></pre></td></tr></table></figure>
+<p>结果：undefined<br>
+★注意：<strong>变量提升只提升声明，不提升赋值</strong></p>
+<p>4.3 函数预解析</p>
+<p>​	 函数的声明会被提升到当前作用域的最上面，但是不会调用函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;打印&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：控制台打印字符串 — ”打印“</p>
+<p>注意：函数声明代表函数整体，所以函数提升后，函数名代表整个函数，但是函数并没有被调用！</p>
+<p>4.4 函数表达式声明函数问题</p>
+<p>函数表达式创建函数，会执行变量提升</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="keyword">var</span>  fn = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;想不到吧&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：报错提示 ”fn is not a function&quot;</p>
+<p>解释：该段代码执行之前，会做变量声明提升，fn在提升之后的值是undefined；而fn调用是在fn被赋值为函数体之前，此时fn的值是undefined，所以无法正确调用</p>
+<h2 id="5-对象">5 - 对象</h2>
+<p>对象：在 JavaScript 中，对象是一组无序的相关属性和方法的集合，所有的事物都是对象，例如字符串、数值、数组、函数等。<br>
+对象是由属性和方法组成的。</p>
+<ul>
+<li>
+<p>属性：事物的特征，在对象中用属性来表示（常用名词）</p>
+</li>
+<li>
+<p>方法：事物的行为，在对象中用方法来表示（常用动词）</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var arr = [‘吴签’, ‘30&#x27;, &#x27;选妃&#x27;];</span><br></pre></td></tr></table></figure>
+<p>​		上述例子中用数组保存数据的缺点是：数据只能通过索引值访问，开发者需要清晰的清除所有的数据的排行才能准确地获取数据，而当数据量庞大时，不可能做到记忆所有数据的索引值。</p>
+<p>​		为了让更好地存储一组数据，对象应运而生：对象中为每项数据设置了属性名称，可以访问数据更语义化，数据结构清晰，表意明显，方便开发者使用。</p>
+<p>使用对象记录上组数据为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="string">&#x27;吴签&#x27;</span>,</span><br><span class="line">    <span class="attr">age</span>:<span class="number">30</span>,</span><br><span class="line">    <span class="attr">works</span>:<span class="string">&#x27;选妃&#x27;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>JS中的对象表达结构更清晰，更强大。</p>
+<h3 id="创建对象的三种方式">创建对象的三种方式</h3>
+<h4 id="利用字面量创建对象">利用字面量创建对象</h4>
+<ul>
+<li>
+<p>键：相当于属性名</p>
+</li>
+<li>
+<p>值：相当于属性值，可以是任意类型的值（数字类型、字符串类型、布尔类型，函数类型等）</p>
+<p>代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> star = &#123;</span><br><span class="line">    name : <span class="string">&#x27;张哲瀚&#x27;</span>,</span><br><span class="line">    age : <span class="number">30</span>,</span><br><span class="line">    sex : <span class="string">&#x27;男&#x27;</span>,</span><br><span class="line">    sayLove : <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&#x27;我很爱国&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(star.<span class="property">name</span>)     <span class="comment">// 调用名字属性</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(star[<span class="string">&#x27;name&#x27;</span>])  <span class="comment">// 调用名字属性</span></span><br><span class="line">star.<span class="title function_">sayLove</span>(); <span class="comment">// 调用 sayLove 方法,注意一定要带后面的括号</span></span><br></pre></td></tr></table></figure>
+<p>上述代码中 star即是创建的对象。</p>
+<ul>
+<li>
+<p>变量、属性、函数、方法总结</p>
+<pre><code>	- 变量：单独声明赋值，单独存在
+</code></pre>
+<ul>
+<li>
+<p>属性：对象里面的变量称为属性，不需要声明</p>
+</li>
+<li>
+<p>函数：单独存在的，通过“函数名()”的方式就可以调用</p>
+</li>
+<li>
+<p>方法：对象里面的函数称为方法，方法不需要声明，使用“对象.方法名()”的方式就可以调用</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="利用-new-Object-创建对象">利用 new Object 创建对象</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Star</span> = <span class="keyword">new</span> <span class="title class_">Object</span>(); <span class="comment">//创建空对象</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property">name</span>=<span class="string">&#x27;吴亦凡&#x27;</span>; <span class="comment">// 给空对象添加属性</span></span><br><span class="line"><span class="title class_">Star</span>.<span class="property">age</span>=<span class="number">30</span>;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property">works</span>=<span class="string">&#x27;选妃&#x27;</span>;</span><br><span class="line"><span class="title class_">Star</span>.<span class="property">sayHi</span>=<span class="keyword">function</span>(<span class="params"></span>)&#123; <span class="comment">// 给空对象添加方法</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;我的很大，你要忍一下~&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>.<span class="property">name</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Star</span>[<span class="string">&#x27;age&#x27;</span>]);</span><br><span class="line"><span class="title class_">Star</span>.<span class="title function_">sayHi</span>();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Object() ：第一个字母大写</li>
+<li>使用的格式：对象.属性 =  值;</li>
+</ul>
+<h4 id="利用构造函数创建对象">利用构造函数创建对象</h4>
+<ul>
+<li>
+<p>构造函数</p>
+<ul>
+<li>
+<p>构造函数：是一种特殊的函数，主要用来初始化对象，即为对象成员变量赋初始值，它总与 new 运算符一起使用。我们可以把对象中一些公共的属性和方法抽取出来，然后封装到这个函数里面。</p>
+</li>
+<li>
+<p>构造函数的封装格式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> 构造函数名(形参<span class="number">1</span>,形参<span class="number">2</span>,形参<span class="number">3</span>) &#123;</span><br><span class="line">     <span class="variable language_">this</span>.属性名<span class="number">1</span> = 参数<span class="number">1</span>;</span><br><span class="line">     <span class="variable language_">this</span>.属性名<span class="number">2</span> = 参数<span class="number">2</span>;</span><br><span class="line">     <span class="variable language_">this</span>.属性名<span class="number">3</span> = 参数<span class="number">3</span>;</span><br><span class="line">     <span class="variable language_">this</span>.方法名 = 函数体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>构造函数的调用格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var obj = new 构造函数名(实参1，实参2，实参3)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>示例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 封装</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Star</span>(<span class="params">name,age,works</span>)&#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span>=name;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span>=age;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">works</span>=works;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">result</span> = <span class="keyword">function</span>(<span class="params">result</span>)&#123; <span class="comment">//方法</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="keyword">var</span> wyf = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;吴亦凡&#x27;</span>,<span class="number">30</span>,<span class="string">&#x27;选妃&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> lzx = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;罗志祥&#x27;</span>,<span class="number">42</span>,<span class="string">&#x27;时间管理&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> zzh = <span class="keyword">new</span> <span class="title class_">Star</span>(<span class="string">&#x27;张哲瀚&#x27;</span>,<span class="number">30</span>,<span class="string">&#x27;靖国神社&#x27;</span>);</span><br><span class="line">wyf.<span class="title function_">result</span>(<span class="string">&#x27;坐牢&#x27;</span>);</span><br><span class="line">lzx.<span class="title function_">result</span>(<span class="string">&#x27;退圈&#x27;</span>);</span><br><span class="line">zzh.<span class="title function_">result</span>(<span class="string">&#x27;封杀&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(wyf.<span class="property">works</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zzh[<span class="string">&#x27;works&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>注意事项</p>
+<ol>
+<li>构造函数约定<strong>首字母大写</strong>。</li>
+<li>函数内的属性和方法前面需要添加 <strong>this</strong> ，表示当前对象的属性和方法。</li>
+<li>构造函数中<strong>不需要 return 返回结果</strong>。</li>
+<li>当我们创建对象的时候，<strong>必须用 new 来调用构造函数</strong>。</li>
+</ol>
+</li>
+<li>
+<p>其他</p>
+<p>构造函数，如 Stars()，抽象了对象的公共部分，封装到了函数里面，它泛指某一大类（class）<br>
+创建对象，如 new Stars()，特指某一个，通过 new 关键字创建对象的过程我们也称为对象实例化</p>
+</li>
+</ul>
+</li>
+<li>
+<p>new关键字的作用</p>
+<ol>
+<li>在构造函数代码开始执行之前，创建一个空对象；</li>
+<li>修改this的指向，把this指向创建出来的空对象；</li>
+<li>执行函数的代码</li>
+<li>在函数完成之后，返回this—即创建出来的对象</li>
+</ol>
+<h3 id="5-3-遍历对象">5.3 遍历对象</h3>
+<p>​		for…in 语句用于对数组或者对象的属性进行循环操作。</p>
+<p>​		其语法如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (变量 <span class="keyword">in</span> 对象名字) &#123;</span><br><span class="line">    <span class="comment">// 在此执行代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​		语法中的变量是自定义的，它需要符合命名规范，通常我们会将这个变量写为 k 或者 key。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(k);      <span class="comment">// 这里的 k 是属性名</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(obj[k]); <span class="comment">// 这里的 obj[k] 是属性值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2021/08/15/js3/">https://youngsay.cn/2021/08/15/js3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/08/16/js4/" title="js基础Ⅳ：内置对象"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">js基础Ⅳ：内置对象</div></div><div class="info-2"><div class="info-item-1">1 - 内置对象 1.1 内置对象 ​		 JavaScript 中的对象分为3种：自定义对象 、内置对象、 浏览器对象 ​		前面两种对象是JS 基础 内容，属于 ECMAScript；  第三个浏览器对象属于 JS 独有的， JS API 讲解内置对象就是指 JS 语言自带的一些对象，这些对象供开发者使用，并提供了一些常用的或是最基本而必要的功能（属性和方法），内置对象最大的优点就是帮助我们快速开发 ​	 	JavaScript 提供了多个内置对象：Math、 Date 、Array、String等 1.2 查文档 Mozilla 开发者网络（MDN）提供了有关开放网络技术（Open Web）的信息，包括 HTML、CSS 和万维网及 HTML5 应用的 API。 ​		MDN:https://developer.mozilla.org/zh-CN/ 1.3 Math对象 ​		Math 对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值，取整、最大值等）可以使用 Math 中的成员。    属性、方法名 功能     Math.PI 圆周率   ...</div></div></div></a><a class="pagination-related" href="/2021/08/15/js2/" title="js基础Ⅱ：数组和函数"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">js基础Ⅱ：数组和函数</div></div><div class="info-2"><div class="info-item-1">1-数组 数组是指一组数据的集合，其中的每个数据被称作元素，在数组中可以存放任意类型的元素。 1-1创建数组 JS 中创建数组有两种方式： 利用  new 创建数组 12var 数组名 = new Array() ；var arr = new Array();   // 创建一个新的空数组 注意 Array () ，A 要大写 利用数组字面量创建数组 1234//1. 使用数组字面量方式创建空的数组var  数组名 = []；//2. 使用数组字面量方式创建带初始值的数组var  数组名 = [&#x27;胖虎&#x27;,&#x27;panghutx&#x27;,&#x27;blog.wangyouwu.cn&#x27;];   数组的字面量是方括号 [ ]   声明数组并赋值称为数组的初始化   数组元素的类型 数组中可以存放任意类型的数据，例如字符串，数字，布尔值等。 1var arrStus = [&#x27;小白&#x27;,12,true,28.9];   1-2获取数组中的元素 ​		索引 (下标) ：用来访问数组元素的序号（数组下标从 0 开始）。 1234// ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/08/19/WebApi1/" title="WebApiⅠ：操作元素"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-19</div><div class="info-item-2">WebApiⅠ：操作元素</div></div><div class="info-2"><div class="info-item-1">1.1. Web API介绍 1.1.1 API的概念 API（Application Programming Interface，应用程序编程接口）是一些预先定义的函数，目的是提供应用程序与开发人员基于某软件或硬件得以访问一组例程的能力，而又无需访问源码，无需理解其内部工作机制细节，只需直接调用使用即可。 1.1.2 Web  API的概念 ​	Web API 是浏览器提供的一套操作浏览器功能和页面元素的 API ( BOM 和 DOM )。 ​	MDN 详细 API : https://developer.mozilla.org/zh-CN/docs/Web/API ​	因为 Web API 很多，所以我们将这个阶段称为 Web APIs。 ​	此处的 Web API 特指浏览器提供的一系列API(很多函数或对象方法)，即操作网页的一系列工具。例如：操作html标签、操作页面地址的方法。 1.1.3 API 和 Web  API 总结   API 是为我们程序员提供的一个接口，帮助我们实现某种功能，我们会使用就可以了，不必纠结内部如何实现   Web API 主要是针对于浏览...</div></div></div></a><a class="pagination-related" href="/2021/09/13/js-node/" title="WebApiⅡ：自定义属性、节点"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-13</div><div class="info-item-2">WebApiⅡ：自定义属性、节点</div></div><div class="info-2"><div class="info-item-1">自定义属性 获取属性值   element.属性 ：获取内置属性值   element.getAttribute(‘属性’) ：获取自定义属性值 12345678910&lt;div id=&quot;demo&quot; index=&quot;1&quot; class=&quot;nav&quot;&gt;&lt;/div&gt;&lt;script&gt;    var div = document.querySelector(&#x27;div&#x27;);    // 1. 获取元素的属性值    // (1) element.属性    console.log(div.id);  //demo    //(2) element.getAttribute(&#x27;属性&#x27;)     console.log(div.getAttribute(&#x27;id&#x27;)); //demo    console.log(div.getAttribute(&#x27;index&#x27;)); //1&lt;/script&gt;   设置属性值  ele...</div></div></div></a><a class="pagination-related" href="/2021/09/16/js-shijian/" title="WebApiⅢ：事件、事件对象"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-16</div><div class="info-item-2">WebApiⅢ：事件、事件对象</div></div><div class="info-2"><div class="info-item-1">注册事件  传统方式   btn.onclick = function() &#123;&#125;  传统事件注册具有唯一性：同一个元素同一个事件只能设置一个处理函数，最后注册的处理函数将会覆盖前面注册的处理函数  方法监听注册方式  1eventTarget.addEventListener(type,listener[,useCapture]) type：事件类型字符串，比如 click、mouseover。这里不需要加on listener：事件处理函数，事件发生时，会调用该监听函数 useCapture：可选参数，是一个布尔值，默认是false。 1234567891011121314151617181920212223242526272829&lt;body&gt;    &lt;button&gt;        传统注册事件    &lt;/button&gt;    &lt;button&gt;        事件监听注册事件    &lt;/button&gt;    &lt;script&gt;    	var btns = document.querySe...</div></div></div></a><a class="pagination-related" href="/2021/10/31/es6/" title="ECMAScript 6入门"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-31</div><div class="info-item-2">ECMAScript 6入门</div></div><div class="info-2"><div class="info-item-1">let var和let声明变量的区别：  let声明的变量是块级变量，只存在{}内。  1234if(true)&#123;    let a=0;&#125;console.log(a); 会出现Uncaught ReferenceError: a is not defined的报错，而在{}内打印console.log(a)而不会报错。  let声明的变量没有变量提升  12console.log(a);let a=0; 如上代码会报错Uncaught ReferenceError: Cannot access 'a' before initialization  let声明的变量会出现暂时死区  在{}外用var声明变量，{}内用let声明一个相同的变量，{}外用var声明的变量便没有意义。 12345var a=10;if(true)&#123;  console.log(a);  let a=20;&#125; 如上代码依旧会报错Uncaught ReferenceError: Cannot access 'a' before initialization const ...</div></div></div></a><a class="pagination-related" href="/2021/08/16/js4/" title="js基础Ⅳ：内置对象"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-16</div><div class="info-item-2">js基础Ⅳ：内置对象</div></div><div class="info-2"><div class="info-item-1">1 - 内置对象 1.1 内置对象 ​		 JavaScript 中的对象分为3种：自定义对象 、内置对象、 浏览器对象 ​		前面两种对象是JS 基础 内容，属于 ECMAScript；  第三个浏览器对象属于 JS 独有的， JS API 讲解内置对象就是指 JS 语言自带的一些对象，这些对象供开发者使用，并提供了一些常用的或是最基本而必要的功能（属性和方法），内置对象最大的优点就是帮助我们快速开发 ​	 	JavaScript 提供了多个内置对象：Math、 Date 、Array、String等 1.2 查文档 Mozilla 开发者网络（MDN）提供了有关开放网络技术（Open Web）的信息，包括 HTML、CSS 和万维网及 HTML5 应用的 API。 ​		MDN:https://developer.mozilla.org/zh-CN/ 1.3 Math对象 ​		Math 对象不是构造函数，它具有数学常数和函数的属性和方法。跟数学相关的运算（求绝对值，取整、最大值等）可以使用 Math 中的成员。    属性、方法名 功能     Math.PI 圆周率   ...</div></div></div></a><a class="pagination-related" href="/2021/08/15/js2/" title="js基础Ⅱ：数组和函数"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-15</div><div class="info-item-2">js基础Ⅱ：数组和函数</div></div><div class="info-2"><div class="info-item-1">1-数组 数组是指一组数据的集合，其中的每个数据被称作元素，在数组中可以存放任意类型的元素。 1-1创建数组 JS 中创建数组有两种方式： 利用  new 创建数组 12var 数组名 = new Array() ；var arr = new Array();   // 创建一个新的空数组 注意 Array () ，A 要大写 利用数组字面量创建数组 1234//1. 使用数组字面量方式创建空的数组var  数组名 = []；//2. 使用数组字面量方式创建带初始值的数组var  数组名 = [&#x27;胖虎&#x27;,&#x27;panghutx&#x27;,&#x27;blog.wangyouwu.cn&#x27;];   数组的字面量是方括号 [ ]   声明数组并赋值称为数组的初始化   数组元素的类型 数组中可以存放任意类型的数据，例如字符串，数字，布尔值等。 1var arrStus = [&#x27;小白&#x27;,12,true,28.9];   1-2获取数组中的元素 ​		索引 (下标) ：用来访问数组元素的序号（数组下标从 0 开始）。 1234// ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-text">1 - 作用域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-text">2 - 变量的作用域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE"><span class="toc-text">3 - 作用域链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%A2%84%E8%A7%A3%E6%9E%90"><span class="toc-text">4 - 预解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AF%B9%E8%B1%A1"><span class="toc-text">5 - 对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">创建对象的三种方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%AD%97%E9%9D%A2%E9%87%8F%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="toc-text">利用字面量创建对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-new-Object-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="toc-text">利用 new Object 创建对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="toc-text">利用构造函数创建对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%81%8D%E5%8E%86%E5%AF%B9%E8%B1%A1"><span class="toc-text">5.3 遍历对象</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"emojiCDN":"https://testingcf.jsdelivr.net/gh/GamerNoTitle/ValineCDN/"}
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nKtN81THEqdpFPQP6484D0Dw-gzGzoHsz',
+      appKey: 'Elo90cRADuj3PvXaL8PiKkMG',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: {"alu2":"alu/不出所料.png","alu3":"alu/不说话.png","alu4":"alu/不高兴.png","alu5":"alu/中刀.png","alu6":"alu/中指.png","alu7":"alu/中枪.png","alu8":"alu/亲亲.png","alu9":"alu/便便.png","alu10":"alu/内伤.png","alu11":"alu/击掌.png","alu12":"alu/口水.png","alu13":"alu/吐.png","alu14":"alu/吐舌.png","alu15":"alu/吐血倒地.png","alu16":"alu/呲牙.png","alu17":"alu/咽气.png","alu18":"alu/哭泣.png","alu19":"alu/喜极而泣.png","alu20":"alu/喷水.png","alu21":"alu/喷血.png","alu22":"alu/坐等.png","alu23":"alu/害羞.png","alu24":"alu/小眼睛.png","alu25":"alu/尴尬.png","alu26":"alu/得意.png","alu27":"alu/惊喜.png","alu28":"alu/想一想.png","alu29":"alu/愤怒.png","alu30":"alu/扇耳光.png","alu31":"alu/投降.png","alu32":"alu/抠鼻.png","alu33":"alu/抽烟.png","alu34":"alu/无奈.png","alu35":"alu/无所谓.png","alu36":"alu/无语.png","alu37":"alu/暗地观察.png","alu38":"alu/期待.png","alu39":"alu/欢呼.png","alu40":"alu/汗.png","alu41":"alu/深思.png","alu42":"alu/狂汗.png","alu43":"alu/献花.png","alu44":"alu/献黄瓜.png","alu45":"alu/皱眉.png","alu46":"alu/看不见.png","alu47":"alu/看热闹.png","alu48":"alu/瞅你.png","alu49":"alu/肿包.png","alu50":"alu/脸红.png","alu51":"alu/蜡烛.png","alu52":"alu/装大款.png","alu53":"alu/观察.png","alu54":"alu/赞一个.png","alu55":"alu/邪恶.png","alu56":"alu/锁眉.png","alu57":"alu/长草.png","alu58":"alu/阴暗.png","alu59":"alu/高兴.png","alu60":"alu/黑线.png","alu61":"alu/鼓掌.png","bilibilitv2":"bilibilitv/[tv_doge].png","bilibilitv3":"bilibilitv/[tv_亲亲].png","bilibilitv4":"bilibilitv/[tv_偷笑].png","bilibilitv5":"bilibilitv/[tv_再见].png","bilibilitv6":"bilibilitv/[tv_冷漠].png","bilibilitv7":"bilibilitv/[tv_发怒].png","bilibilitv8":"bilibilitv/[tv_发财].png","bilibilitv9":"bilibilitv/[tv_可爱].png","bilibilitv10":"bilibilitv/[tv_吐血].png","bilibilitv11":"bilibilitv/[tv_呆].png","bilibilitv12":"bilibilitv/[tv_呕吐].png","bilibilitv13":"bilibilitv/[tv_困].png","bilibilitv14":"bilibilitv/[tv_坏笑].png","bilibilitv15":"bilibilitv/[tv_大佬].png","bilibilitv16":"bilibilitv/[tv_大哭].png","bilibilitv17":"bilibilitv/[tv_委屈].png","bilibilitv18":"bilibilitv/[tv_害羞].png","bilibilitv19":"bilibilitv/[tv_尴尬].png","bilibilitv20":"bilibilitv/[tv_微笑].png","bilibilitv21":"bilibilitv/[tv_思考].png","bilibilitv22":"bilibilitv/[tv_惊吓].png","bilibilitv23":"bilibilitv/[tv_打脸].png","bilibilitv24":"bilibilitv/[tv_抓狂].png","bilibilitv25":"bilibilitv/[tv_抠鼻].png","bilibilitv26":"bilibilitv/[tv_斜眼笑].png","bilibilitv27":"bilibilitv/[tv_无奈].png","bilibilitv28":"bilibilitv/[tv_晕].png","bilibilitv29":"bilibilitv/[tv_流汗].png","bilibilitv30":"bilibilitv/[tv_流泪].png","bilibilitv31":"bilibilitv/[tv_流鼻血].png","bilibilitv32":"bilibilitv/[tv_点赞].png","bilibilitv33":"bilibilitv/[tv_生气].png","bilibilitv34":"bilibilitv/[tv_生病].png","bilibilitv35":"bilibilitv/[tv_疑问].png","bilibilitv36":"bilibilitv/[tv_白眼].png","bilibilitv37":"bilibilitv/[tv_皱眉].png","bilibilitv38":"bilibilitv/[tv_目瞪口呆].png","bilibilitv39":"bilibilitv/[tv_睡着].png","bilibilitv40":"bilibilitv/[tv_笑哭].png","bilibilitv41":"bilibilitv/[tv_腼腆].png","bilibilitv42":"bilibilitv/[tv_色].png","bilibilitv43":"bilibilitv/[tv_调侃].png","bilibilitv44":"bilibilitv/[tv_调皮].png","bilibilitv45":"bilibilitv/[tv_鄙视].png","bilibilitv46":"bilibilitv/[tv_闭嘴].png","bilibilitv47":"bilibilitv/[tv_难过].png","bilibilitv48":"bilibilitv/[tv_馋].png","bilibilitv49":"bilibilitv/[tv_鬼脸].png","bilibilitv50":"bilibilitv/[tv_黑人问号].png","bilibilitv51":"bilibilitv/[tv_鼓掌].png","Tieba-New2":"Tieba-New/image_emoticon.png","Tieba-New3":"Tieba-New/image_emoticon10.png","Tieba-New4":"Tieba-New/image_emoticon100.png","Tieba-New5":"Tieba-New/image_emoticon101.png","Tieba-New6":"Tieba-New/image_emoticon102.png","Tieba-New7":"Tieba-New/image_emoticon103.png","Tieba-New8":"Tieba-New/image_emoticon104.png","Tieba-New9":"Tieba-New/image_emoticon105.png","Tieba-New10":"Tieba-New/image_emoticon106.png","Tieba-New11":"Tieba-New/image_emoticon107.png","Tieba-New12":"Tieba-New/image_emoticon108.png","Tieba-New13":"Tieba-New/image_emoticon109.png","Tieba-New14":"Tieba-New/image_emoticon11.png","Tieba-New15":"Tieba-New/image_emoticon110.png","Tieba-New16":"Tieba-New/image_emoticon111.png","Tieba-New17":"Tieba-New/image_emoticon112.png","Tieba-New18":"Tieba-New/image_emoticon113.png","Tieba-New19":"Tieba-New/image_emoticon114.png","Tieba-New20":"Tieba-New/image_emoticon115.png","Tieba-New21":"Tieba-New/image_emoticon116.png","Tieba-New22":"Tieba-New/image_emoticon117.png","Tieba-New23":"Tieba-New/image_emoticon118.png","Tieba-New24":"Tieba-New/image_emoticon119.png","Tieba-New25":"Tieba-New/image_emoticon12.png","Tieba-New26":"Tieba-New/image_emoticon120.png","Tieba-New27":"Tieba-New/image_emoticon121.png","Tieba-New28":"Tieba-New/image_emoticon122.png","Tieba-New29":"Tieba-New/image_emoticon123.png","Tieba-New30":"Tieba-New/image_emoticon124.png","Tieba-New31":"Tieba-New/image_emoticon13.png","Tieba-New32":"Tieba-New/image_emoticon14.png","Tieba-New33":"Tieba-New/image_emoticon15.png","Tieba-New34":"Tieba-New/image_emoticon16.png","Tieba-New35":"Tieba-New/image_emoticon17.png","Tieba-New36":"Tieba-New/image_emoticon18.png","Tieba-New37":"Tieba-New/image_emoticon19.png","Tieba-New38":"Tieba-New/image_emoticon2.png","Tieba-New39":"Tieba-New/image_emoticon20.png","Tieba-New40":"Tieba-New/image_emoticon21.png","Tieba-New41":"Tieba-New/image_emoticon22.png","Tieba-New42":"Tieba-New/image_emoticon23.png","Tieba-New43":"Tieba-New/image_emoticon24.png","Tieba-New44":"Tieba-New/image_emoticon25.png","Tieba-New45":"Tieba-New/image_emoticon26.png","Tieba-New46":"Tieba-New/image_emoticon27.png","Tieba-New47":"Tieba-New/image_emoticon28.png","Tieba-New48":"Tieba-New/image_emoticon29.png","Tieba-New49":"Tieba-New/image_emoticon3.png","Tieba-New50":"Tieba-New/image_emoticon30.png","Tieba-New51":"Tieba-New/image_emoticon31.png","Tieba-New52":"Tieba-New/image_emoticon32.png","Tieba-New53":"Tieba-New/image_emoticon33.png","Tieba-New54":"Tieba-New/image_emoticon34.png","Tieba-New55":"Tieba-New/image_emoticon35.png","Tieba-New56":"Tieba-New/image_emoticon36.png","Tieba-New57":"Tieba-New/image_emoticon37.png","Tieba-New58":"Tieba-New/image_emoticon38.png","Tieba-New59":"Tieba-New/image_emoticon39.png","Tieba-New60":"Tieba-New/image_emoticon4.png","Tieba-New61":"Tieba-New/image_emoticon40.png","Tieba-New62":"Tieba-New/image_emoticon41.png","Tieba-New63":"Tieba-New/image_emoticon42.png","Tieba-New64":"Tieba-New/image_emoticon43.png","Tieba-New65":"Tieba-New/image_emoticon44.png","Tieba-New66":"Tieba-New/image_emoticon45.png","Tieba-New67":"Tieba-New/image_emoticon46.png","Tieba-New68":"Tieba-New/image_emoticon47.png","Tieba-New69":"Tieba-New/image_emoticon48.png","Tieba-New70":"Tieba-New/image_emoticon49.png","Tieba-New71":"Tieba-New/image_emoticon5.png","Tieba-New72":"Tieba-New/image_emoticon50.png","Tieba-New73":"Tieba-New/image_emoticon6.png","Tieba-New74":"Tieba-New/image_emoticon66.png","Tieba-New75":"Tieba-New/image_emoticon67.png","Tieba-New76":"Tieba-New/image_emoticon68.png","Tieba-New77":"Tieba-New/image_emoticon69.png","Tieba-New78":"Tieba-New/image_emoticon7.png","Tieba-New79":"Tieba-New/image_emoticon70.png","Tieba-New80":"Tieba-New/image_emoticon71.png","Tieba-New81":"Tieba-New/image_emoticon72.png","Tieba-New82":"Tieba-New/image_emoticon73.png","Tieba-New83":"Tieba-New/image_emoticon74.png","Tieba-New84":"Tieba-New/image_emoticon75.png","Tieba-New85":"Tieba-New/image_emoticon76.png","Tieba-New86":"Tieba-New/image_emoticon77.png","Tieba-New87":"Tieba-New/image_emoticon78.png","Tieba-New88":"Tieba-New/image_emoticon79.png","Tieba-New89":"Tieba-New/image_emoticon8.png","Tieba-New90":"Tieba-New/image_emoticon80.png","Tieba-New91":"Tieba-New/image_emoticon81.png","Tieba-New92":"Tieba-New/image_emoticon82.png","Tieba-New93":"Tieba-New/image_emoticon83.png","Tieba-New94":"Tieba-New/image_emoticon84.png","Tieba-New95":"Tieba-New/image_emoticon85.png","Tieba-New96":"Tieba-New/image_emoticon86.png","Tieba-New97":"Tieba-New/image_emoticon87.png","Tieba-New98":"Tieba-New/image_emoticon88.png","Tieba-New99":"Tieba-New/image_emoticon89.png","Tieba-New100":"Tieba-New/image_emoticon9.png","Tieba-New101":"Tieba-New/image_emoticon90.png","Tieba-New102":"Tieba-New/image_emoticon91.png","Tieba-New103":"Tieba-New/image_emoticon92.png","Tieba-New104":"Tieba-New/image_emoticon93.png","Tieba-New105":"Tieba-New/image_emoticon94.png","Tieba-New106":"Tieba-New/image_emoticon95.png","Tieba-New107":"Tieba-New/image_emoticon96.png","Tieba-New108":"Tieba-New/image_emoticon97.png","Tieba-New109":"Tieba-New/image_emoticon98.png","Tieba-New110":"Tieba-New/image_emoticon99.png"},
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

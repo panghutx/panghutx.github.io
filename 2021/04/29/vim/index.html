@@ -1,0 +1,585 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>vim的使用 | panghutx's blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是 vim？ Vim是从 vi 发展出来的一个文本编辑器。代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。 vim 是一个程序开发工具而不是文字处理软件。 vim 键盘图：   vi/vim 的使用 基本上 vi/vim 共分为三种模式，分别是命令模式（Comman..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "vim的使用",
+  "url": "https://youngsay.cn/2021/04/29/vim/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg",
+  "datePublished": "2021-04-29T05:25:01.000Z",
+  "dateModified": "2021-05-02T10:00:04.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/pumpkin.png"><link rel="canonical" href="https://youngsay.cn/2021/04/29/vim/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'vim的使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">vim的使用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">vim的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-29T05:25:01.000Z" title="发表于 2021-04-29 13:25:01">2021-04-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-05-02T10:00:04.000Z" title="更新于 2021-05-02 18:00:04">2021-05-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="什么是-vim？">什么是 vim？</h2>
+<p>Vim是从 vi 发展出来的一个文本编辑器。代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。 vim 是一个程序开发工具而不是文字处理软件。</p>
+<p>vim 键盘图：</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://www.runoob.com/wp-content/uploads/2015/10/vi-vim-cheat-sheet-sch.gif" alt="img"></p>
+<hr>
+<h2 id="vi-vim-的使用">vi/vim 的使用</h2>
+<p>基本上 vi/vim 共分为三种模式，分别是<strong>命令模式（Command mode）</strong>，<strong>输入模式（Insert mode）<strong>和</strong>底线命令模式（Last line mode）</strong>。 这三种模式的作用分别是：</p>
+<h3 id="命令模式：">命令模式：</h3>
+<p>用户刚刚启动 vi/vim，便进入了命令模式。</p>
+<p>此状态下敲击键盘动作会被Vim识别为命令，而非输入字符。比如我们此时按下i，并不会输入一个字符，i被当作了一个命令。</p>
+<p>以下是常用的几个命令：</p>
+<ul>
+<li><strong>i</strong> 切换到输入模式，以输入字符。</li>
+<li><strong>x</strong> 删除当前光标所在处的字符。</li>
+<li><strong>:</strong> 切换到底线命令模式，以在最底一行输入命令。</li>
+</ul>
+<p>若想要编辑文本：启动Vim，进入了命令模式，按下i，切换到输入模式。</p>
+<p>命令模式只有一些最基本的命令，因此仍要依靠底线命令模式输入更多命令。</p>
+<h3 id="输入模式">输入模式</h3>
+<p>在命令模式下按下i就进入了输入模式。</p>
+<p>在输入模式中，可以使用以下按键：</p>
+<ul>
+<li><strong>字符按键以及Shift组合</strong>，输入字符</li>
+<li><strong>ENTER</strong>，回车键，换行</li>
+<li><strong>BACK SPACE</strong>，退格键，删除光标前一个字符</li>
+<li><strong>DEL</strong>，删除键，删除光标后一个字符</li>
+<li><strong>方向键</strong>，在文本中移动光标</li>
+<li><strong>HOME</strong>/<strong>END</strong>，移动光标到行首/行尾</li>
+<li><strong>Page Up</strong>/<strong>Page Down</strong>，上/下翻页</li>
+<li><strong>Insert</strong>，切换光标为输入/替换模式，光标将变成竖线/下划线</li>
+<li><strong>ESC</strong>，退出输入模式，切换到命令模式</li>
+</ul>
+<h3 id="底线命令模式">底线命令模式</h3>
+<p>在命令模式下按下:（英文冒号）就进入了底线命令模式。</p>
+<p>底线命令模式可以输入单个或多个字符的命令，可用的命令非常多。</p>
+<p>在底线命令模式中，基本的命令有（已经省略了冒号）：</p>
+<ul>
+<li>q 退出程序</li>
+<li>w 保存文件</li>
+</ul>
+<p>按ESC键可随时退出底线命令模式。</p>
+<p>简单的说，我们可以将这三个模式想成底下的图标来表示：</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://www.runoob.com/wp-content/uploads/2014/07/vim-vi-workmodel.png" alt="img"></p>
+<hr>
+<h2 id="vi-vim-按键说明">vi/vim 按键说明</h2>
+<p>除了上面简易范例的 i, Esc, :wq 之外，其实 vim 还有非常多的按键可以使用。</p>
+<h3 id="第一部分：一般模式可用的光标移动、复制粘贴、搜索替换等">第一部分：一般模式可用的光标移动、复制粘贴、搜索替换等</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">移动光标的方法</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">h 或 向左箭头键(←)</td>
+<td>光标向左移动一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">j 或 向下箭头键(↓)</td>
+<td>光标向下移动一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">k 或 向上箭头键(↑)</td>
+<td>光标向上移动一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">l 或 向右箭头键(→)</td>
+<td>光标向右移动一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">如果你将右手放在键盘上的话，你会发现 hjkl 是排列在一起的，因此可以使用这四个按钮来移动光标。 如果想要进行多次移动的话，例如向下移动 30 行，可以使用 “30j” 或 “30↓” 的组合按键， 亦即加上想要进行的次数(数字)后，按下动作即可！</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">[Ctrl] + [f]</td>
+<td>屏幕『向下』移动一页，相当于 [Page Down]按键 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">[Ctrl] + [b]</td>
+<td>屏幕『向上』移动一页，相当于 [Page Up] 按键 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">[Ctrl] + [d]</td>
+<td>屏幕『向下』移动半页</td>
+</tr>
+<tr>
+<td style="text-align:left">[Ctrl] + [u]</td>
+<td>屏幕『向上』移动半页</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td>光标移动到非空格符的下一行</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td>光标移动到非空格符的上一行</td>
+</tr>
+<tr>
+<td style="text-align:left">n<space></td>
+<td>那个 n 表示『数字』，例如 20 。按下数字后再按空格键，光标会向右移动这一行的 n 个字符。例如 20<space> 则光标会向后面移动 20 个字符距离。</td>
+</tr>
+<tr>
+<td style="text-align:left">0 或功能键[Home]</td>
+<td>这是数字『 0 』：移动到这一行的最前面字符处 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">$ 或功能键[End]</td>
+<td>移动到这一行的最后面字符处(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td>光标移动到这个屏幕的最上方那一行的第一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">M</td>
+<td>光标移动到这个屏幕的中央那一行的第一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">L</td>
+<td>光标移动到这个屏幕的最下方那一行的第一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">G</td>
+<td>移动到这个档案的最后一行(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">nG</td>
+<td>n 为数字。移动到这个档案的第 n 行。例如 20G 则会移动到这个档案的第 20 行(可配合 :set nu)</td>
+</tr>
+<tr>
+<td style="text-align:left">gg</td>
+<td>移动到这个档案的第一行，相当于 1G 啊！ (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">n<Enter></td>
+<td>n 为数字。光标向下移动 n 行(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>搜索替换</strong></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">/word</td>
+<td>向光标之下寻找一个名称为 word 的字符串。例如要在档案内搜寻 vbird 这个字符串，就输入 /vbird 即可！ (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">?word</td>
+<td>向光标之上寻找一个字符串名称为 word 的字符串。</td>
+</tr>
+<tr>
+<td style="text-align:left">n</td>
+<td>这个 n 是英文按键。代表重复前一个搜寻的动作。举例来说， 如果刚刚我们执行 /vbird 去向下搜寻 vbird 这个字符串，则按下 n 后，会向下继续搜寻下一个名称为 vbird 的字符串。如果是执行 ?vbird 的话，那么按下 n 则会向上继续搜寻名称为 vbird 的字符串！</td>
+</tr>
+<tr>
+<td style="text-align:left">N</td>
+<td>这个 N 是英文按键。与 n 刚好相反，为『反向』进行前一个搜寻动作。 例如 /vbird 后，按下 N 则表示『向上』搜寻 vbird 。</td>
+</tr>
+<tr>
+<td style="text-align:left">使用 /word 配合 n 及 N 是非常有帮助的！可以让你重复的找到一些你搜寻的关键词！</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">:n1,n2s/word1/word2/g</td>
+<td>n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为 word2 ！举例来说，在 100 到 200 行之间搜寻 vbird 并取代为 VBIRD 则： 『:100,200s/vbird/VBIRD/g』。(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>:1,$s/word1/word2/g</strong> 或 <strong>:%s/word1/word2/g</strong></td>
+<td>从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>:1,$s/word1/word2/gc</strong> 或 <strong>:%s/word1/word2/gc</strong></td>
+<td>从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！且在取代前显示提示字符给用户确认 (confirm) 是否需要取代！(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">删除、复制与贴上</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">x, X</td>
+<td>在一行字当中，x 为向后删除一个字符 (相当于 [del] 按键)， X 为向前删除一个字符(相当于 [backspace] 亦即是退格键) (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">nx</td>
+<td>n 为数字，连续向后删除 n 个字符。举例来说，我要连续删除 10 个字符， 『10x』。</td>
+</tr>
+<tr>
+<td style="text-align:left">dd</td>
+<td>删除游标所在的那一整行(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">ndd</td>
+<td>n 为数字。删除光标所在的向下 n 行，例如 20dd 则是删除 20 行 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">d1G</td>
+<td>删除光标所在到第一行的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">dG</td>
+<td>删除光标所在到最后一行的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">d$</td>
+<td>删除游标所在处，到该行的最后一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">d0</td>
+<td>那个是数字的 0 ，删除游标所在处，到该行的最前面一个字符</td>
+</tr>
+<tr>
+<td style="text-align:left">yy</td>
+<td>复制游标所在的那一行(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">nyy</td>
+<td>n 为数字。复制光标所在的向下 n 行，例如 20yy 则是复制 20 行(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">y1G</td>
+<td>复制游标所在行到第一行的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">yG</td>
+<td>复制游标所在行到最后一行的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">y0</td>
+<td>复制光标所在的那个字符到该行行首的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">y$</td>
+<td>复制光标所在的那个字符到该行行尾的所有数据</td>
+</tr>
+<tr>
+<td style="text-align:left">p, P</td>
+<td>p 为将已复制的数据在光标下一行贴上，P 则为贴在游标上一行！ 举例来说，我目前光标在第 20 行，且已经复制了 10 行数据。则按下 p 后， 那 10 行数据会贴在原本的 20 行之后，亦即由 21 行开始贴。但如果是按下 P 呢？ 那么原本的第 20 行会被推到变成 30 行。 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">J</td>
+<td>将光标所在行与下一行的数据结合成同一行</td>
+</tr>
+<tr>
+<td style="text-align:left">c</td>
+<td>重复删除多个数据，例如向下删除 10 行，[ 10cj ]</td>
+</tr>
+<tr>
+<td style="text-align:left">u</td>
+<td>复原前一个动作。(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">[Ctrl]+r</td>
+<td>重做上一个动作。(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">这个 u 与 [Ctrl]+r 是很常用的指令！一个是复原，另一个则是重做一次～ 利用这两个功能按键，你的编辑，嘿嘿！很快乐的啦！</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">.</td>
+<td>不要怀疑！这就是小数点！意思是重复前一个动作的意思。 如果你想要重复删除、重复贴上等等动作，按下小数点『.』就好了！ (常用)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第二部分：一般模式切换到编辑模式的可用的按钮说明">第二部分：一般模式切换到编辑模式的可用的按钮说明</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">进入输入或取代的编辑模式</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">i, I</td>
+<td>进入输入模式(Insert mode)： i 为『从目前光标所在处输入』， I 为『在目前所在行的第一个非空格符处开始输入』。 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">a, A</td>
+<td>进入输入模式(Insert mode)： a 为『从目前光标所在的下一个字符处开始输入』， A 为『从光标所在行的最后一个字符处开始输入』。(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">o, O</td>
+<td>进入输入模式(Insert mode)： 这是英文字母 o 的大小写。o 为在目前光标所在的下一行处输入新的一行； O 为在目前光标所在的上一行处输入新的一行！(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">r, R</td>
+<td>进入取代模式(Replace mode)： r 只会取代光标所在的那一个字符一次；R会一直取代光标所在的文字，直到按下 ESC 为止；(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">上面这些按键中，在 vi 画面的左下角处会出现『–INSERT–』或『–REPLACE–』的字样。 由名称就知道该动作了吧！！特别注意的是，我们上面也提过了，你想要在档案里面输入字符时， 一定要在左下角处看到 INSERT 或 REPLACE 才能输入喔！</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">[Esc]</td>
+<td>退出编辑模式，回到一般模式中(常用)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第三部分：一般模式切换到指令行模式的可用的按钮说明">第三部分：一般模式切换到指令行模式的可用的按钮说明</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令行的储存、离开等指令</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">:w</td>
+<td>将编辑的数据写入硬盘档案中(常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">:w!</td>
+<td>若文件属性为『只读』时，强制写入该档案。不过，到底能不能写入， 还是跟你对该档案的档案权限有关啊！</td>
+</tr>
+<tr>
+<td style="text-align:left">:q</td>
+<td>离开 vi (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">:q!</td>
+<td>若曾修改过档案，又不想储存，使用 ! 为强制离开不储存档案。</td>
+</tr>
+<tr>
+<td style="text-align:left">注意一下啊，那个惊叹号 (!) 在 vi 当中，常常具有『强制』的意思～</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">:wq</td>
+<td>储存后离开，若为 :wq! 则为强制储存后离开 (常用)</td>
+</tr>
+<tr>
+<td style="text-align:left">ZZ</td>
+<td>这是大写的 Z 喔！如果修改过，保存当前文件，然后退出！效果等同于(保存并退出)</td>
+</tr>
+<tr>
+<td style="text-align:left">ZQ</td>
+<td>不保存，强制退出。效果等同于 <strong>:q!</strong>。</td>
+</tr>
+<tr>
+<td style="text-align:left">:w [filename]</td>
+<td>将编辑的数据储存成另一个档案（类似另存新档）</td>
+</tr>
+<tr>
+<td style="text-align:left">:r [filename]</td>
+<td>在编辑的数据中，读入另一个档案的数据。亦即将 『filename』 这个档案内容加到游标所在行后面</td>
+</tr>
+<tr>
+<td style="text-align:left">:n1,n2 w [filename]</td>
+<td>将 n1 到 n2 的内容储存成 filename 这个档案。</td>
+</tr>
+<tr>
+<td style="text-align:left">:! command</td>
+<td>暂时离开 vi 到指令行模式下执行 command 的显示结果！例如 『:! ls /home』即可在 vi 当中察看 /home 底下以 ls 输出的档案信息！</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>vim 环境的变更</strong></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">:set nu</td>
+<td>显示行号，设定之后，会在每一行的前缀显示该行的行号</td>
+</tr>
+<tr>
+<td style="text-align:left">:set nonu</td>
+<td>与 set nu 相反，为取消行号！</td>
+</tr>
+</tbody>
+</table>
+<p>特别注意，在 vi/vim 中，数字是很有意义的！数字通常代表重复做几次的意思！ 也有可能是代表去到第几个什么什么的意思。</p>
+<p>举例来说，要删除 50 行，则是用 『50dd』 对吧！ 数字加在动作之前，如我要向下移动 20 行呢？那就是『20j』或者是『20↓』即可。</p>
+<p>来源：<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-vim.html">https://www.runoob.com/linux/linux-vim.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2021/04/29/vim/">https://youngsay.cn/2021/04/29/vim/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/04/30/useradd/" title="Linux用户和用户组的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux用户和用户组的管理</div></div><div class="info-2"><div class="info-item-1">Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。 用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。 每个用户账号都拥有一个唯一的用户名和各自的口令。 用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。 实现用户账号的管理，要完成的工作主要有如下几个方面：  用户账号的添加、删除与修改。 用户口令的管理。 用户组的管理。   一、用户账号管理 1、添加账户 1useradd 选项 用户名  -c comment 指定一段注释性描述。 -d 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。 -g 用户组 指定用户所属的用户组。 -G 用户组，用户组 指定用户所属的附加组。 -s Shell文件 指定用户的登录Shell。 -u 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。  1# useradd –d  /home/...</div></div></div></a><a class="pagination-related" href="/2021/04/22/linux2/" title="Linux基础命令(2)"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux基础命令(2)</div></div><div class="info-2"><div class="info-item-1">看懂文件属性 Linux系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。 在Linux中我们可以使用ll或者ls –l命令来显示一个文件的属性以及文件所属的用户和组，如：  实例中，boot文件的第一个属性用&quot;d&quot;表示。&quot;d&quot;在Linux中代表该文件是一个目录文件。 在Linux中第一个字符代表这个文件是目录、文件或链接文件等等：  当为[ d ]则是目录 当为[ - ]则是文件； 若是[ l ]则表示为链接文档 ( link file )； 若是[ b ]则表示为装置文件里面的可供储存的接口设备 ( 可随机存取装置 )； 若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标 ( 一次性读取装置 )。  接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。 其中，[ r ]代表可读(read)、[ w ]代表可写(write)、[ x ]代表可执行(execute)。 要注意的是，这三个权限的位置...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/04/21/linux1/" title="Linux基础命令(1)"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-21</div><div class="info-item-2">Linux基础命令(1)</div></div><div class="info-2"><div class="info-item-1">ls 列出目录 12[root@VM-16-9-centos /]# ls [-aAdfFhilnrRSt]目录文件  -a：全部的文件，连同隐藏文件( 开头为 . 的文件) 一起列出来 -l ：长数据串列出，包含文件的属性与权限等等数据  1[root@VM-16-9-centos www]# ls -al 将目录下的所有文件列出来(含属性与隐藏档) cd 切换目录 Change Directory 1cd [相对路径或绝对路径] 123456#回到自己的家目录，即/root[root@VM-16-9-centos /]# cd ~#回到根目录[root@VM-16-9-centos ~]# cd /#回到上一级[root@VM-16-9-centos /]# cd .. pwd 显示目前所在目录 Print Working Directory 12[root@VM-16-9-centos ~]# pwd/root  -P：显示出确实的路径，而非使用连接(link) 路径  123456# 单纯显示出目前的工作目录[root@VM-16-9-centos bin]# pwd/b...</div></div></div></a><a class="pagination-related" href="/2021/04/22/linux2/" title="Linux基础命令(2)"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-k89gl7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-22</div><div class="info-item-2">Linux基础命令(2)</div></div><div class="info-2"><div class="info-item-1">看懂文件属性 Linux系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。 在Linux中我们可以使用ll或者ls –l命令来显示一个文件的属性以及文件所属的用户和组，如：  实例中，boot文件的第一个属性用&quot;d&quot;表示。&quot;d&quot;在Linux中代表该文件是一个目录文件。 在Linux中第一个字符代表这个文件是目录、文件或链接文件等等：  当为[ d ]则是目录 当为[ - ]则是文件； 若是[ l ]则表示为链接文档 ( link file )； 若是[ b ]则表示为装置文件里面的可供储存的接口设备 ( 可随机存取装置 )； 若是[ c ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标 ( 一次性读取装置 )。  接下来的字符中，以三个为一组，且均为『rwx』 的三个参数的组合。 其中，[ r ]代表可读(read)、[ w ]代表可写(write)、[ x ]代表可执行(execute)。 要注意的是，这三个权限的位置...</div></div></div></a><a class="pagination-related" href="/2021/05/01/filesystem/" title="Linux磁盘管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-01</div><div class="info-item-2">Linux磁盘管理</div></div><div class="info-2"><div class="info-item-1">Linux磁盘管理好坏直接关系到整个系统的性能问题。 Linux磁盘管理常用命令为 df、du。  df ：列出文件系统的整体磁盘使用量 du：检查磁盘空间使用量  df df命令参数功能：检查文件系统的磁盘空间占用情况。可以利用该命令来获取硬盘被占用了多少空间，目前还剩下多少空间等信息。 语法： 1df [-ahikHTm] [目录或文件名] 选项与参数：  -a ：列出所有的文件系统，包括系统特有的 /proc 等文件系统； -k ：以 KBytes 的容量显示各文件系统； -m ：以 MBytes 的容量显示各文件系统； -h ：以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示； -H ：以 M=1000K 取代 M=1024K 的进位方式； -T ：显示文件系统类型, 连同该 partition 的 filesystem 名称 (例如 ext3) 也列出； -i ：不用硬盘容量，而以 inode 的数量来显示  测试： 12345678910111213141516171819202122232425262728293031323334353...</div></div></div></a><a class="pagination-related" href="/2021/04/30/useradd/" title="Linux用户和用户组的管理"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-30</div><div class="info-item-2">Linux用户和用户组的管理</div></div><div class="info-2"><div class="info-item-1">Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。 用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。 每个用户账号都拥有一个唯一的用户名和各自的口令。 用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。 实现用户账号的管理，要完成的工作主要有如下几个方面：  用户账号的添加、删除与修改。 用户口令的管理。 用户组的管理。   一、用户账号管理 1、添加账户 1useradd 选项 用户名  -c comment 指定一段注释性描述。 -d 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。 -g 用户组 指定用户所属的用户组。 -G 用户组，用户组 指定用户所属的附加组。 -s Shell文件 指定用户的登录Shell。 -u 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。  1# useradd –d  /home/...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-vim%EF%BC%9F"><span class="toc-text">什么是 vim？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vi-vim-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">vi&#x2F;vim 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-text">命令模式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text">输入模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E7%BA%BF%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-text">底线命令模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vi-vim-%E6%8C%89%E9%94%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">vi&#x2F;vim 按键说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%80%E8%88%AC%E6%A8%A1%E5%BC%8F%E5%8F%AF%E7%94%A8%E7%9A%84%E5%85%89%E6%A0%87%E7%A7%BB%E5%8A%A8%E3%80%81%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E3%80%81%E6%90%9C%E7%B4%A2%E6%9B%BF%E6%8D%A2%E7%AD%89"><span class="toc-text">第一部分：一般模式可用的光标移动、复制粘贴、搜索替换等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%80%E8%88%AC%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2%E5%88%B0%E7%BC%96%E8%BE%91%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">第二部分：一般模式切换到编辑模式的可用的按钮说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%80%E8%88%AC%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2%E5%88%B0%E6%8C%87%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8F%AF%E7%94%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">第三部分：一般模式切换到指令行模式的可用的按钮说明</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/02/redeploy-hexo/" title="如何将Hexo部署至服务器">如何将Hexo部署至服务器</a><time datetime="2026-01-02T13:44:15.000Z" title="发表于 2026-01-02 21:44:15">2026-01-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/12/14/2025/" title="2025年终总结">2025年终总结</a><time datetime="2025-12-14T08:45:15.000Z" title="发表于 2025-12-14 16:45:15">2025-12-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/01/2023/" title="2023年终总结">2023年终总结</a><time datetime="2024-01-01T03:03:15.000Z" title="发表于 2024-01-01 11:03:15">2024-01-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/01/21/2022/" title="2022年终总结">2022年终总结</a><time datetime="2023-01-21T07:15:15.000Z" title="发表于 2023-01-21 15:15:15">2023-01-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/11/29/MySQL-transaction/" title="MySQL数据库：事务">MySQL数据库：事务</a><time datetime="2022-11-29T05:04:41.000Z" title="发表于 2022-11-29 13:04:41">2022-11-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By panghutx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 5.4.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"emojiCDN":"https://testingcf.jsdelivr.net/gh/GamerNoTitle/ValineCDN/"}
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'nKtN81THEqdpFPQP6484D0Dw-gzGzoHsz',
+      appKey: 'Elo90cRADuj3PvXaL8PiKkMG',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: {"alu2":"alu/不出所料.png","alu3":"alu/不说话.png","alu4":"alu/不高兴.png","alu5":"alu/中刀.png","alu6":"alu/中指.png","alu7":"alu/中枪.png","alu8":"alu/亲亲.png","alu9":"alu/便便.png","alu10":"alu/内伤.png","alu11":"alu/击掌.png","alu12":"alu/口水.png","alu13":"alu/吐.png","alu14":"alu/吐舌.png","alu15":"alu/吐血倒地.png","alu16":"alu/呲牙.png","alu17":"alu/咽气.png","alu18":"alu/哭泣.png","alu19":"alu/喜极而泣.png","alu20":"alu/喷水.png","alu21":"alu/喷血.png","alu22":"alu/坐等.png","alu23":"alu/害羞.png","alu24":"alu/小眼睛.png","alu25":"alu/尴尬.png","alu26":"alu/得意.png","alu27":"alu/惊喜.png","alu28":"alu/想一想.png","alu29":"alu/愤怒.png","alu30":"alu/扇耳光.png","alu31":"alu/投降.png","alu32":"alu/抠鼻.png","alu33":"alu/抽烟.png","alu34":"alu/无奈.png","alu35":"alu/无所谓.png","alu36":"alu/无语.png","alu37":"alu/暗地观察.png","alu38":"alu/期待.png","alu39":"alu/欢呼.png","alu40":"alu/汗.png","alu41":"alu/深思.png","alu42":"alu/狂汗.png","alu43":"alu/献花.png","alu44":"alu/献黄瓜.png","alu45":"alu/皱眉.png","alu46":"alu/看不见.png","alu47":"alu/看热闹.png","alu48":"alu/瞅你.png","alu49":"alu/肿包.png","alu50":"alu/脸红.png","alu51":"alu/蜡烛.png","alu52":"alu/装大款.png","alu53":"alu/观察.png","alu54":"alu/赞一个.png","alu55":"alu/邪恶.png","alu56":"alu/锁眉.png","alu57":"alu/长草.png","alu58":"alu/阴暗.png","alu59":"alu/高兴.png","alu60":"alu/黑线.png","alu61":"alu/鼓掌.png","bilibilitv2":"bilibilitv/[tv_doge].png","bilibilitv3":"bilibilitv/[tv_亲亲].png","bilibilitv4":"bilibilitv/[tv_偷笑].png","bilibilitv5":"bilibilitv/[tv_再见].png","bilibilitv6":"bilibilitv/[tv_冷漠].png","bilibilitv7":"bilibilitv/[tv_发怒].png","bilibilitv8":"bilibilitv/[tv_发财].png","bilibilitv9":"bilibilitv/[tv_可爱].png","bilibilitv10":"bilibilitv/[tv_吐血].png","bilibilitv11":"bilibilitv/[tv_呆].png","bilibilitv12":"bilibilitv/[tv_呕吐].png","bilibilitv13":"bilibilitv/[tv_困].png","bilibilitv14":"bilibilitv/[tv_坏笑].png","bilibilitv15":"bilibilitv/[tv_大佬].png","bilibilitv16":"bilibilitv/[tv_大哭].png","bilibilitv17":"bilibilitv/[tv_委屈].png","bilibilitv18":"bilibilitv/[tv_害羞].png","bilibilitv19":"bilibilitv/[tv_尴尬].png","bilibilitv20":"bilibilitv/[tv_微笑].png","bilibilitv21":"bilibilitv/[tv_思考].png","bilibilitv22":"bilibilitv/[tv_惊吓].png","bilibilitv23":"bilibilitv/[tv_打脸].png","bilibilitv24":"bilibilitv/[tv_抓狂].png","bilibilitv25":"bilibilitv/[tv_抠鼻].png","bilibilitv26":"bilibilitv/[tv_斜眼笑].png","bilibilitv27":"bilibilitv/[tv_无奈].png","bilibilitv28":"bilibilitv/[tv_晕].png","bilibilitv29":"bilibilitv/[tv_流汗].png","bilibilitv30":"bilibilitv/[tv_流泪].png","bilibilitv31":"bilibilitv/[tv_流鼻血].png","bilibilitv32":"bilibilitv/[tv_点赞].png","bilibilitv33":"bilibilitv/[tv_生气].png","bilibilitv34":"bilibilitv/[tv_生病].png","bilibilitv35":"bilibilitv/[tv_疑问].png","bilibilitv36":"bilibilitv/[tv_白眼].png","bilibilitv37":"bilibilitv/[tv_皱眉].png","bilibilitv38":"bilibilitv/[tv_目瞪口呆].png","bilibilitv39":"bilibilitv/[tv_睡着].png","bilibilitv40":"bilibilitv/[tv_笑哭].png","bilibilitv41":"bilibilitv/[tv_腼腆].png","bilibilitv42":"bilibilitv/[tv_色].png","bilibilitv43":"bilibilitv/[tv_调侃].png","bilibilitv44":"bilibilitv/[tv_调皮].png","bilibilitv45":"bilibilitv/[tv_鄙视].png","bilibilitv46":"bilibilitv/[tv_闭嘴].png","bilibilitv47":"bilibilitv/[tv_难过].png","bilibilitv48":"bilibilitv/[tv_馋].png","bilibilitv49":"bilibilitv/[tv_鬼脸].png","bilibilitv50":"bilibilitv/[tv_黑人问号].png","bilibilitv51":"bilibilitv/[tv_鼓掌].png","Tieba-New2":"Tieba-New/image_emoticon.png","Tieba-New3":"Tieba-New/image_emoticon10.png","Tieba-New4":"Tieba-New/image_emoticon100.png","Tieba-New5":"Tieba-New/image_emoticon101.png","Tieba-New6":"Tieba-New/image_emoticon102.png","Tieba-New7":"Tieba-New/image_emoticon103.png","Tieba-New8":"Tieba-New/image_emoticon104.png","Tieba-New9":"Tieba-New/image_emoticon105.png","Tieba-New10":"Tieba-New/image_emoticon106.png","Tieba-New11":"Tieba-New/image_emoticon107.png","Tieba-New12":"Tieba-New/image_emoticon108.png","Tieba-New13":"Tieba-New/image_emoticon109.png","Tieba-New14":"Tieba-New/image_emoticon11.png","Tieba-New15":"Tieba-New/image_emoticon110.png","Tieba-New16":"Tieba-New/image_emoticon111.png","Tieba-New17":"Tieba-New/image_emoticon112.png","Tieba-New18":"Tieba-New/image_emoticon113.png","Tieba-New19":"Tieba-New/image_emoticon114.png","Tieba-New20":"Tieba-New/image_emoticon115.png","Tieba-New21":"Tieba-New/image_emoticon116.png","Tieba-New22":"Tieba-New/image_emoticon117.png","Tieba-New23":"Tieba-New/image_emoticon118.png","Tieba-New24":"Tieba-New/image_emoticon119.png","Tieba-New25":"Tieba-New/image_emoticon12.png","Tieba-New26":"Tieba-New/image_emoticon120.png","Tieba-New27":"Tieba-New/image_emoticon121.png","Tieba-New28":"Tieba-New/image_emoticon122.png","Tieba-New29":"Tieba-New/image_emoticon123.png","Tieba-New30":"Tieba-New/image_emoticon124.png","Tieba-New31":"Tieba-New/image_emoticon13.png","Tieba-New32":"Tieba-New/image_emoticon14.png","Tieba-New33":"Tieba-New/image_emoticon15.png","Tieba-New34":"Tieba-New/image_emoticon16.png","Tieba-New35":"Tieba-New/image_emoticon17.png","Tieba-New36":"Tieba-New/image_emoticon18.png","Tieba-New37":"Tieba-New/image_emoticon19.png","Tieba-New38":"Tieba-New/image_emoticon2.png","Tieba-New39":"Tieba-New/image_emoticon20.png","Tieba-New40":"Tieba-New/image_emoticon21.png","Tieba-New41":"Tieba-New/image_emoticon22.png","Tieba-New42":"Tieba-New/image_emoticon23.png","Tieba-New43":"Tieba-New/image_emoticon24.png","Tieba-New44":"Tieba-New/image_emoticon25.png","Tieba-New45":"Tieba-New/image_emoticon26.png","Tieba-New46":"Tieba-New/image_emoticon27.png","Tieba-New47":"Tieba-New/image_emoticon28.png","Tieba-New48":"Tieba-New/image_emoticon29.png","Tieba-New49":"Tieba-New/image_emoticon3.png","Tieba-New50":"Tieba-New/image_emoticon30.png","Tieba-New51":"Tieba-New/image_emoticon31.png","Tieba-New52":"Tieba-New/image_emoticon32.png","Tieba-New53":"Tieba-New/image_emoticon33.png","Tieba-New54":"Tieba-New/image_emoticon34.png","Tieba-New55":"Tieba-New/image_emoticon35.png","Tieba-New56":"Tieba-New/image_emoticon36.png","Tieba-New57":"Tieba-New/image_emoticon37.png","Tieba-New58":"Tieba-New/image_emoticon38.png","Tieba-New59":"Tieba-New/image_emoticon39.png","Tieba-New60":"Tieba-New/image_emoticon4.png","Tieba-New61":"Tieba-New/image_emoticon40.png","Tieba-New62":"Tieba-New/image_emoticon41.png","Tieba-New63":"Tieba-New/image_emoticon42.png","Tieba-New64":"Tieba-New/image_emoticon43.png","Tieba-New65":"Tieba-New/image_emoticon44.png","Tieba-New66":"Tieba-New/image_emoticon45.png","Tieba-New67":"Tieba-New/image_emoticon46.png","Tieba-New68":"Tieba-New/image_emoticon47.png","Tieba-New69":"Tieba-New/image_emoticon48.png","Tieba-New70":"Tieba-New/image_emoticon49.png","Tieba-New71":"Tieba-New/image_emoticon5.png","Tieba-New72":"Tieba-New/image_emoticon50.png","Tieba-New73":"Tieba-New/image_emoticon6.png","Tieba-New74":"Tieba-New/image_emoticon66.png","Tieba-New75":"Tieba-New/image_emoticon67.png","Tieba-New76":"Tieba-New/image_emoticon68.png","Tieba-New77":"Tieba-New/image_emoticon69.png","Tieba-New78":"Tieba-New/image_emoticon7.png","Tieba-New79":"Tieba-New/image_emoticon70.png","Tieba-New80":"Tieba-New/image_emoticon71.png","Tieba-New81":"Tieba-New/image_emoticon72.png","Tieba-New82":"Tieba-New/image_emoticon73.png","Tieba-New83":"Tieba-New/image_emoticon74.png","Tieba-New84":"Tieba-New/image_emoticon75.png","Tieba-New85":"Tieba-New/image_emoticon76.png","Tieba-New86":"Tieba-New/image_emoticon77.png","Tieba-New87":"Tieba-New/image_emoticon78.png","Tieba-New88":"Tieba-New/image_emoticon79.png","Tieba-New89":"Tieba-New/image_emoticon8.png","Tieba-New90":"Tieba-New/image_emoticon80.png","Tieba-New91":"Tieba-New/image_emoticon81.png","Tieba-New92":"Tieba-New/image_emoticon82.png","Tieba-New93":"Tieba-New/image_emoticon83.png","Tieba-New94":"Tieba-New/image_emoticon84.png","Tieba-New95":"Tieba-New/image_emoticon85.png","Tieba-New96":"Tieba-New/image_emoticon86.png","Tieba-New97":"Tieba-New/image_emoticon87.png","Tieba-New98":"Tieba-New/image_emoticon88.png","Tieba-New99":"Tieba-New/image_emoticon89.png","Tieba-New100":"Tieba-New/image_emoticon9.png","Tieba-New101":"Tieba-New/image_emoticon90.png","Tieba-New102":"Tieba-New/image_emoticon91.png","Tieba-New103":"Tieba-New/image_emoticon92.png","Tieba-New104":"Tieba-New/image_emoticon93.png","Tieba-New105":"Tieba-New/image_emoticon94.png","Tieba-New106":"Tieba-New/image_emoticon95.png","Tieba-New107":"Tieba-New/image_emoticon96.png","Tieba-New108":"Tieba-New/image_emoticon97.png","Tieba-New109":"Tieba-New/image_emoticon98.png","Tieba-New110":"Tieba-New/image_emoticon99.png"},
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,4 +1,4 @@
-/* 自定义页脚样式 - 白色背景 + 分割线 */
+/* 页脚自适应样式 - 白色背景 + 分割线 + 层次感 */
 #footer {
   background-color: #ffffff !important;
   background-image: none !important;
@@ -6,54 +6,58 @@
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
+/* 页脚文字颜色 - 清晰显示 */
+#footer,
 #footer > * {
   color: #1f2937 !important;
 }
 
-/* 移除底部灰条背景 */
-.footer-other {
-  background-color: transparent !important;
-}
-
-.footer-flex {
-  padding: 40px 60px !important;
-}
-
-.footer-flex-items {
-  padding: 0 15px;
-}
-
 .footer-flex-title {
-  font-size: 1.2em !important;
-  font-weight: 700 !important;
-  margin-bottom: 15px !important;
   color: #1f2937 !important;
-}
-
-.footer-flex-item {
-  margin: 8px 0 !important;
 }
 
 .footer-flex-content a,
 .footer-flex-content div {
   color: #6b7280 !important;
-  transition: all 0.3s ease;
-  font-size: 0.95em;
 }
 
 .footer-flex-content a:hover {
   color: #1f2937 !important;
-  padding-left: 5px;
 }
 
-/* 防止版权信息换行 - 所有元素改为内联 */
-.footer-flex-content > div,
-.footer-flex-content > div a {
-  display: inline !important;
+/* 移除底部灰条 */
+.footer-other {
+  background-color: transparent !important;
+}
+
+.footer-flex-items {
+  white-space: normal !important;
+}
+
+.footer-flex-item {
+  white-space: normal !important;
+}
+
+/* 第一列的描述文字可以换行 */
+.footer-flex-items:first-child .footer-flex-content > div:first-child {
+  white-space: normal !important;
+}
+
+/* 第一列的版权信息及其内部元素保持一行 */
+.footer-flex-items:first-child .footer-flex-content > div:last-child {
   white-space: nowrap !important;
 }
 
-/* 响应式调整 */
+.footer-flex-items:first-child .footer-flex-content > div:last-child a {
+  display: inline !important;
+}
+
+/* 其他列的链接保持块级显示 */
+.footer-flex-items:not(:first-child) .footer-flex-content a {
+  display: block !important;
+}
+
+/* 响应式：小屏幕设备 */
 @media (max-width: 768px) {
   .footer-flex {
     padding: 30px 20px !important;
@@ -65,7 +69,15 @@
     margin-bottom: 20px;
   }
 
-  .footer-flex-content > div {
-    display: block !important;
+  /* 小屏幕下版权信息也可以换行 */
+  .footer-flex-items:first-child .footer-flex-content > div:last-child {
+    white-space: normal !important;
+  }
+}
+
+/* 中等屏幕：允许描述文字换行 */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .footer-flex-items:first-child .footer-flex-content > div:first-child {
+    max-width: 300px;
   }
 }

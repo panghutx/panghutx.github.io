@@ -1,0 +1,71 @@
+/* 自定义页脚样式 - 白色背景 + 分割线 */
+#footer {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+#footer > * {
+  color: #1f2937 !important;
+}
+
+/* 移除底部灰条背景 */
+.footer-other {
+  background-color: transparent !important;
+}
+
+.footer-flex {
+  padding: 40px 60px !important;
+}
+
+.footer-flex-items {
+  padding: 0 15px;
+}
+
+.footer-flex-title {
+  font-size: 1.2em !important;
+  font-weight: 700 !important;
+  margin-bottom: 15px !important;
+  color: #1f2937 !important;
+}
+
+.footer-flex-item {
+  margin: 8px 0 !important;
+}
+
+.footer-flex-content a,
+.footer-flex-content div {
+  color: #6b7280 !important;
+  transition: all 0.3s ease;
+  font-size: 0.95em;
+}
+
+.footer-flex-content a:hover {
+  color: #1f2937 !important;
+  padding-left: 5px;
+}
+
+/* 防止版权信息换行 - 所有元素改为内联 */
+.footer-flex-content > div,
+.footer-flex-content > div a {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .footer-flex {
+    padding: 30px 20px !important;
+  }
+
+  .footer-flex-items {
+    flex: 0 0 100% !important;
+    min-width: 100% !important;
+    margin-bottom: 20px;
+  }
+
+  .footer-flex-content > div {
+    display: block !important;
+  }
+}

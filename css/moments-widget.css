@@ -1,0 +1,52 @@
+.moments-widget {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--card-box-shadow);
+}
+
+.moments-widget-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  color: var(--font-color);
+}
+
+.moments-widget-title i {
+  margin-right: 0.5rem;
+  color: var(--theme-color);
+}
+
+.moments-widget-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--hr-border);
+}
+
+.moments-widget-item:last-child {
+  border-bottom: none;
+}
+
+.moments-widget-text {
+  font-size: 0.9rem;
+  color: var(--font-color);
+  margin: 0 0 0.3rem 0;
+  line-height: 1.5;
+}
+
+.moments-widget-date {
+  font-size: 0.75rem;
+  color: var(--text-bg-hover);
+}
+
+.moments-widget-more {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--theme-color);
+  margin-top: 0.8rem;
+}
+
+.moments-widget-more:hover {
+  color: var(--theme-color-hover);
+}

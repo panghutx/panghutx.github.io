@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java单例模式：懒汉模式和饿汉模式 | panghutx's Blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="单例模式，就是一个类中只有一个实例。主要有懒汉模式和饿汉模式。 饿汉模式是在类加载的同时就创建实例，而懒汉模式是使用时才创建实例。 饿汉模式 12345678910class Singleton&amp;#123;    &#x2F;&#x2F;1.使用static创建一个实例，并且立即实例化    private static Singleton instance &#x3D; new Singleton();    &#x2F;&#x2F;2.为了防">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java单例模式：懒汉模式和饿汉模式">
+<meta property="og:url" content="https://youngsay.cn/2022/09/21/Java-Singleton/index.html">
+<meta property="og:site_name" content="panghutx&#39;s Blog">
+<meta property="og:description" content="单例模式，就是一个类中只有一个实例。主要有懒汉模式和饿汉模式。 饿汉模式是在类加载的同时就创建实例，而懒汉模式是使用时才创建实例。 饿汉模式 12345678910class Singleton&amp;#123;    &#x2F;&#x2F;1.使用static创建一个实例，并且立即实例化    private static Singleton instance &#x3D; new Singleton();    &#x2F;&#x2F;2.为了防">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg">
+<meta property="article:published_time" content="2022-09-21T21:04:41.000Z">
+<meta property="article:modified_time" content="2026-05-02T12:51:09.080Z">
+<meta property="article:author" content="panghutx">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Java单例模式：懒汉模式和饿汉模式",
+  "url": "https://youngsay.cn/2022/09/21/Java-Singleton/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg",
+  "datePublished": "2022-09-21T21:04:41.000Z",
+  "dateModified": "2026-05-02T12:51:09.080Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/favicon.png"><link rel="canonical" href="https://youngsay.cn/2022/09/21/Java-Singleton/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java单例模式：懒汉模式和饿汉模式',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/footer_custom.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><link rel="stylesheet" href="/css/media.css"><link rel="stylesheet" href="/css/moments-widget.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">90</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/media/"><span> 书影音</span></a></div><div class="menus_item"><a class="site-page" href="/moments/"><span> 微博文</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Java单例模式：懒汉模式和饿汉模式</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/media/"><span> 书影音</span></a></div><div class="menus_item"><a class="site-page" href="/moments/"><span> 微博文</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Java单例模式：懒汉模式和饿汉模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-21T21:04:41.000Z" title="发表于 2022-09-21 21:04:41">2022-09-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-02T12:51:09.080Z" title="更新于 2026-05-02 12:51:09">2026-05-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">570</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span></div></div></div><article class="container post-content" id="article-container"><p>单例模式，就是一个类中只有一个实例。主要有懒汉模式和饿汉模式。</p>
+<p>饿汉模式是在类加载的同时就创建实例，而懒汉模式是使用时才创建实例。</p>
+<h3 id="饿汉模式">饿汉模式</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>&#123;</span><br><span class="line">    <span class="comment">//1.使用static创建一个实例，并且立即实例化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">    <span class="comment">//2.为了防止在其他地方不小心new这个Singleton，把方法构造为private</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供一个方法，让外面能够拿到唯一实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在多线程中，多个线程对同一数据进行读操作，线程安全。</p>
+<h3 id="懒汉模式">懒汉模式</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton1</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton1</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton1 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="literal">null</span>)&#123;</span><br><span class="line">            instance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多线程中，多个线程对同一对象进行读、写操作，线程不安全。线程不安全出现在首次创建实例时，多个线程同时调用getInstance方法，可能创造出多个实例。</p>
+<p>改进1：</p>
+<p>对getInstance方法加锁，保证操作的原子性，实现线程安全。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton1</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="literal">null</span>)&#123;</span><br><span class="line">            instance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但这种方法性能较差，毕竟线程不安全只出现在首次创建实例时，为getInstance方法加锁后每次都要加锁解锁，所以做如下改进。</p>
+<p>改进2：</p>
+<p>进入getInstance方法后首先判断instance是否为空，即是否为第一次创建实例，是才需要加锁，否则不需要加锁。同时为了避免 “内存可见性” 导致读取的 instance 出现偏差, 因此为instance加上volatile。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span>&#123;</span><br><span class="line">    <span class="comment">//1.不立即初始化实例，使用时再初始化</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">Singleton1</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//2.将构造方法设为private</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="comment">//3.提供方法获取实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance==<span class="literal">null</span>)&#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2022/09/21/Java-Singleton/">https://youngsay.cn/2022/09/21/Java-Singleton/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/09/26/Thread-safe/" title="线程安全及解决方案"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">线程安全及解决方案</div></div><div class="info-2"><div class="info-item-1">安全，已经成为非常重要的社会话题。所谓“安全第一”，“安全无小事”（手动滑稽），同样，多线程中，线程安全也是非常重要的话题。那么是什么原因造成了线程不安全，又如何解决线程不安全呢？ 造成线程不安全的原因   线程的调度 各线程之间是抢占式执行的，线程的执行顺序是随机的，因此可能会产生各种问题。现在最流行什么？做核酸！如果做核酸是抢占式的，做核酸没有一个顺序，做核酸顺序完全靠运气，这能安全吗！   多线程同时修改同一变量 如果是多线程同时读取同一变量，不涉及修改的操作，是线程安全的。但如果多线程同时修改同一变量，这能不乱吗？想当年家里买了一台电脑，我姐姐要用电脑玩QQ炫舞，我要用电脑玩穿越火线，你争我抢，打的是不可开交。   操作指令不是原子的 例如一条加法指令，其实要执行三条指令，load、add、save，先将内存中的变量加载到寄存器，在寄存器中完成加法操作，再将结果写会内存中。假设线程1完成了load、add操作，线程2完成了load、add、save操作，当线程1再去执行save操作，便将线程2的操作覆盖了，线程2说：线程1真是一个猪队友。   内存可见性 线程1循环进行读...</div></div></div></a><a class="pagination-related" href="/2022/06/09/Java-Thymeleaf/" title="【JavaWeb】Thymeleaf模板引擎"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【JavaWeb】Thymeleaf模板引擎</div></div><div class="info-2"><div class="info-item-1">上篇博客中，我们了解了服务器渲染，并用Thymeleaf模板引擎写了一个简单的猜数字小游戏。 下面我们简单了解一下Thymeleaf的语法。 Thymeleaf常见命令    命令 功能     th:text 在标签体中展示表达式求值结果的文本内容   th:[HTML标签属性] 设置任意的 HTML 标签属性的值   th:if 当表达式的结果为真时则显示内容，否则不显示   th:each 循环访问元素    Thymeleaf语法有很多，我们这里先简单介绍这四个。th:text和th:if在猜数字小游戏案例已经使用过，这里不再介绍。 th:[属性]  HTML模板代码：  1234&lt;body&gt;    &lt;a th:href=&quot;$&#123;url1&#125;&quot;&gt;胖虎同学&lt;/a&gt;    &lt;a th:href=&quot;$&#123;url2&#125;&quot;&gt;胖虎同学1&lt;/a&gt;&lt;/body&gt;  Servlet代码：  12345678910111213141516171819...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/11/14/Java-Timer/" title="多线程实例：定时器"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-14</div><div class="info-item-2">多线程实例：定时器</div></div><div class="info-2"><div class="info-item-1">定时器是实际开发中常用的组件，例如文章的定时发布，双11的准点抢购活动等。 下面我们来看一下Java标准库中的定时器。 123456789public static void main(String[] args) &#123;    Timer timer = new Timer();    timer.schedule(new TimerTask() &#123;        @Override        public void run() &#123;            System.out.println(&quot;hello&quot;);        &#125;    &#125;, 3000);&#125; 该定时器会在3秒之后输出“hello”。创建一个定时器需要用到Timer类中的核心方法schedule，该方法内有两个参数，一个表示要执行的任务，一个表示任务在多长时间后执行。 认识了标准库中的定时器后，我们可以自己来模拟实现一个定时器。 首先，描述一个任务。创建一个MyTask类，类中有两个属性：一个是执行的任务，一个是任务执行时间。这两个属性...</div></div></div></a><a class="pagination-related" href="/2022/11/14/Java-BlockingQueue/" title="多线程实例：阻塞队列"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-9o51l8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-14</div><div class="info-item-2">多线程实例：阻塞队列</div></div><div class="info-2"><div class="info-item-1">阻塞队列是一种具有阻塞功能的队列，满足队列“先进先出”的特点，是一种线性安全的数据结构。当队列为空时，执行出队操作会进行阻塞，直到队列中有元素为止；当队列已经满了，执行入堆操作会进行阻塞，知道队列有空间为止。 阻塞队列的一个典型应用常见就是“生产者消费者”模型。毫无疑问，该模型有两个主体：生产者和消费者。生产者线程负责生产产品，将生产好的产品放进阻塞队列。消费者线程负责消费产品，直接从阻塞队列取产品。 生产者消费者模型具有解耦、平衡速度差异的特点。 解耦：生产者无需关注是谁在消费产品，消费了多少产品，只需关注生产操作即可；消费者无需关注是谁在生产产品，生产了多少产品，只需关注消费操作即可。 平衡速度差异：设想11.11，大量用户向服务器发送了大量的支付请求，一次性将这些请求交给服务器处理，服务器可能会hole不住，因此将这些请求都放进阻塞队列，消费者线程从阻塞队列一个一个地来处理请求就好了。这样就起到了“削峰填谷”的作用，平衡了生产者和消费者之间的速度差异。 标准库中的阻塞队列： 123456public static void main(String[] args) throw...</div></div></div></a><a class="pagination-related" href="/2022/09/26/Thread-safe/" title="线程安全及解决方案"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-26</div><div class="info-item-2">线程安全及解决方案</div></div><div class="info-2"><div class="info-item-1">安全，已经成为非常重要的社会话题。所谓“安全第一”，“安全无小事”（手动滑稽），同样，多线程中，线程安全也是非常重要的话题。那么是什么原因造成了线程不安全，又如何解决线程不安全呢？ 造成线程不安全的原因   线程的调度 各线程之间是抢占式执行的，线程的执行顺序是随机的，因此可能会产生各种问题。现在最流行什么？做核酸！如果做核酸是抢占式的，做核酸没有一个顺序，做核酸顺序完全靠运气，这能安全吗！   多线程同时修改同一变量 如果是多线程同时读取同一变量，不涉及修改的操作，是线程安全的。但如果多线程同时修改同一变量，这能不乱吗？想当年家里买了一台电脑，我姐姐要用电脑玩QQ炫舞，我要用电脑玩穿越火线，你争我抢，打的是不可开交。   操作指令不是原子的 例如一条加法指令，其实要执行三条指令，load、add、save，先将内存中的变量加载到寄存器，在寄存器中完成加法操作，再将结果写会内存中。假设线程1完成了load、add操作，线程2完成了load、add、save操作，当线程1再去执行save操作，便将线程2的操作覆盖了，线程2说：线程1真是一个猪队友。   内存可见性 线程1循环进行读...</div></div></div></a><a class="pagination-related" href="/2022/11/14/Java-ThreadPool/" title="多线程实例：线程池"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-14</div><div class="info-item-2">多线程实例：线程池</div></div><div class="info-2"><div class="info-item-1">顾名思义，线程池就是存放线程的池子。直接用线程不就好了吗，为什么还需要线程池呢？ 相比进程，线程已经轻量很多了，创建和销毁线程消耗的资源会少很多，但终究还是有消耗的。为了进一步降低消耗，我们需要用到线程池。需要用到线程时不用申请，直接从线程池中取，用完之后也不用销毁，再放进线程池。 标准库中的线程池（简化版本)： 123456789public static void main(String[] args) &#123;    ExecutorService pool = Executors.newFixedThreadPool(10);    pool.submit(new Runnable() &#123;        @Override        public void run() &#123;            System.out.println(&quot;hello&quot;);        &#125;    &#125;);&#125; 模拟实现一个简化版本的线程池：  描述任务：直接用Runnable接口即可 组织任务：用到阻塞队列 描述工作线程...</div></div></div></a><a class="pagination-related" href="/2022/10/12/Java-Thread/" title="Java线程的创建及状态"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-21kqkm.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-12</div><div class="info-item-2">Java线程的创建及状态</div></div><div class="info-2"><div class="info-item-1">什么是线程 在计算机中，一个任务就是一个进程。打开任务管理器，我们可以看见多个进程。如浏览器，QQ。线程是进程的再划分，是进程的一部分。一个进程可以只有一个线程（主线程），也可以有多个线程。拿浏览器举例，打开浏览器的多个网页，一个网页在播放音乐，一个网页在播放视频，一个网页在浏览博客。每个网页有不同的分工，这些浏览器的每个子任务就是一个线程。 线程是更轻量的进程，创建一个线程的消耗要低于创建一个进程，且同一进程的不同线程之间可以共享资源，效率更高。通过多线程可以更好地实现并发编程。 进程vs线程  进程包含线程，进程是线程的一部分，一个进程中至少包含一个线程。 进程与进程之间不能共享资源，同一个进程的线程之间可以共享资源。 进程是系统分配资源的最小单位，线程是系统调度执行的最小单位。 多进程稳定性高于多线程，一个进程的崩溃不会影响其他线程；多线程下一个线程的崩溃可能影响该进程。  创建线程 一个线程至少包含一个进程，main()就是一个线程，我们还可以在里面创建多个线程。 1.继承Thread类,重写run()方法 12345678910111213public class Ma...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">90</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A5%BF%E6%B1%89%E6%A8%A1%E5%BC%8F"><span class="toc-text">饿汉模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F"><span class="toc-text">懒汉模式</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/02/hexo-moments-feature/" title="为Hexo博客添加微博文功能">为Hexo博客添加微博文功能</a><time datetime="2026-05-02T20:00:00.000Z" title="发表于 2026-05-02 20:00:00">2026-05-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/26/migrate-valine-to-waline/" title="博客评论系统迁移：从 Valine 到 Waline">博客评论系统迁移：从 Valine 到 Waline</a><time datetime="2026-04-26T21:00:00.000Z" title="发表于 2026-04-26 21:00:00">2026-04-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/26/douban-hexo-sync/" title="豆瓣 RSS + Hexo：打造自动同步的书影音记录页">豆瓣 RSS + Hexo：打造自动同步的书影音记录页</a><time datetime="2026-04-26T14:00:00.000Z" title="发表于 2026-04-26 14:00:00">2026-04-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/22/20260322/" title="近期碎碎念">近期碎碎念</a><time datetime="2026-03-22T17:39:15.000Z" title="发表于 2026-03-22 17:39:15">2026-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/07/openclaw/" title="养一只OpenClaw小龙虾">养一只OpenClaw小龙虾</a><time datetime="2026-03-07T16:45:15.000Z" title="发表于 2026-03-07 16:45:15">2026-03-07</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-flex"><div class="footer-flex-items" style="flex-grow:1.5"><div class="footer-flex-item"><div class="footer-flex-title">panghutx's Blog</div><div class="footer-flex-content"><div><div style="margin: 10px 0; color: var(--light-grey); font-size: 0.9em;">我是胖虎同学，是一名北漂打工仔，博客涉及心得感悟、学习笔记、编程等内容，感谢来访。</div></div><div><div style="margin: 10px 0; color: var(--light-grey); font-size: 0.9em;">© 2025 By panghutx | Powered by <a href="https://hexo.io" target="_blank" style="color: inherit;">Hexo</a> | Theme by <a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank">Butterfly</a></div></div></div></div></div><div class="footer-flex-items" style="flex-grow:1"><div class="footer-flex-item"><div class="footer-flex-title">快速链接</div><div class="footer-flex-content"><a href="/" target="_blank" title="首页">首页</a><a href="/archives/" target="_blank" title="归档">归档</a><a href="/categories/" target="_blank" title="分类">分类</a><a href="/about/" target="_blank" title="关于">关于</a></div></div></div><div class="footer-flex-items" style="flex-grow:1"><div class="footer-flex-item"><div class="footer-flex-title">个人作品</div><div class="footer-flex-content"><a href="https://mind.youngsay.cn" target="_blank" title="mindmirror-AI日记">mindmirror-AI日记</a><a href="https://code.youngsay.cn" target="_blank" title="codegogo-编程教程">codegogo-编程教程</a></div></div></div></div><div class="footer-other"><div class="footer-copyright"></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const destroyWaline = ele => ele.destroy()
+
+  const initWaline = (Fn, el = document, path = window.location.pathname) => {
+    const waline = Fn({
+      el: el.querySelector('#waline-wrap'),
+      serverURL: 'https://comments.youngsay.cn/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      comment: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyWaline = () => {
+        destroyWaline(waline)
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const loadWaline = (el, path) => {
+    if (initFn) initWaline(initFn, el, path)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn, el, path)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if (isShuoshuo) {
+    'Waline' === 'Waline'
+      ? window.shuoshuoComment = { loadComment: loadWaline } 
+      : window.loadOtherComment = loadWaline
+    return
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script src="/js/moments-widget.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

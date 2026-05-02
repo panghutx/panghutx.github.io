@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>为Hexo博客添加微博文功能 | panghutx's Blog</title><meta name="author" content="panghutx"><meta name="copyright" content="panghutx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="最近给博客添加了一个「微博文」功能，可以发布短内容、想法、观点，类似朋友圈或微博。这篇文章记录了设计思路、实现过程和遇到的问题。 需求背景 博客通常用来写长文章，但很多时候只想记录一些短想法、碎碎念，不值得写一篇完整的文章。微博文功能就是为了解决这个问题：  发布短内容，支持文字和图片 手机端也能方便发布 在首页侧边栏显示预览 有独立的聚合页面  技术方案选型 内容存储 考虑了几个方案：  自建后">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为Hexo博客添加微博文功能">
+<meta property="og:url" content="https://youngsay.cn/2026/05/02/hexo-moments-feature/index.html">
+<meta property="og:site_name" content="panghutx&#39;s Blog">
+<meta property="og:description" content="最近给博客添加了一个「微博文」功能，可以发布短内容、想法、观点，类似朋友圈或微博。这篇文章记录了设计思路、实现过程和遇到的问题。 需求背景 博客通常用来写长文章，但很多时候只想记录一些短想法、碎碎念，不值得写一篇完整的文章。微博文功能就是为了解决这个问题：  发布短内容，支持文字和图片 手机端也能方便发布 在首页侧边栏显示预览 有独立的聚合页面  技术方案选型 内容存储 考虑了几个方案：  自建后">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg">
+<meta property="article:published_time" content="2026-05-02T20:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-02T12:51:09.082Z">
+<meta property="article:author" content="panghutx">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="技术实现">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "为Hexo博客添加微博文功能",
+  "url": "https://youngsay.cn/2026/05/02/hexo-moments-feature/",
+  "image": "https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg",
+  "datePublished": "2026-05-02T20:00:00.000Z",
+  "dateModified": "2026-05-02T12:51:09.082Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "panghutx",
+      "url": "https://youngsay.cn"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://offer.youngsay.cn/blog/favicon.png"><link rel="canonical" href="https://youngsay.cn/2026/05/02/hexo-moments-feature/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?80654a5a2150b79f76c6c457f3ba64ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":-1,"unescape":true,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '为Hexo博客添加微博文功能',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/footer_custom.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_3131436_y923pkc0jd.css"><link rel="stylesheet" href="/css/media.css"><link rel="stylesheet" href="/css/moments-widget.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="panghutx's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">90</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/media/"><span> 书影音</span></a></div><div class="menus_item"><a class="site-page" href="/moments/"><span> 微博文</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">panghutx's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">为Hexo博客添加微博文功能</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/media/"><span> 书影音</span></a></div><div class="menus_item"><a class="site-page" href="/moments/"><span> 微博文</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">为Hexo博客添加微博文功能</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-02T20:00:00.000Z" title="发表于 2026-05-02 20:00:00">2026-05-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-02T12:51:09.082Z" title="更新于 2026-05-02 12:51:09">2026-05-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span></div></div></div><article class="container post-content" id="article-container"><p>最近给博客添加了一个「微博文」功能，可以发布短内容、想法、观点，类似朋友圈或微博。这篇文章记录了设计思路、实现过程和遇到的问题。</p>
+<h2 id="需求背景">需求背景</h2>
+<p>博客通常用来写长文章，但很多时候只想记录一些短想法、碎碎念，不值得写一篇完整的文章。微博文功能就是为了解决这个问题：</p>
+<ul>
+<li>发布短内容，支持文字和图片</li>
+<li>手机端也能方便发布</li>
+<li>在首页侧边栏显示预览</li>
+<li>有独立的聚合页面</li>
+</ul>
+<h2 id="技术方案选型">技术方案选型</h2>
+<h3 id="内容存储">内容存储</h3>
+<p>考虑了几个方案：</p>
+<ol>
+<li><strong>自建后端服务</strong> - 需要服务器、数据库，维护成本高</li>
+<li><strong>第三方评论系统</strong> - 如 Valine、Waline，但数据不在自己手里</li>
+<li><strong>GitHub Issues</strong> - 免费、稳定、支持 Markdown、手机可通过 GitHub App 操作</li>
+</ol>
+<p>最终选择了 <strong>GitHub Issues</strong>，理由：</p>
+<ul>
+<li>零成本，不需要额外服务器</li>
+<li>数据完全可控，就在自己的仓库里</li>
+<li>GitHub API 完善，方便读取</li>
+<li>手机可以通过 GitHub App 或网页发布</li>
+</ul>
+<h3 id="前端展示">前端展示</h3>
+<p>使用 Hexo 的数据文件功能，在构建时生成静态页面：</p>
+<ul>
+<li><code>source/_data/shuoshuo.yml</code> 存储微博文数据</li>
+<li>自定义 Pug 模板渲染页面</li>
+<li>JavaScript 实现首页侧边栏预览</li>
+</ul>
+<h2 id="实现细节">实现细节</h2>
+<h3 id="1-创建独立的-GitHub-Action">1. 创建独立的 GitHub Action</h3>
+<p>为了方便复用，我创建了一个独立的 GitHub Action 仓库：<a target="_blank" rel="noopener" href="https://github.com/panghutx/hexo-moments-action">hexo-moments-action</a></p>
+<p><strong>核心功能</strong>：</p>
+<ul>
+<li>调用 GitHub API 获取带指定标签的 Issues</li>
+<li>解析 Issue 内容，支持 Markdown 图片语法</li>
+<li>生成 Hexo 数据文件 <code>shuoshuo.yml</code></li>
+</ul>
+<p><strong>Action 的核心逻辑</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从 GitHub API 获取 Issues</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchIssues</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(</span><br><span class="line">    <span class="string">`https://api.github.com/repos/<span class="subst">$&#123;owner&#125;</span>/<span class="subst">$&#123;repo&#125;</span>/issues?labels=<span class="subst">$&#123;label&#125;</span>&amp;state=open&amp;sort=created&amp;direction=desc`</span>,</span><br><span class="line">    &#123; <span class="attr">headers</span>: &#123; <span class="title class_">Authorization</span>: <span class="string">`token <span class="subst">$&#123;token&#125;</span>`</span> &#125; &#125;</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解析内容，提取图片</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">parseContent</span>(<span class="params">body</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> imageRegex = <span class="regexp">/!\[.*?\]\((.*?)\)/g</span>;</span><br><span class="line">  <span class="keyword">const</span> images = [...body.<span class="title function_">matchAll</span>(imageRegex)].<span class="title function_">map</span>(<span class="function"><span class="params">m</span> =&gt;</span> m[<span class="number">1</span>]);</span><br><span class="line">  <span class="keyword">const</span> content = body.<span class="title function_">replace</span>(imageRegex, <span class="string">&#x27;&#x27;</span>).<span class="title function_">trim</span>();</span><br><span class="line">  <span class="keyword">return</span> &#123; content, images &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成 YAML 数据文件</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">generateYaml</span>(<span class="params">issues</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> issues.<span class="title function_">map</span>(<span class="function"><span class="params">issue</span> =&gt;</span> (&#123;</span><br><span class="line">    <span class="attr">date</span>: issue.<span class="property">created_at</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="title function_">parseContent</span>(issue.<span class="property">body</span>).<span class="property">content</span>,</span><br><span class="line">    <span class="attr">tags</span>: issue.<span class="property">labels</span>.<span class="title function_">map</span>(<span class="function"><span class="params">l</span> =&gt;</span> l.<span class="property">name</span>).<span class="title function_">filter</span>(<span class="function"><span class="params">n</span> =&gt;</span> n !== label),</span><br><span class="line">    <span class="attr">key</span>: <span class="string">`moment-<span class="subst">$&#123;issue.number&#125;</span>`</span></span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Action 的优势</strong>：</p>
+<ul>
+<li>可被任何 Hexo 博客复用</li>
+<li>支持自定义标签、输出路径等配置</li>
+<li>输出 <code>has-changes</code> 标识，方便后续流程判断</li>
+</ul>
+<h3 id="2-在博客仓库中配置-Workflow">2. 在博客仓库中配置 Workflow</h3>
+<p>创建 <code>.github/workflows/moments.yml</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Sync</span> <span class="string">Moments</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">issues:</span></span><br><span class="line">    <span class="attr">types:</span> [<span class="string">opened</span>, <span class="string">edited</span>, <span class="string">closed</span>, <span class="string">reopened</span>, <span class="string">labeled</span>, <span class="string">unlabeled</span>]</span><br><span class="line">  <span class="attr">workflow_dispatch:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">permissions:</span></span><br><span class="line">  <span class="attr">contents:</span> <span class="string">write</span></span><br><span class="line">  <span class="attr">issues:</span> <span class="string">read</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">sync:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">if:</span> <span class="string">github.event_name</span> <span class="string">==</span> <span class="string">&#x27;workflow_dispatch&#x27;</span> <span class="string">||</span> <span class="string">contains(github.event.issue.labels.*.name,</span> <span class="string">&#x27;moment&#x27;</span><span class="string">)</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">repository</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v4</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Sync</span> <span class="string">moments</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">panghutx/hexo-moments-action@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github-token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Commit</span> <span class="string">source</span> <span class="string">changes</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">steps.sync.outputs.has-changes</span> <span class="string">==</span> <span class="string">&#x27;true&#x27;</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          git config user.name &quot;github-actions[bot]&quot;</span></span><br><span class="line"><span class="string">          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;</span></span><br><span class="line"><span class="string">          git add source/_data/shuoshuo.yml</span></span><br><span class="line"><span class="string">          git commit -m &quot;chore: sync moments from issues [skip ci]&quot;</span></span><br><span class="line"><span class="string">          git push</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">and</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          npx hexo clean</span></span><br><span class="line"><span class="string">          npx hexo generate</span></span><br><span class="line"><span class="string">          npx hexo deploy</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-页面模板">3. 页面模板</h3>
+<p>在 Butterfly 主题中创建了两个 Pug 模板：</p>
+<p><strong><code>media.pug</code></strong> - 首页侧边栏预览组件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#moments-widget</span><br><span class="line">  .moments-header</span><br><span class="line">    a(href=&#x27;/moments/&#x27;) 动态</span><br><span class="line">  .moments-content</span><br><span class="line">    each moment in site.data.shuoshuo.slice(0, 5)</span><br><span class="line">      .moment-item</span><br><span class="line">        .moment-date= date(moment.date, &#x27;MM-DD&#x27;)</span><br><span class="line">        .moment-text= moment.content</span><br></pre></td></tr></table></figure>
+<p><strong><code>shuoshuo.pug</code></strong> - 独立页面完整列表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">each moment in site.data.shuoshuo</span><br><span class="line">  article.shuoshuo-item</span><br><span class="line">    .meta</span><br><span class="line">      time= date(moment.date, &#x27;YYYY-MM-DD&#x27;)</span><br><span class="line">      if moment.tags</span><br><span class="line">        each tag in moment.tags</span><br><span class="line">          span.tag= tag</span><br><span class="line">    .content!= moment.content</span><br></pre></td></tr></table></figure>
+<h3 id="4-JavaScript-增强">4. JavaScript 增强</h3>
+<p>首页侧边栏通过 JavaScript 动态加载最新内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadMoments</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;/moments/&#x27;</span>);</span><br><span class="line">  <span class="comment">// 解析页面，提取微博文数据</span></span><br><span class="line">  <span class="keyword">const</span> moments = <span class="title function_">parseMomentsFromHtml</span>(html);</span><br><span class="line">  <span class="title function_">renderMomentsWidget</span>(moments);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="遇到的问题">遇到的问题</h2>
+<h3 id="问题一：Git-Submodule-导致主题文件丢失">问题一：Git Submodule 导致主题文件丢失</h3>
+<p><strong>现象</strong>：本地预览正常，但 GitHub Actions 部署后页面空白，控制台报 “No layout” 错误。</p>
+<p><strong>原因</strong>：Butterfly 主题是作为 Git Submodule 引入的，指向官方仓库。但官方仓库没有我自定义的 <code>media.pug</code> 和 <code>shuoshuo.pug</code> 模板文件。GitHub Actions checkout 时只拉取了官方版本，丢失了本地修改。</p>
+<p><strong>解决方案</strong>：将主题从 Submodule 转换为普通目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除 submodule 的 .git 目录</span></span><br><span class="line"><span class="built_in">rm</span> -rf themes/butterfly/.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从 git 索引中移除 submodule 引用</span></span><br><span class="line">git <span class="built_in">rm</span> --cached themes/butterfly</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将主题文件作为普通文件添加</span></span><br><span class="line">git add themes/butterfly/</span><br><span class="line">git commit -m <span class="string">&quot;fix: convert butterfly theme from submodule to regular files&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="问题二：SSH-部署失败">问题二：SSH 部署失败</h3>
+<p><strong>现象</strong>：GitHub Actions 部署到服务器时报 “Permission denied”。</p>
+<p><strong>原因</strong>：缺少 SSH 私钥配置。</p>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li>在 GitHub 仓库设置中添加 <code>SSH_PRIVATE_KEY</code> secret</li>
+<li>在 workflow 中添加 SSH 配置步骤：</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">SSH</span></span><br><span class="line">  <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    mkdir -p ~/.ssh</span></span><br><span class="line"><span class="string">    echo &quot;$&#123;&#123; secrets.SSH_PRIVATE_KEY &#125;&#125;&quot; &gt; ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">    chmod 600 ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">    ssh-keyscan -H your-server-ip &gt;&gt; ~/.ssh/known_hosts</span></span><br></pre></td></tr></table></figure>
+<h3 id="问题三：Git-用户未配置">问题三：Git 用户未配置</h3>
+<p><strong>现象</strong>：部署时报错 “Please tell me who you are”。</p>
+<p><strong>解决方案</strong>：在 workflow 中配置 git 用户：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">and</span> <span class="string">Deploy</span></span><br><span class="line">  <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    git config --global user.name &quot;your-name&quot;</span></span><br><span class="line"><span class="string">    git config --global user.email &quot;your-email&quot;</span></span><br><span class="line"><span class="string">    npx hexo deploy</span></span><br></pre></td></tr></table></figure>
+<h3 id="问题四：Workflow-文件放在错误的位置">问题四：Workflow 文件放在错误的位置</h3>
+<p><strong>现象</strong>：在博客静态仓库（GitHub Pages 仓库）中添加了 <code>.github/workflows/moments.yml</code>，但 Issue 创建后没有任何反应。</p>
+<p><strong>原因</strong>：Hexo 部署时只会将 <code>public/</code> 目录下的静态文件推送到 GitHub Pages 仓库，<code>.github/workflows</code> 目录根本不会被上传。GitHub Actions 只能在源码仓库中触发。</p>
+<p><strong>解决方案</strong>：创建独立的源码仓库 <code>hexo-blog</code>，将 workflow 文件放在源码仓库中。最终形成了两个仓库：</p>
+<ul>
+<li><code>hexo-blog</code>：源码仓库，包含 workflow、主题、配置等</li>
+<li><code>blog</code>：静态仓库，只包含生成的静态文件（GitHub Pages）</li>
+</ul>
+<h3 id="问题五：Workflow-只更新源码，不更新博客">问题五：Workflow 只更新源码，不更新博客</h3>
+<p><strong>现象</strong>：Workflow 运行成功，<code>shuoshuo.yml</code> 文件也更新了，但博客页面没有变化。</p>
+<p><strong>原因</strong>：Workflow 更新了源码仓库中的数据文件，但没有触发 Hexo 重新构建和部署。需要在同一个 workflow 中完成：同步数据 → 构建 → 部署。</p>
+<p><strong>解决方案</strong>：在 workflow 中添加构建和部署步骤：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Sync</span> <span class="string">moments</span></span><br><span class="line">    <span class="attr">uses:</span> <span class="string">panghutx/hexo-moments-action@v1</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Commit</span> <span class="string">source</span> <span class="string">changes</span></span><br><span class="line">    <span class="comment"># 更新源码仓库</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">and</span> <span class="string">Deploy</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">      npx hexo clean</span></span><br><span class="line"><span class="string">      npx hexo generate</span></span><br><span class="line"><span class="string">      npx hexo deploy  # 部署到静态仓库</span></span><br></pre></td></tr></table></figure>
+<p>这样整个流程就打通了：Issue 更新 → 同步数据 → 提交源码 → 构建静态文件 → 部署到 GitHub Pages。</p>
+<h2 id="最终效果">最终效果</h2>
+<ul>
+<li><strong>发布方式</strong>：在 GitHub 仓库创建 Issue，添加 <code>moment</code> 标签</li>
+<li><strong>首页预览</strong>：侧边栏显示最新的 5 条微博文</li>
+<li><strong>独立页面</strong>：<code>/moments/</code> 显示完整列表，支持标签分类</li>
+<li><strong>自动化</strong>：Issue 创建或更新后自动构建部署</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>本文介绍了如何为 Hexo 博客添加微博文功能：</p>
+<ol>
+<li><strong>方案选择</strong>：使用 GitHub Issues 作为内容存储，零成本且数据可控</li>
+<li><strong>核心实现</strong>：创建独立的 GitHub Action 同步 Issues 数据，生成 Hexo 数据文件</li>
+<li><strong>前端展示</strong>：自定义 Pug 模板渲染页面，JavaScript 实现首页侧边栏预览</li>
+<li><strong>自动化流程</strong>：Issue 更新后自动同步、构建、部署</li>
+</ol>
+<p><strong>相关代码仓库</strong>：</p>
+<ul>
+<li>同步 Action：<a target="_blank" rel="noopener" href="https://github.com/panghutx/hexo-moments-action">panghutx/hexo-moments-action</a></li>
+</ul>
+<p>如果你也想在 Hexo 博客添加类似功能，可以直接使用 <code>panghutx/hexo-moments-action</code>，只需在源码仓库中添加 workflow 配置即可。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://youngsay.cn">panghutx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://youngsay.cn/2026/05/02/hexo-moments-feature/">https://youngsay.cn/2026/05/02/hexo-moments-feature/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://youngsay.cn" target="_blank">panghutx's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/GitHub/">GitHub</a><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0/">技术实现</a></div><div class="post-share"><div class="social-share" data-image="https://offer.youngsay.cn/blog/wallhaven-mlpxrk.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://testingcf.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://testingcf.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/04/26/migrate-valine-to-waline/" title="博客评论系统迁移：从 Valine 到 Waline"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/wallhaven-yqjdpd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">博客评论系统迁移：从 Valine 到 Waline</div></div><div class="info-2"><div class="info-item-1">背景 LeanCloud 官方公告将于 2027 年 1 月 12 日停止对外提供服务。作为 Valine 评论系统的数据存储后端，这意味着所有依赖 LeanCloud 的 Valine 评论数据将面临丢失风险。 我的博客之前使用 Valine + LeanCloud 的组合，必须在此之前完成迁移。经过调研，最终选择了 Waline 作为替代方案。 为什么选择 Waline Waline 是 Valine 的继任者，主要优势：  数据迁移简单：支持从 LeanCloud 直接导入评论数据 功能更丰富：支持邮件通知、微信通知、垃圾评论过滤、评论管理后台 部署灵活：支持 Vercel、Railway、自建服务器等多种部署方式 兼容 Valine：前端配置几乎一样，迁移成本低 持续维护：活跃的开源社区，定期更新  部署步骤 1. 部署 Waline 到 Vercel  访问 Waline 官网 点击「部署到 Vercel」按钮 授权 Vercel 访问 GitHub 创建仓库并部署  部署完成后会获得一个 Vercel 域名，如 https://your-project.vercel....</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://offer.youngsay.cn/blog/pumpkin.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">panghutx</div><div class="author-info-description">时间证明一切</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">90</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/panghutx" target="_blank" title="Github"><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="mailto:2367897284@qq.com" target="_blank" title="Email"><i class="iconfont icon-email"></i></a><a class="social-icon" href="https://youngsay.cn/atom.xml" target="_blank" title="RSS"><i class="iconfont icon-rss"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="toc-text">需求背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E9%80%89%E5%9E%8B"><span class="toc-text">技术方案选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E5%AD%98%E5%82%A8"><span class="toc-text">内容存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E5%B1%95%E7%A4%BA"><span class="toc-text">前端展示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text">实现细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E7%8B%AC%E7%AB%8B%E7%9A%84-GitHub-Action"><span class="toc-text">1. 创建独立的 GitHub Action</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9C%A8%E5%8D%9A%E5%AE%A2%E4%BB%93%E5%BA%93%E4%B8%AD%E9%85%8D%E7%BD%AE-Workflow"><span class="toc-text">2. 在博客仓库中配置 Workflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%A1%B5%E9%9D%A2%E6%A8%A1%E6%9D%BF"><span class="toc-text">3. 页面模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-JavaScript-%E5%A2%9E%E5%BC%BA"><span class="toc-text">4. JavaScript 增强</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9AGit-Submodule-%E5%AF%BC%E8%87%B4%E4%B8%BB%E9%A2%98%E6%96%87%E4%BB%B6%E4%B8%A2%E5%A4%B1"><span class="toc-text">问题一：Git Submodule 导致主题文件丢失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9ASSH-%E9%83%A8%E7%BD%B2%E5%A4%B1%E8%B4%A5"><span class="toc-text">问题二：SSH 部署失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%B8%89%EF%BC%9AGit-%E7%94%A8%E6%88%B7%E6%9C%AA%E9%85%8D%E7%BD%AE"><span class="toc-text">问题三：Git 用户未配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%9B%9B%EF%BC%9AWorkflow-%E6%96%87%E4%BB%B6%E6%94%BE%E5%9C%A8%E9%94%99%E8%AF%AF%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-text">问题四：Workflow 文件放在错误的位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%BA%94%EF%BC%9AWorkflow-%E5%8F%AA%E6%9B%B4%E6%96%B0%E6%BA%90%E7%A0%81%EF%BC%8C%E4%B8%8D%E6%9B%B4%E6%96%B0%E5%8D%9A%E5%AE%A2"><span class="toc-text">问题五：Workflow 只更新源码，不更新博客</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C"><span class="toc-text">最终效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/02/hexo-moments-feature/" title="为Hexo博客添加微博文功能">为Hexo博客添加微博文功能</a><time datetime="2026-05-02T20:00:00.000Z" title="发表于 2026-05-02 20:00:00">2026-05-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/26/migrate-valine-to-waline/" title="博客评论系统迁移：从 Valine 到 Waline">博客评论系统迁移：从 Valine 到 Waline</a><time datetime="2026-04-26T21:00:00.000Z" title="发表于 2026-04-26 21:00:00">2026-04-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/26/douban-hexo-sync/" title="豆瓣 RSS + Hexo：打造自动同步的书影音记录页">豆瓣 RSS + Hexo：打造自动同步的书影音记录页</a><time datetime="2026-04-26T14:00:00.000Z" title="发表于 2026-04-26 14:00:00">2026-04-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/22/20260322/" title="近期碎碎念">近期碎碎念</a><time datetime="2026-03-22T17:39:15.000Z" title="发表于 2026-03-22 17:39:15">2026-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/07/openclaw/" title="养一只OpenClaw小龙虾">养一只OpenClaw小龙虾</a><time datetime="2026-03-07T16:45:15.000Z" title="发表于 2026-03-07 16:45:15">2026-03-07</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-flex"><div class="footer-flex-items" style="flex-grow:1.5"><div class="footer-flex-item"><div class="footer-flex-title">panghutx's Blog</div><div class="footer-flex-content"><div><div style="margin: 10px 0; color: var(--light-grey); font-size: 0.9em;">我是胖虎同学，是一名北漂打工仔，博客涉及心得感悟、学习笔记、编程等内容，感谢来访。</div></div><div><div style="margin: 10px 0; color: var(--light-grey); font-size: 0.9em;">© 2025 By panghutx | Powered by <a href="https://hexo.io" target="_blank" style="color: inherit;">Hexo</a> | Theme by <a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank">Butterfly</a></div></div></div></div></div><div class="footer-flex-items" style="flex-grow:1"><div class="footer-flex-item"><div class="footer-flex-title">快速链接</div><div class="footer-flex-content"><a href="/" target="_blank" title="首页">首页</a><a href="/archives/" target="_blank" title="归档">归档</a><a href="/categories/" target="_blank" title="分类">分类</a><a href="/about/" target="_blank" title="关于">关于</a></div></div></div><div class="footer-flex-items" style="flex-grow:1"><div class="footer-flex-item"><div class="footer-flex-title">个人作品</div><div class="footer-flex-content"><a href="https://mind.youngsay.cn" target="_blank" title="mindmirror-AI日记">mindmirror-AI日记</a><a href="https://code.youngsay.cn" target="_blank" title="codegogo-编程教程">codegogo-编程教程</a></div></div></div></div><div class="footer-other"><div class="footer-copyright"></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://testingcf.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const destroyWaline = ele => ele.destroy()
+
+  const initWaline = (Fn, el = document, path = window.location.pathname) => {
+    const waline = Fn({
+      el: el.querySelector('#waline-wrap'),
+      serverURL: 'https://comments.youngsay.cn/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      comment: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyWaline = () => {
+        destroyWaline(waline)
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const loadWaline = (el, path) => {
+    if (initFn) initWaline(initFn, el, path)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn, el, path)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if (isShuoshuo) {
+    'Waline' === 'Waline'
+      ? window.shuoshuoComment = { loadComment: loadWaline } 
+      : window.loadOtherComment = loadWaline
+    return
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script src="/js/moments-widget.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

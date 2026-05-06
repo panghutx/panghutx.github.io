@@ -20,9 +20,34 @@
       
         <tags>
             
-            <tag> 生活感悟 </tag>
+            <tag> 随笔 </tag>
             
-            <tag> 职场 </tag>
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>躺盈记账：一个开源的个人资产追踪工具</title>
+      <link href="/2026/05/06/finance-aggregator-introduction/"/>
+      <url>/2026/05/06/finance-aggregator-introduction/</url>
+      
+        <content type="html"><![CDATA[<p>你是否曾经困惑于自己的投资到底赚了多少钱？</p><p>存入本金、取出资金、账户间转账……这些操作让简单的&quot;期末减期初&quot;计算变得毫无意义。如果你也有这样的烦恼，那么「躺盈记账」可能正是你需要的工具。</p><h2 id="项目简介">项目简介</h2><p><strong>躺盈记账</strong>（Finance Aggregator）是一个开源的个人资产追踪应用，核心功能是帮助用户记录多账户资产、追踪资金流水，并计算出<strong>真实的投资收益</strong>。</p><p>项目提供两个版本：</p><ul><li><strong>Web 版</strong>：基于 Next.js 16，部署在 Vercel，支持多用户</li><li><strong>桌面版</strong>：基于 Tauri 2，本地运行，数据完全离线</li></ul><h2 id="核心功能">核心功能</h2><h3 id="真实收益计算">真实收益计算</h3><p>这是项目最核心的功能。传统的收益计算方式是：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">收益 = 期末资产 - 期初资产</span><br></pre></td></tr></table></figure><p>但这忽略了资金进出对资产变化的影响。躺盈记账采用的是：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">真实收益 = 资产变动 - 净流入</span><br><span class="line">净流入 = 入金 + 转入 - 出金 - 转出</span><br></pre></td></tr></table></figure><p>这样，无论你中途存取多少次，都能准确知道自己的投资到底赚了多少。</p><h3 id="多账户管理">多账户管理</h3><p>支持四种账户类型：</p><ul><li><strong>国内平台</strong>：支付宝、微信理财等</li><li><strong>银行理财</strong>：各类银行理财产品</li><li><strong>券商账户</strong>：股票、基金投资</li><li><strong>海外平台</strong>：美股、港股等</li></ul><p>每个账户可设置不同币种，系统自动换算成人民币汇总。</p><h3 id="多币种支持">多币种支持</h3><p>支持 CNY、USD、HKD、EUR、JPY、GBP 六种货币，实时汇率来自 <a href="http://exchangerate-api.com">exchangerate-api.com</a>，本地缓存 1 小时。</p><h3 id="数据可视化">数据可视化</h3><ul><li>资产趋势图：展示近 30 天的资产变化曲线</li><li>币种分布图：饼图展示各币种资产占比</li><li>收益报表：按日/周/月/年/全部时间段查看收益</li></ul><h3 id="批量录入">批量录入</h3><p>支持一次性录入多个账户的资产数据，适合定期（如每日/每周）记录的场景。</p><p><img src="https://offer.youngsay.cn/blog/Snipaste_2026-05-06_20-53-21.png" alt=""></p><h2 id="技术架构">技术架构</h2><h3 id="Web-版">Web 版</h3><table><thead><tr><th>层级</th><th>技术选型</th></tr></thead><tbody><tr><td>框架</td><td>Next.js 16 (App Router)</td></tr><tr><td>前端</td><td>React 19 + TypeScript</td></tr><tr><td>样式</td><td>Tailwind CSS 4</td></tr><tr><td>UI 组件</td><td>Radix UI + shadcn/ui</td></tr><tr><td>图表</td><td>Recharts</td></tr><tr><td>数据库</td><td>PostgreSQL (Supabase)</td></tr><tr><td>ORM</td><td>Prisma</td></tr><tr><td>认证</td><td>NextAuth.js v5</td></tr></tbody></table><p>Web 版采用现代化的全栈架构，部署在 Vercel 上，数据库使用 Supabase 提供的 PostgreSQL。支持多用户注册登录，每个用户的数据完全隔离。</p><h3 id="桌面版">桌面版</h3><table><thead><tr><th>层级</th><th>技术选型</th></tr></thead><tbody><tr><td>桌面框架</td><td>Tauri 2</td></tr><tr><td>前端</td><td>React 19 + Vite</td></tr><tr><td>后端</td><td>Rust</td></tr><tr><td>数据库</td><td>SQLite (本地)</td></tr><tr><td>样式</td><td>Tailwind CSS 4</td></tr><tr><td>UI 组件</td><td>Radix UI</td></tr></tbody></table><p>桌面版使用 Tauri 而非 Electron，优势明显：</p><ul><li><strong>体积小</strong>：约 10MB vs Electron 的 150MB+</li><li><strong>内存占用低</strong>：使用系统 WebView，无需打包 Chromium</li><li><strong>安全性高</strong>：Rust 后端，内存安全有保障</li><li><strong>性能好</strong>：Rust 比 Node.js 后端更快</li></ul><p>数据完全存储在本地 SQLite 数据库中，无需联网即可使用（汇率查询除外）。</p><h2 id="两个版本如何选择？">两个版本如何选择？</h2><table><thead><tr><th>维度</th><th>Web 版</th><th>桌面版</th></tr></thead><tbody><tr><td><strong>数据存储</strong></td><td>云端（Supabase）</td><td>本地（SQLite）</td></tr><tr><td><strong>用户模式</strong></td><td>多用户，需注册登录</td><td>单用户，无需登录</td></tr><tr><td><strong>网络依赖</strong></td><td>必须联网</td><td>离线可用</td></tr><tr><td><strong>数据隐私</strong></td><td>数据存储在云端</td><td>数据完全本地</td></tr><tr><td><strong>跨设备</strong></td><td>任意设备浏览器访问</td><td>需安装应用</td></tr><tr><td><strong>部署成本</strong></td><td>Vercel 免费额度足够</td><td>无需服务器</td></tr></tbody></table><p><strong>推荐选择</strong>：</p><ul><li>如果你有多个设备需要同步数据，或希望随时随地访问 → <strong>Web 版</strong></li><li>如果你对数据隐私敏感，不想把财务数据放到云端 → <strong>桌面版</strong></li><li>如果你希望离线使用，不依赖网络 → <strong>桌面版</strong></li><li>如果你是开发者想快速部署体验 → <strong>Web 版</strong></li></ul><p>当然，两个版本可以同时使用，互不干扰。</p><h2 id="开源地址">开源地址</h2><ul><li>Web 版：<a href="https://github.com/panghutx/tangying">https://github.com/panghutx/tangying</a></li><li>桌面版：<a href="https://github.com/panghutx/finance-aggregator-desktop">https://github.com/panghutx/finance-aggregator-desktop</a></li></ul><h2 id="写在最后">写在最后</h2><p>这个项目诞生于一个简单的需求：<strong>我想知道我的投资到底赚了多少钱</strong>。市面上的记账软件要么功能过于复杂，要么无法处理资金进出的影响。于是五一期间闲来无事，vibe coding了这个工具。</p><p>如果你也有类似的需求，欢迎试用、反馈、贡献代码。希望「躺盈记账」能帮你更清晰地了解自己的财富增长。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 项目 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> React </tag>
+            
+            <tag> Tauri </tag>
             
         </tags>
       
@@ -40,7 +65,7 @@
       
       <categories>
           
-          <category> 技术 </category>
+          <category> 项目 </category>
           
       </categories>
       
@@ -50,8 +75,6 @@
             <tag> Hexo </tag>
             
             <tag> GitHub </tag>
-            
-            <tag> 技术实现 </tag>
             
         </tags>
       
@@ -69,14 +92,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> hexo </tag>
+            <tag> Hexo </tag>
+            
+            <tag> Waline </tag>
             
         </tags>
       
@@ -94,18 +119,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> hexo </tag>
+            <tag> Python </tag>
             
-            <tag> python </tag>
-            
-            <tag> 自动化 </tag>
+            <tag> Hexo </tag>
             
         </tags>
       
@@ -123,14 +146,14 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 思考 </tag>
+            <tag> 随笔 </tag>
             
         </tags>
       
@@ -148,14 +171,14 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> AI </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> openclaw </tag>
+            <tag> OpenClaw </tag>
             
         </tags>
       
@@ -173,14 +196,14 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> hexo </tag>
+            <tag> Hexo </tag>
             
         </tags>
       
@@ -198,7 +221,7 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
@@ -223,7 +246,7 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
@@ -248,7 +271,7 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
@@ -273,7 +296,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -281,8 +304,6 @@
         <tags>
             
             <tag> MySQL </tag>
-            
-            <tag> 事务 </tag>
             
         </tags>
       
@@ -300,14 +321,12 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
-            
-            <tag> 索引 </tag>
             
             <tag> MySQL </tag>
             
@@ -327,7 +346,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -352,7 +371,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -377,7 +396,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -402,7 +421,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -427,7 +446,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -452,7 +471,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -477,7 +496,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -502,7 +521,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -527,14 +546,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaWeb </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -552,14 +571,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaWeb </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -577,14 +596,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaWeb </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -602,14 +621,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 数据结构和算法 </tag>
+            <tag> 算法 </tag>
             
         </tags>
       
@@ -627,14 +646,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -652,14 +671,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -677,14 +696,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -702,14 +721,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -727,14 +746,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -752,14 +771,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -777,14 +796,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -802,14 +821,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -827,14 +846,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -852,14 +871,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -877,10 +896,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> C </tag>
+            
+        </tags>
       
     </entry>
     
@@ -896,10 +921,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> C </tag>
+            
+        </tags>
       
     </entry>
     
@@ -915,14 +946,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -940,14 +971,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -965,14 +996,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -990,14 +1021,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1015,7 +1046,7 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
@@ -1040,14 +1071,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -1065,14 +1096,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -1090,14 +1121,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaSE </tag>
+            <tag> Java </tag>
             
         </tags>
       
@@ -1115,14 +1146,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1140,14 +1171,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> Vue.js </tag>
+            <tag> Vue </tag>
             
         </tags>
       
@@ -1165,7 +1196,7 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -1190,14 +1221,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1215,14 +1246,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1240,14 +1271,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1265,14 +1296,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1290,14 +1321,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1415,14 +1446,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1440,14 +1471,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1465,14 +1496,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1490,14 +1521,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1515,14 +1546,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1540,14 +1571,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> JS </tag>
             
         </tags>
       
@@ -1565,14 +1596,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1590,14 +1621,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1615,14 +1646,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1640,14 +1671,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1665,14 +1696,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1690,10 +1721,16 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1709,14 +1746,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1734,14 +1771,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1759,14 +1796,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1784,14 +1821,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -1809,10 +1846,16 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1828,10 +1871,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> PicGo </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1847,14 +1896,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> c </tag>
+            <tag> C </tag>
             
         </tags>
       
@@ -1872,10 +1921,16 @@
       
       <categories>
           
-          <category> 分享 </category>
+          <category> 项目 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1891,14 +1946,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> linux </tag>
+            <tag> Linux </tag>
             
         </tags>
       
@@ -1916,14 +1971,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> linux </tag>
+            <tag> Linux </tag>
             
         </tags>
       
@@ -1941,14 +1996,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> linux </tag>
+            <tag> Linux </tag>
             
         </tags>
       
@@ -1966,14 +2021,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> linux </tag>
+            <tag> Linux </tag>
             
         </tags>
       
@@ -1991,14 +2046,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> linux </tag>
+            <tag> Linux </tag>
             
         </tags>
       
@@ -2016,14 +2071,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -2041,14 +2096,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -2066,14 +2121,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -2091,14 +2146,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -2116,16 +2171,16 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
-            <tag> html </tag>
+            <tag> HTML </tag>
             
         </tags>
       
@@ -2143,14 +2198,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> html </tag>
+            <tag> HTML </tag>
             
         </tags>
       
@@ -2168,14 +2223,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> css </tag>
+            <tag> CSS </tag>
             
         </tags>
       
@@ -2193,14 +2248,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> html </tag>
+            <tag> HTML </tag>
             
         </tags>
       
@@ -2218,14 +2273,14 @@
       
       <categories>
           
-          <category> 学习 </category>
+          <category> 笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> yaml </tag>
+            <tag> YAML </tag>
             
         </tags>
       
@@ -2243,10 +2298,16 @@
       
       <categories>
           
-          <category> 感想 </category>
+          <category> 随笔 </category>
           
       </categories>
       
+      
+        <tags>
+            
+            <tag> 随笔 </tag>
+            
+        </tags>
       
     </entry>
     

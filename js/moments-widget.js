@@ -7,7 +7,7 @@
     // 检查是否已存在 widget
     if (document.querySelector('.moments-widget')) return;
 
-    // 获取微博文数据
+    // 获取说说数据
     fetch('/moments/')
       .then(response => response.text())
       .then(html => {
@@ -32,7 +32,7 @@
         container.className = 'moments-widget';
         container.innerHTML = `
           <div class="moments-widget-title">
-            <i class="fa-solid fa-comment-dots"></i> 最新微博文
+            <i class="fa-solid fa-comment-dots"></i> 最新说说
           </div>
           <div class="moments-widget-content"></div>
           <a href="/moments/" class="moments-widget-more">查看全部 →</a>

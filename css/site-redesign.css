@@ -89,6 +89,30 @@ body::before {
   background: rgba(217, 119, 87, .11);
 }
 
+/* 文章页导航：站名、当前标题和返回首页保持清晰层级 */
+#page-header.not-top-img #nav #blog-info > .nav-page-title {
+  display: inline-flex !important;
+  align-items: center;
+  min-width: 0;
+  max-width: min(52vw, 560px);
+  margin-left: 22px;
+  padding-left: 18px;
+  border-left: 1px solid var(--ink-line);
+  vertical-align: middle;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title > :first-child {
+  display: block;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title > :last-child {
+  display: none !important;
+}
+
 #content-inner.layout {
   width: min(1180px, calc(100% - 48px));
   max-width: none;
@@ -1051,4 +1075,143 @@ body::before {
   #body-wrap.type-shuoshuo .shuoshuo-day-label {
     margin-left: -25px;
   }
+
+  /* 手机端文章卡片给时间线节点留出独立空间，避免节点压住标题 */
+  #recent-posts .recent-post-item > .recent-post-info,
+  #recent-posts .recent-post-item > .recent-post-info.no-cover {
+    width: 100% !important;
+    min-width: 0;
+    padding-left: 54px !important;
+  }
+
+  #recent-posts .recent-post-item::before {
+    left: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* 文章页移动端：站名与当前文章标题之间留出明确间距 */
+  #page-header.not-top-img #nav #blog-info {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  #page-header.not-top-img #nav #blog-info > .nav-site-title {
+    flex: 0 0 auto;
+  }
+
+  #page-header.not-top-img #nav #blog-info > .nav-page-title {
+    display: flex !important;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+    margin-left: 18px;
+    padding-left: 14px;
+    border-left: 1px solid var(--ink-line);
+    vertical-align: middle;
+  }
+
+  #page-header.not-top-img #nav #blog-info > .nav-page-title > :first-child {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #page-header.not-top-img #nav #blog-info > .nav-page-title > :last-child {
+    display: block !important;
+    position: static !important;
+    flex: 0 0 auto;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid var(--ink-line);
+    color: var(--ink-teal);
+    opacity: 1 !important;
+    transform: none !important;
+    white-space: nowrap;
+    font-size: 11px;
+  }
+
+  /* 搜索和菜单按钮统一垂直居中 */
+  #page-header.not-top-img #nav #menus {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  #page-header.not-top-img #nav #search-button,
+  #page-header.not-top-img #nav #toggle-menu {
+    display: flex !important;
+    align-items: center;
+    height: 100%;
+    padding: 0 !important;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  #page-header.not-top-img #nav #toggle-menu {
+    margin-left: 12px;
+  }
+
+  #page-header.not-top-img #nav #search-button .site-page,
+  #page-header.not-top-img #nav #toggle-menu .site-page {
+    display: flex;
+    align-items: center;
+    height: auto;
+    padding: 0 !important;
+    line-height: 1;
+  }
+
+  #page-header.not-top-img #nav #search-button i,
+  #page-header.not-top-img #nav #toggle-menu i {
+    display: block;
+    margin: 0;
+    line-height: 1;
+  }
+}
+
+/* 触碰/悬停文章标题时切换为“返回首页” */
+#page-header.not-top-img #nav #blog-info > .nav-page-title {
+  position: relative;
+  overflow: hidden;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title > :first-child {
+  position: relative;
+  z-index: 1;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title > :last-child {
+  position: absolute !important;
+  top: 50%;
+  left: 0;
+  display: block !important;
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+  color: var(--ink-teal);
+  opacity: 0 !important;
+  transform: translateY(-50%) translateY(-10px) !important;
+  transition: opacity .2s ease, transform .2s ease;
+  white-space: nowrap;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title:hover > :first-child,
+#page-header.not-top-img #nav #blog-info > .nav-page-title:focus > :first-child,
+#page-header.not-top-img #nav #blog-info > .nav-page-title:focus-within > :first-child {
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+}
+
+#page-header.not-top-img #nav #blog-info > .nav-page-title:hover > :last-child,
+#page-header.not-top-img #nav #blog-info > .nav-page-title:focus > :last-child,
+#page-header.not-top-img #nav #blog-info > .nav-page-title:focus-within > :last-child {
+  opacity: 1 !important;
+  transform: translateY(-50%) translateY(0) !important;
 }
